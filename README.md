@@ -2,6 +2,15 @@
 
 * Implementation of Gradient Augmented Level Set method in both CPU and GPU (using CUDA).
 
+### Build instructions
+
+```sh
+git clone https://github.com/acrlakshman/gradient-augmented-levelset-cuda
+cd gradient-augmented-levelset-cuda
+mkdir -p build && cd build
+cmake .. && make
+```
+
 
 License
 -------
