@@ -6,10 +6,19 @@ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMakeMod
 
 OPTION(BUILD_DOCUMENTATION "Build Documentation" OFF)
 OPTION(BUILD_EXAMPLES "Build examples" OFF)
-OPTION(BUILD_TESTS "Build Tests" OFF)
+OPTION(BUILD_TESTS "Build Tests" ON)
 OPTION(BUILD_COVERAGE "Create test coverage report" OFF)
 OPTION(USE_SYSTEM_GTEST "Use GTEST from system libraries" OFF)
 OPTION(USE_RELATIVE_TEST_DIR "Use relative paths for the test data directory(For continious integration(CI) purposes only)" OFF)
+
+if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/googletest")
+  message(WARNING "test/googletest is not available. Tests will not built.")
+  message("Did you miss the --recursive option when cloning?")
+  message("Run the following commands to correct this:")
+  message("git submodule init")
+  message("git submodule update")
+  message("git submodule foreach git pull origin master")
+endif ()
 
 # Set a default build type if none was specified
 IF(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
