@@ -18,7 +18,7 @@ class Grid {
   typedef T value_type;
 
   Grid(int nx, int ny, int nz) : m_dimension(DIM), m_nx(nx), m_ny(ny), m_nz(nz) {
-    m_grid.resize(m_nx * m_ny * m_nz * m_dimension);
+    m_grid.resize((m_nx + 2) * (m_ny + 2) * (m_nz + 2));
   }
 
   Grid(int nx, int ny) : Grid(nx, ny, 1) {}
@@ -37,7 +37,9 @@ class Grid {
 
   const int dimension() const { return m_dimension; }
 
-  void generate(T x_min, T x_max, T y_min, T y_max, T z_min, T z_max) {}
+  void generate(T x_min, T x_max, T y_min, T y_max, T z_min, T z_max) {
+    // TODO
+  }
 
  private:
   int m_dimension, m_nx, m_ny, m_nz;
