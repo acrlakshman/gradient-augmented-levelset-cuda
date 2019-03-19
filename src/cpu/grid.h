@@ -42,6 +42,7 @@ class Grid {
  private:
   int m_dimension, m_nx, m_ny, m_nz;
   std::vector<T> m_grid;
+  // Added Comment
 };
 
 }  // namespace CPU
