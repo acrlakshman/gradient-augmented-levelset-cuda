@@ -41,9 +41,10 @@ file(GLOB FILES "*.cpp" "*.cc")
 foreach(FILE ${FILES})
   get_filename_component(FNAME ${FILE} NAME_WE)
   set(TEST_NAME ${FNAME})
+  #set(TEST_NAME unit_test)
   add_test(Test_${TEST_NAME} ${TEST_NAME})
   file(GLOB TEST_FILE "${FNAME}.cpp" "${FNAME}.cc" "${FNAME}.c")
-
+  #aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} TEST_FILE)
   add_executable(${TEST_NAME} ${TEST_FILE})
 
   set_property(TARGET ${TEST_NAME} PROPERTY CXX_STANDARD 14)
@@ -59,6 +60,8 @@ foreach(FILE ${FILES})
     #)
 
   target_link_libraries(${TEST_NAME}
+    PUBLIC
+      cpu_grid
     PRIVATE
       gtest
       gtest_main
