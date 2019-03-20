@@ -7,21 +7,15 @@
  * accompanying LICENSE.txt file.
  */
 
-#include <cpu/grid.h>
+#include <cpu/array.h>
+
 #include <gtest/gtest.h>
 
 using namespace std;
 
-TEST(CPU, GRID)
-{
+TEST(CPU, ARRAY) {
   GALS::CPU::Grid<double, 3> grid(10);
+  GALS::CPU::Array<GALS::CPU::Grid<double, 3>> levelset(grid);
 
-  EXPECT_TRUE(grid.dimension() == 3);
-  EXPECT_TRUE(grid.getNumCells()[0] == 10);
-  EXPECT_TRUE(grid.getNumCells()[1] == 1);
-  EXPECT_TRUE(grid.getNumCells()[2] == 1);
-  EXPECT_TRUE(grid.getPadding() == 1);
-
-  grid.setPadding(2);
-  EXPECT_TRUE(grid.getPadding() == 2);
+  EXPECT_TRUE(levelset.size() == 108);
 }

@@ -8,6 +8,7 @@
  */
 
 #include "grid.h"
+#include "array.h"
 
 #include <iostream>
 
@@ -19,6 +20,9 @@ int main()
 
   std::cout << "grid.x = " << grid.x(1)[0] << std::endl;
   std::cout << "dimension = " << grid.dimension() << std::endl;
+
+  // Array
+  GALS::CPU::Array<GALS::CPU::Grid<double, 3>> levelset(grid);
 
   return 0;
 }
