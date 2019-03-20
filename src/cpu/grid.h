@@ -7,6 +7,8 @@
  * accompanying LICENSE.txt file.
  */
 
+#pragma once
+
 #include <vector>
 
 namespace GALS {
@@ -16,6 +18,7 @@ template <typename T, int DIM = 3>
 class Grid {
  public:
   typedef T value_type;
+  static const int dim = DIM;
 
   Grid(int nx, int ny, int nz) : m_dimension(DIM), m_nx(nx), m_ny(ny), m_nz(nz) {
     m_grid.resize((m_nx + 2) * (m_ny + 2) * (m_nz + 2));
