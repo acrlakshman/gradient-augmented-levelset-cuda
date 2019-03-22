@@ -21,7 +21,12 @@ class Grid {
   static const int dim = DIM;
 
   Grid(int nx, int ny, int nz) : m_dimension(DIM), m_nx(nx), m_ny(ny), m_nz(nz), m_pad(1) {
-    m_grid.resize((m_nx + 2 * m_pad) * (m_ny + 2 * m_pad) * (m_nz + 2 * m_pad));
+    m_mask[0] = 1, m_mask[1] = 0, m_mask[2] = 0;
+
+    if (dim == 2)
+      m_mask[1] = 1;
+    else if (dim == 3)
+      m_mask[1] = 1, m_mask[2] = 1;
   }
 
   Grid(int nx, int ny) : Grid(nx, ny, 1) {}
@@ -41,6 +46,8 @@ class Grid {
     return pos;
   }
 
+  const int* getMask() const { return m_mask; }
+
   const int dimension() const { return m_dimension; }
 
   const int size() const { return m_grid.size(); }
@@ -48,6 +55,13 @@ class Grid {
   const std::vector<int> getNumCells() const { return std::vector<int>{m_nx, m_ny, m_nz}; }
 
   const int getPadding() const { return m_pad; }
+
+  const std::size_t getIndex(int i, int j, int k) {
+    std::size_t idx = ((k + m_pad) * (m_nx + 2 * m_pad) * (m_ny + 2 * m_pad) * m_mask[2]) +
+                      ((j + m_pad) * (m_nx + 2 * m_pad) * m_mask[1]) + (i + m_pad);
+
+    return idx;
+  }
 
   void setPadding(const int pad) { m_pad = pad; }
 
@@ -57,6 +71,7 @@ class Grid {
 
  private:
   int m_dimension, m_nx, m_ny, m_nz, m_pad;
+  int m_mask[3];
   std::vector<T> m_grid;
   // Added Comment
 };
