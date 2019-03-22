@@ -21,7 +21,7 @@ class Grid {
   static const int dim = DIM;
 
   Grid(int nx, int ny, int nz) : m_dimension(DIM), m_nx(nx), m_ny(ny), m_nz(nz), m_pad(1) {
-    m_grid.resize((m_nx + 2*m_pad) * (m_ny + 2*m_pad) * (m_nz + 2*m_pad));
+    m_grid.resize((m_nx + 2 * m_pad) * (m_ny + 2 * m_pad) * (m_nz + 2 * m_pad));
   }
 
   Grid(int nx, int ny) : Grid(nx, ny, 1) {}

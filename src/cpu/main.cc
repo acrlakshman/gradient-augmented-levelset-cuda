@@ -7,8 +7,8 @@
  * accompanying LICENSE.txt file.
  */
 
-#include "grid.h"
 #include "array.h"
+#include "grid.h"
 
 #include <iostream>
 
@@ -22,7 +22,7 @@ int main()
   std::cout << "dimension = " << grid.dimension() << std::endl;
 
   // Array
-  GALS::CPU::Array<GALS::CPU::Grid<double, 3>> levelset(grid);
+  GALS::CPU::Array<GALS::CPU::Grid<double, 3>, double> levelset(grid);
 
   return 0;
 }
