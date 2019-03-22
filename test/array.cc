@@ -11,6 +11,7 @@
 #include <cpu/vec_n.h>
 
 #include <gtest/gtest.h>
+#include <iostream>
 
 using namespace std;
 
@@ -28,4 +29,12 @@ TEST(CPU, ARRAY) {
     velocity[1][i] = static_cast<double>(i + 0.5);
   }
   EXPECT_TRUE(velocity[1][1] == 1.5);
+}
+
+TEST(CPU, ARRAY_2D) {
+  GALS::CPU::Grid<double, 2> grid(4, 3);
+
+  GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::VecN<int, 2>> indices(grid);
+
+  // EXPECT_TRUE(indices.getIndex(0, 0, 0) == 37);
 }
