@@ -58,10 +58,10 @@ ENDIF()
 
 file(GLOB_RECURSE SRC src/cpu/*.cc src/cpu/*.h)
 
-ADD_LIBRARY(cpu_grid SHARED ${SRC})
+ADD_LIBRARY(cpu_test SHARED ${SRC})
 ADD_EXECUTABLE(gals_cuda src/main.cc)
 TARGET_INCLUDE_DIRECTORIES(gals_cuda PUBLIC src/cpu)
-TARGET_LINK_LIBRARIES(gals_cuda PUBLIC cpu_grid)
+TARGET_LINK_LIBRARIES(gals_cuda PUBLIC cpu_test)
 
 INSTALL(TARGETS gals_cuda DESTINATION .)
 

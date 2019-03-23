@@ -38,47 +38,23 @@ endif()
 
 file(GLOB FILES "*.cpp" "*.cc")
 
-#foreach(FILE ${FILES})
-  #get_filename_component(FNAME ${FILE} NAME_WE)
-  #set(TEST_NAME ${FNAME})
-  set(TEST_NAME unit_test)
-  #add_test(Test_${TEST_NAME} ${TEST_NAME})
-  #file(GLOB TEST_FILE "${FNAME}.cpp" "${FNAME}.cc" "${FNAME}.c")
-  aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} TEST_FILE)
-  add_executable(${TEST_NAME} ${TEST_FILE})
+set(TEST_NAME gals_unit_test)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} TEST_FILE)
+add_executable(${TEST_NAME} ${TEST_FILE})
 
-  set_property(TARGET ${TEST_NAME} PROPERTY CXX_STANDARD 14)
+set_property(TARGET ${TEST_NAME} PROPERTY CXX_STANDARD 14)
 
-  target_include_directories(${TEST_NAME}
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
-    ${PROJECT_SOURCE_DIR}/src
-    )
+target_include_directories(${TEST_NAME}
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/src
+)
 
-  #target_compile_definitions(${TEST_NAME}
-    #PRIVATE
-    #TEST_DIR="${CMAKE_CURRENT_SOURCE_DIR}/resources"
-    #)
+target_link_libraries(${TEST_NAME}
+  PUBLIC
+    cpu_test
+  PRIVATE
+    gtest
+    gtest_main
+)
 
-  target_link_libraries(${TEST_NAME}
-    PUBLIC
-      cpu_grid
-    PRIVATE
-      gtest
-      gtest_main
-    )
-
-  #if (MeshIO_BUILD_COVERAGE)
-    #target_compile_options(${TEST_NAME}
-      #PRIVATE
-        #-g -O0 -fprofile-arcs -ftest-coverage
-      #)
-    #target_link_libraries(${TEST_NAME}
-      #PRIVATE
-        #-g -O0 -fprofile-arcs -ftest-coverage
-      #)
-  #endif (MeshIO_BUILD_COVERAGE)
-
-  set_target_properties(${TEST_NAME} PROPERTIES FOLDER "Tests")
-
-  #add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
-#endforeach()
+set_target_properties(${TEST_NAME} PROPERTIES FOLDER "Tests")

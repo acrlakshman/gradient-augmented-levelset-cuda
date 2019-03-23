@@ -40,7 +40,7 @@ class Grid {
 
   const int getPadding() const;
 
-  const std::size_t getIndex(int i, int j, int k);
+  const std::size_t getIndex(const int i, const int j, const int k);
 
   void setPadding(const int pad);
 

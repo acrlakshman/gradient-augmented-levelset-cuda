@@ -25,4 +25,3 @@ TEST(CPU, GRID)
   grid.setPadding(2);
   EXPECT_TRUE(grid.getPadding() == 2);
 }
-

@@ -19,21 +19,15 @@ class VecN {
  public:
   typedef T value_type;
 
-  VecN() {
-    m_data.resize(SIZE);
-    for (int i = 0; i < SIZE; ++i) m_data[i] = static_cast<T>(0);
-  }
+  VecN();
 
-  ~VecN() {
-    m_data.clear();
-    m_data.shrink_to_fit();
-  }
+  ~VecN();
 
-  const int size() const { return m_data.size(); }
+  const int size() const;
 
-  const T operator[](const int idx) const { return m_data[idx]; }
+  const T operator[](const int idx) const;
 
-  T &operator[](const int idx) { return m_data[idx]; }
+  T &operator[](const int idx);
 
  private:
   std::vector<T> m_data;
