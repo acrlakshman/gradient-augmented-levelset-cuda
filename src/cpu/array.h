@@ -13,11 +13,13 @@
 
 #include <vector>
 
-namespace GALS {
-namespace CPU {
-
+namespace GALS
+{
+namespace CPU
+{
 template <typename T_GRID, typename T_ARRAY>
-class Array {
+class Array
+{
  public:
   Array(Grid<typename T_GRID::value_type, T_GRID::dim> &grid);
 
@@ -29,7 +31,9 @@ class Array {
 
   T_ARRAY &operator[](const std::size_t idx);
 
-  const T_ARRAY operator()(const int i, const int j, const int k);
+  const T_ARRAY operator()(const int i, const int j, const int k) const;
+
+  T_ARRAY &operator()(const int i, const int j, const int k);
 
  private:
   T_GRID &m_grid;

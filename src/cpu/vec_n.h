@@ -11,11 +11,13 @@
 
 #include <vector>
 
-namespace GALS {
-namespace CPU {
-
+namespace GALS
+{
+namespace CPU
+{
 template <typename T, int SIZE = 3>
-class VecN {
+class VecN
+{
  public:
   typedef T value_type;
 

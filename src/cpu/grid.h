@@ -9,13 +9,17 @@
 
 #pragma once
 
+#include "vec_n.h"
+
 #include <vector>
 
-namespace GALS {
-namespace CPU {
-
+namespace GALS
+{
+namespace CPU
+{
 template <typename T, int DIM = 3>
-class Grid {
+class Grid
+{
  public:
   typedef T value_type;
   static const int dim = DIM;
@@ -28,7 +32,7 @@ class Grid {
 
   ~Grid();
 
-  std::vector<T> x(int i, int j = 1, int k = 1);
+  VecN<T, 3>& x(const int i, const int j = 1, const int k = 1);
 
   const int dimension() const;
 
@@ -42,14 +46,21 @@ class Grid {
 
   const std::size_t getIndex(const int i, const int j, const int k);
 
+  const VecN<T, 3> dX() const;
+
+  VecN<T, 3>& operator()(const int i, const int j, const int k);
+
   void setPadding(const int pad);
 
   void generate(T x_min, T x_max, T y_min, T y_max, T z_min, T z_max);
 
+  void print(bool show_padding = false);
+
  private:
   int m_dimension, m_nx, m_ny, m_nz, m_pad;
   int m_mask[3];
-  std::vector<T> m_grid;
+  std::vector<VecN<T, 3>> m_grid;
+  VecN<T, 3> m_dx;
 };
 
 }  // namespace CPU

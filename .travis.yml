@@ -47,7 +47,7 @@ before_install:
 script:
     - mkdir -p build
     - cd build
-    - CC=$INSTALL_CC CXX=$INSTALL_CXX cmake ../ -DMeshIO_BUILD_COVERAGE:BOOL=ON
+    - CC=$INSTALL_CC CXX=$INSTALL_CXX cmake ../ -DBUILD_COVERAGE:BOOL=ON
     - make -j4
     - ctest --output-on-failure
 
@@ -56,6 +56,6 @@ after_success:
         ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" < /dev/null 2> /dev/null;
         brew install lcov;
       fi
-    - lcov --directory test --base-directory ../include/meshio/ --capture --no-external --output-file coverage.info
+    - lcov --directory test --base-directory ../src --capture --no-external --output-file coverage.info
     - lcov --remove coverage.info '/usr*' -o coverage.info
     - coveralls-lcov coverage.info
