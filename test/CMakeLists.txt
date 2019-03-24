@@ -58,3 +58,4 @@ target_link_libraries(${TEST_NAME}
 )
 
 set_target_properties(${TEST_NAME} PROPERTIES FOLDER "Tests")
+add_test(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
