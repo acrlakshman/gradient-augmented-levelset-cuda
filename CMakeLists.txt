@@ -11,14 +11,14 @@ OPTION(BUILD_COVERAGE "Create test coverage report" OFF)
 OPTION(USE_SYSTEM_GTEST "Use GTEST from system libraries" OFF)
 OPTION(USE_RELATIVE_TEST_DIR "Use relative paths for the test data directory(For continious integration(CI) purposes only)" OFF)
 
-if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/googletest")
-  message(WARNING "test/googletest is not available. Tests will not built.")
-  message("Did you miss the --recursive option when cloning?")
-  message("Run the following commands to correct this:")
-  message("git submodule init")
-  message("git submodule update")
-  message("git submodule foreach git pull origin master")
-endif ()
+IF (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/googletest")
+  MESSAGE(WARNING "test/googletest is not available. Tests will not built.")
+  MESSAGE("Did you miss the --recursive option when cloning?")
+  MESSAGE("Run the following commands to correct this:")
+  MESSAGE("git submodule init")
+  MESSAGE("git submodule update")
+  MESSAGE("git submodule foreach git pull origin master")
+ENDIF ()
 
 # Set a default build type if none was specified
 IF(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -56,7 +56,7 @@ IF(BUILD_TESTS)
     ADD_SUBDIRECTORY(test)
 ENDIF()
 
-file(GLOB_RECURSE SRC src/cpu/*.cc src/cpu/*.h)
+FILE(GLOB_RECURSE SRC src/cpu/*.cc src/cpu/*.h)
 
 ADD_LIBRARY(cpu_test SHARED ${SRC})
 ADD_EXECUTABLE(gals_cuda src/main.cc)
@@ -64,4 +64,3 @@ TARGET_INCLUDE_DIRECTORIES(gals_cuda PUBLIC src/cpu)
 TARGET_LINK_LIBRARIES(gals_cuda PUBLIC cpu_test)
 
 INSTALL(TARGETS gals_cuda DESTINATION .)
-

@@ -11,22 +11,48 @@
 
 #include <vector>
 
-namespace GALS {
-namespace CPU {
-
+namespace GALS
+{
+namespace CPU
+{
+/*! \class VecN
+ *
+ * Class to create varying size elements at a computational cell. For e.x. velocity, gradients, etc.
+ */
 template <typename T, int SIZE = 3>
-class VecN {
+class VecN
+{
  public:
   typedef T value_type;
 
+  /*! Default constructor
+   */
   VecN();
 
+  /*! Destructor
+   */
   ~VecN();
 
+  /*! Returns number of elements.
+   *
+   * \return number of elements.
+   */
   const int size() const;
 
+  /*! Overloaded subscript operator.
+   *
+   * \param idx zero based index of element.
+   *
+   * \return element at index (idx).
+   */
   const T operator[](const int idx) const;
 
+  /*! Overloaded subscript operator that returns a reference.
+   *
+   * \param idx zero based index of element.
+   *
+   * \return element at index (idx).
+   */
   T &operator[](const int idx);
 
  private:

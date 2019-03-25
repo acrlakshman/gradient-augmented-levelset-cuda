@@ -10,30 +10,35 @@
 #include "vec_n.h"
 
 template <typename T, int SIZE>
-GALS::CPU::VecN<T, SIZE>::VecN() {
+GALS::CPU::VecN<T, SIZE>::VecN()
+{
   m_data.resize(SIZE);
 
   for (int i = 0; i < SIZE; ++i) m_data[i] = static_cast<T>(0);
 }
 
 template <typename T, int SIZE>
-GALS::CPU::VecN<T, SIZE>::~VecN() {
+GALS::CPU::VecN<T, SIZE>::~VecN()
+{
   m_data.clear();
   m_data.shrink_to_fit();
 }
 
 template <typename T, int SIZE>
-const int GALS::CPU::VecN<T, SIZE>::size() const {
+const int GALS::CPU::VecN<T, SIZE>::size() const
+{
   return m_data.size();
 }
 
 template <typename T, int SIZE>
-const T GALS::CPU::VecN<T, SIZE>::operator[](const int idx) const {
+const T GALS::CPU::VecN<T, SIZE>::operator[](const int idx) const
+{
   return m_data[idx];
 }
 
 template <typename T, int SIZE>
-T& GALS::CPU::VecN<T, SIZE>::operator[](const int idx) {
+T& GALS::CPU::VecN<T, SIZE>::operator[](const int idx)
+{
   return m_data[idx];
 }
 

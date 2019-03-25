@@ -16,7 +16,8 @@ GALS::CPU::Array<T_GRID, T_ARRAY>::Array(Grid<typename T_GRID::value_type, T_GRI
       m_nx(grid.getNumCells()[0]),
       m_ny(grid.getNumCells()[1]),
       m_nz(grid.getNumCells()[2]),
-      m_pad(grid.getPadding()) {
+      m_pad(grid.getPadding())
+{
   m_data.resize(m_grid.size());
 
   for (int i = 0; i < m_data.size(); ++i) {
@@ -25,28 +26,40 @@ GALS::CPU::Array<T_GRID, T_ARRAY>::Array(Grid<typename T_GRID::value_type, T_GRI
 }
 
 template <typename T_GRID, typename T_ARRAY>
-GALS::CPU::Array<T_GRID, T_ARRAY>::~Array() {
+GALS::CPU::Array<T_GRID, T_ARRAY>::~Array()
+{
   m_data.clear();
   m_data.shrink_to_fit();
 }
 
 template <typename T_GRID, typename T_ARRAY>
-const std::size_t GALS::CPU::Array<T_GRID, T_ARRAY>::size() const {
+const std::size_t GALS::CPU::Array<T_GRID, T_ARRAY>::size() const
+{
   return m_data.size();
 }
 
 template <typename T_GRID, typename T_ARRAY>
-const T_ARRAY& GALS::CPU::Array<T_GRID, T_ARRAY>::operator[](const std::size_t idx) const {
+const T_ARRAY& GALS::CPU::Array<T_GRID, T_ARRAY>::operator[](const std::size_t idx) const
+{
   return m_data[idx];
 }
 
 template <typename T_GRID, typename T_ARRAY>
-T_ARRAY& GALS::CPU::Array<T_GRID, T_ARRAY>::operator[](const std::size_t idx) {
+T_ARRAY& GALS::CPU::Array<T_GRID, T_ARRAY>::operator[](const std::size_t idx)
+{
   return m_data[idx];
 }
 
 template <typename T_GRID, typename T_ARRAY>
-const T_ARRAY GALS::CPU::Array<T_GRID, T_ARRAY>::operator()(const int i, const int j, const int k) {
+const T_ARRAY GALS::CPU::Array<T_GRID, T_ARRAY>::operator()(const int i, const int j, const int k) const
+{
+  const std::size_t idx = m_grid.getIndex(i, j, k);
+  return m_data[idx];
+}
+
+template <typename T_GRID, typename T_ARRAY>
+T_ARRAY& GALS::CPU::Array<T_GRID, T_ARRAY>::operator()(const int i, const int j, const int k)
+{
   const std::size_t idx = m_grid.getIndex(i, j, k);
   return m_data[idx];
 }

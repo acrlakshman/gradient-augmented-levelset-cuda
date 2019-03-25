@@ -11,30 +11,30 @@
 #include <cpu/vec_n.h>
 
 #include <gtest/gtest.h>
-#include <iostream>
 
-using namespace std;
+#include <math.h>
 
-TEST(CPU, ARRAY) {
-  GALS::CPU::Grid<double, 3> grid(10);
-  GALS::CPU::Array<GALS::CPU::Grid<double, 3>, double> levelset(grid);
+TEST(CPU, ARRAY)
+{
+  // scalar array on 1D grid.
+  GALS::CPU::Grid<double, 1> grid(10, 1, 1);
+  grid.generate(-1, 1, -1, 1, -1, 1);
+  GALS::CPU::Array<GALS::CPU::Grid<double, 1>, double> levelset(grid);
 
-  EXPECT_TRUE(levelset.size() == 0);
+  EXPECT_TRUE(levelset.size() == 12);
 
-  GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::VecN<double, 2>> velocity(grid);
-  EXPECT_TRUE(velocity.size() == 0);
-  // EXPECT_TRUE(velocity[0].size() == 2);
+  // 2D component array on 1D grid.
+  GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::VecN<double, 2>> twod_array(grid);
+  EXPECT_TRUE(twod_array.size() == 12);
 
-  // for (int i = 0; i < velocity[1].size(); ++i) {
-  // velocity[1][i] = static_cast<double>(i + 0.5);
-  //}
-  // EXPECT_TRUE(velocity[1][1] == 1.5);
-}
+  GALS::CPU::VecN<double, 2> vec;
+  vec[0] = 0.9, vec[1] = 0.12;
+  twod_array(0, 0, 0) = vec;
+  EXPECT_TRUE(fabs(twod_array(0, 0, 0)[0] - vec[0]) < 1e-10);
+  EXPECT_TRUE(fabs(twod_array(0, 0, 0)[1] - vec[1]) < 1e-10);
 
-TEST(CPU, ARRAY_2D) {
-  GALS::CPU::Grid<double, 2> grid(4, 3);
+  EXPECT_TRUE(fabs(twod_array[1][0] - vec[0]) < 1e-10);
 
-  GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::VecN<int, 2>> indices(grid);
-
-  // EXPECT_TRUE(indices.getIndex(0, 0, 0) == 37);
+  twod_array[1][0] = 0.95;
+  EXPECT_TRUE(fabs(twod_array[1][0] - 0.95) < 1e-10);
 }

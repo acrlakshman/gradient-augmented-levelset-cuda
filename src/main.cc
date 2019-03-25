@@ -16,13 +16,5 @@ int main()
 {
   std::cout << "Running CPU version of GALS implementation" << std::endl;
 
-  GALS::CPU::Grid<double, 3> grid(4, 4, 4);
-
-  // std::cout << "grid.x = " << grid.x(1)[0] << std::endl;
-  // std::cout << "dimension = " << grid.dimension() << std::endl;
-
-  // Array
-  GALS::CPU::Array<GALS::CPU::Grid<double, 3>, double> levelset(grid);
-
   return 0;
 }
