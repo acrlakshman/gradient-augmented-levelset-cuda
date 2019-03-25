@@ -14,28 +14,28 @@ matrix:
           addons:
               apt:
                   sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-precise-3.5', 'george-edison55-precise-backports']
-                  packages: ['clang-3.5', 'lcov', 'cmake', 'cmake-data']
+                  packages: ['clang-3.5', 'lcov', 'cmake', 'cmake-data', 'doxygen']
         - dist: xenial
           compiler: clang
           env: INSTALL_CXX=clang++-3.6
           addons:
               apt:
                   sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-precise-3.6', 'george-edison55-precise-backports']
-                  packages: ['clang-3.6', 'lcov', 'cmake', 'cmake-data']
+                  packages: ['clang-3.6', 'lcov', 'cmake', 'cmake-data', 'doxygen']
         - dist: xenial
           compiler: gcc-4.8
           env: INSTALL_CXX=g++-4.8 INSTALL_CC=gcc-4.8
           addons:
               apt:
                   sources: ['ubuntu-toolchain-r-test', 'george-edison55-precise-backports']
-                  packages: ['g++-4.8', 'lcov', 'cmake', 'cmake-data']
+                  packages: ['g++-4.8', 'lcov', 'cmake', 'cmake-data', 'doxygen']
         - dist: xenial
           compiler: gcc-4.9
           env: INSTALL_CXX=g++-4.9 INSTALL_CC=gcc-4.9
           addons:
               apt:
                   sources: ['ubuntu-toolchain-r-test', 'george-edison55-precise-backports']
-                  packages: ['g++-4.9', 'lcov', 'cmake', 'cmake-data']
+                  packages: ['g++-4.9', 'lcov', 'cmake', 'cmake-data', 'doxygen']
         - os: osx
           osx_image: xcode10.1
           compiler: clang
@@ -55,7 +55,17 @@ after_success:
     - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
         ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" < /dev/null 2> /dev/null;
         brew install lcov;
+        brew install doxygen;
       fi
     - lcov --directory test --base-directory ../src --capture --no-external --output-file coverage.info
     - lcov --remove coverage.info '/usr*' -o coverage.info
     - coveralls-lcov coverage.info
+    - cd ../doc && doxygen
+
+deploy:
+   provider: pages
+   skip_cleanup: true
+   local_dir: ./doc/html
+   github_token: $GH_REPO_TOKEN
+   on:
+      branch: master
