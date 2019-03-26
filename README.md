@@ -1,5 +1,6 @@
 ## Gradient Augmented Level Set Method - CPU & CUDA
 [![Build Status](https://travis-ci.org/acrlakshman/gradient-augmented-levelset-cuda.svg?branch=master)](https://travis-ci.org/acrlakshman/gradient-augmented-levelset-cuda)
+[![Coverage Status](https://coveralls.io/repos/github/acrlakshman/gradient-augmented-levelset-cuda/badge.svg)](https://coveralls.io/github/acrlakshman/gradient-augmented-levelset-cuda)
 
 * Implementation of Gradient Augmented Level Set method in both CPU and GPU (using CUDA).
 
@@ -11,7 +12,6 @@ cd gradient-augmented-levelset-cuda
 mkdir -p build && cd build
 cmake .. -GNinja && ninja -j 4
 ```
-
 
 License
 -------

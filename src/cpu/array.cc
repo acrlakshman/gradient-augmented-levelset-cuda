@@ -51,7 +51,7 @@ T_ARRAY& GALS::CPU::Array<T_GRID, T_ARRAY>::operator[](const std::size_t idx)
 }
 
 template <typename T_GRID, typename T_ARRAY>
-const T_ARRAY GALS::CPU::Array<T_GRID, T_ARRAY>::operator()(const int i, const int j, const int k) const
+const T_ARRAY& GALS::CPU::Array<T_GRID, T_ARRAY>::operator()(const int i, const int j, const int k) const
 {
   const std::size_t idx = m_grid.getIndex(i, j, k);
   return m_data[idx];

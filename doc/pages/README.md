@@ -16,7 +16,7 @@ Implementation of Gradient Augmented Levelset method in CPU and GPU.
    cmake .. -GNinja && ninja -j 4
 ```
 
-### Developers
+### Primary developers
 
 * Lakshman Anumolu [acrlakshman@yahoo.co.in]
 * Raunak Bardia [raunakbardia@gmail.com]

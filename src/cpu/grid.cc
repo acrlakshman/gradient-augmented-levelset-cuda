@@ -135,9 +135,9 @@ void GALS::CPU::Grid<T, DIM>::generate(T x_min, T x_max, T y_min, T y_max, T z_m
 }
 
 template <typename T, int DIM>
-void GALS::CPU::Grid<T, DIM>::writeToFile(std::string file_Name, std::string dir_Name, bool show_padding)
+void GALS::CPU::Grid<T, DIM>::writeToFile(std::string file_name, std::string dir_name, bool show_padding)
 {
-  std::string full_File_Name = dir_Name + "/" + file_Name;
+  std::string full_File_Name = dir_name + "/" + file_name;
   std::ofstream output_file(full_File_Name);
   output_file << "Node_ID\tX\tY\tZ\n";
 

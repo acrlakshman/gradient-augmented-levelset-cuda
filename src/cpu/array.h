@@ -67,7 +67,7 @@ class Array
    *
    * \return value at given 3D cell index.
    */
-  const T_ARRAY operator()(const int i, const int j, const int k) const;
+  const T_ARRAY &operator()(const int i, const int j, const int k) const;
 
   /*! Overloaded operator to return reference to value of array using 3D cell index.
    *

@@ -148,11 +148,11 @@ class Grid
 
   /*! Print grid for debugging.
    *
+   * \param file_name writes grid file with the prescribed name.
+   * \param dir_name writes grid in the prescribed directory.
    * \param show_padding writes grid with or without padding cells.
-   * \param dirName writes grid in the prescribed directory.
-   * \param fileName writes grid file with the prescribed name.
    */
-  void writeToFile(std::string file_Name = "grid.dat", std::string dir_Name = ".", bool show_padding = false);
+  void writeToFile(std::string file_name = "grid.dat", std::string dir_name = ".", bool show_padding = false);
 
  private:
   int m_dimension, m_nx, m_ny, m_nz, m_pad;
