@@ -40,6 +40,8 @@ matrix:
           osx_image: xcode10.1
           compiler: clang
           env: INSTALL_CXX=clang++ INSTALL_CC=clang
+          install:
+             - brew install doxygen
 
 before_install:
     - gem install coveralls-lcov
@@ -47,25 +49,23 @@ before_install:
 script:
     - mkdir -p build
     - cd build
-    - CC=$INSTALL_CC CXX=$INSTALL_CXX cmake ../ -DBUILD_COVERAGE:BOOL=ON
-    - make -j4
+    - CC=$INSTALL_CC CXX=$INSTALL_CXX cmake ../ -DBUILD_COVERAGE:BOOL=ON -DBUILD_DOCUMENTATION:BOOL=ON
+    - make -j 4
     - ctest --output-on-failure
 
 after_success:
     - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
         ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" < /dev/null 2> /dev/null;
         brew install lcov;
-        brew install doxygen;
       fi
     - lcov --directory test --base-directory ../src --capture --no-external --output-file coverage.info
     - lcov --remove coverage.info '/usr*' -o coverage.info
     - coveralls-lcov coverage.info
-    - cd ../doc && doxygen
 
 deploy:
    provider: pages
    skip_cleanup: true
-   local_dir: ./doc/html
+   local_dir: ./build/doc/html
    github_token: $GH_REPO_TOKEN
    on:
       branch: master
