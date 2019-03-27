@@ -42,6 +42,10 @@ IF(UNIX)
     ENDIF()
 ENDIF()
 
+IF (BUILD_COVERAGE)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+ENDIF()
+
 # Generate documentation
 IF(BUILD_DOCUMENTATION)
     ADD_SUBDIRECTORY(doc)

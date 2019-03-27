@@ -51,6 +51,7 @@ script:
     - cd build
     - CC=$INSTALL_CC CXX=$INSTALL_CXX cmake ../ -DBUILD_COVERAGE:BOOL=ON -DBUILD_DOCUMENTATION:BOOL=ON
     - make -j 4
+    - ./gals_cuda
     - ctest --output-on-failure
 
 after_success:
@@ -58,7 +59,7 @@ after_success:
         ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" < /dev/null 2> /dev/null;
         brew install lcov;
       fi
-    - lcov --directory test --base-directory ../src --capture --no-external --output-file coverage.info
+    - lcov --directory . --base-directory ../src --capture --no-external --output-file coverage.info
     - lcov --remove coverage.info '/usr*' -o coverage.info
     - coveralls-lcov coverage.info
 
@@ -69,3 +70,4 @@ deploy:
    github_token: $GH_REPO_TOKEN
    on:
       branch: master
+      condition: "$INSTALL_CC = gcc-4.9"
