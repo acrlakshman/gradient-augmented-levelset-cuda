@@ -12,6 +12,7 @@
 #include "vec_n.h"
 
 #include <vector>
+#include <string>
 
 namespace GALS
 {
@@ -147,9 +148,11 @@ class Grid
 
   /*! Print grid for debugging.
    *
-   * \param show_padding print grid with or without padding cells.
+   * \param show_padding writes grid with or without padding cells.
+   * \param dirName writes grid in the prescribed directory.
+   * \param fileName writes grid file with the prescribed name.
    */
-  void print(bool show_padding = false);
+  void writeToFile(std::string file_Name = "grid.dat", std::string dir_Name = ".", bool show_padding = false);
 
  private:
   int m_dimension, m_nx, m_ny, m_nz, m_pad;

@@ -8,6 +8,7 @@
  */
 
 #include "grid.h"
+#include <fstream>
 #include <iostream>
 
 template <typename T, int DIM>
@@ -34,6 +35,8 @@ GALS::CPU::Grid<T, DIM>::Grid(int nx) : Grid(nx, 1, 1)
 template <typename T, int DIM>
 GALS::CPU::Grid<T, DIM>::~Grid()
 {
+  m_grid.clear();
+  m_grid.shrink_to_fit();
 }
 
 template <typename T, int DIM>
@@ -132,8 +135,12 @@ void GALS::CPU::Grid<T, DIM>::generate(T x_min, T x_max, T y_min, T y_max, T z_m
 }
 
 template <typename T, int DIM>
-void GALS::CPU::Grid<T, DIM>::print(bool show_padding)
+void GALS::CPU::Grid<T, DIM>::writeToFile(std::string file_Name, std::string dir_Name, bool show_padding)
 {
+  std::string full_File_Name = dir_Name + "/" + file_Name;
+  std::ofstream output_file(full_File_Name);
+  output_file << "Node_ID\tX\tY\tZ\n";
+
   int i_min = show_padding ? -m_pad * m_mask[0] : 0;
   int j_min = show_padding ? -m_pad * m_mask[1] : 0;
   int k_min = show_padding ? -m_pad * m_mask[2] : 0;
@@ -144,8 +151,9 @@ void GALS::CPU::Grid<T, DIM>::print(bool show_padding)
   for (int i = i_min; i < i_max; ++i) {
     for (int j = j_min; j < j_max; ++j) {
       for (int k = k_min; k < k_max; ++k) {
-        std::cout << "index [" << i << ", " << j << ", " << k << "]: (" << this->x(i, j, k)[0] << ", "
-                  << this->x(i, j, k)[1] << ", " << this->x(i, j, k)[2] << ")" << std::endl;
+        VecN<T, 3> coordinate = this->x(i, j, k);
+        output_file << this->getIndex(i, j, k) << '\t' << coordinate[0] << '\t' << coordinate[1] << '\t'
+                    << coordinate[2] << std::endl;
       }
     }
   }
