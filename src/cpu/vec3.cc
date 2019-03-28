@@ -29,44 +29,30 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "vec_n.h"
+#include "vec3.h"
 
-template <typename T, int SIZE>
-GALS::CPU::VecN<T, SIZE>::VecN()
+template <typename T>
+GALS::CPU::Vec3<T>::Vec3()
 {
-  m_data.resize(SIZE);
-
-  for (int i = 0; i < SIZE; ++i) m_data[i] = static_cast<T>(0);
+  for (int i = 0; i < 3; ++i) m_data[i] = static_cast<T>(0);
 }
 
-template <typename T, int SIZE>
-GALS::CPU::VecN<T, SIZE>::~VecN()
+template <typename T>
+GALS::CPU::Vec3<T>::~Vec3()
 {
-  m_data.clear();
-  m_data.shrink_to_fit();
 }
 
-template <typename T, int SIZE>
-const int GALS::CPU::VecN<T, SIZE>::size() const
+template <typename T>
+const int GALS::CPU::Vec3<T>::size() const
 {
-  return m_data.size();
+  return 3;
 }
 
-template <typename T, int SIZE>
-const T GALS::CPU::VecN<T, SIZE>::operator[](const int idx) const
+template <typename T>
+T& GALS::CPU::Vec3<T>::operator[](const int idx)
 {
   return m_data[idx];
 }
 
-template <typename T, int SIZE>
-T& GALS::CPU::VecN<T, SIZE>::operator[](const int idx)
-{
-  return m_data[idx];
-}
-
-template class GALS::CPU::VecN<int, 1>;
-template class GALS::CPU::VecN<int, 2>;
-template class GALS::CPU::VecN<int, 3>;
-template class GALS::CPU::VecN<double, 1>;
-template class GALS::CPU::VecN<double, 2>;
-template class GALS::CPU::VecN<double, 3>;
+template class GALS::CPU::Vec3<int>;
+template class GALS::CPU::Vec3<double>;

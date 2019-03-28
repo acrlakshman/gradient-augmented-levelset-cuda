@@ -29,44 +29,49 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "vec_n.h"
+#pragma once
 
-template <typename T, int SIZE>
-GALS::CPU::VecN<T, SIZE>::VecN()
+#include <vector>
+
+namespace GALS
 {
-  m_data.resize(SIZE);
-
-  for (int i = 0; i < SIZE; ++i) m_data[i] = static_cast<T>(0);
-}
-
-template <typename T, int SIZE>
-GALS::CPU::VecN<T, SIZE>::~VecN()
+namespace CPU
 {
-  m_data.clear();
-  m_data.shrink_to_fit();
-}
-
-template <typename T, int SIZE>
-const int GALS::CPU::VecN<T, SIZE>::size() const
+/*! \class Vec3
+ *
+ * Class to create 3 component elements at a computational cell. For e.x. velocity, gradients, etc.
+ */
+template <typename T>
+class Vec3
 {
-  return m_data.size();
-}
+ public:
+  typedef T value_type;
 
-template <typename T, int SIZE>
-const T GALS::CPU::VecN<T, SIZE>::operator[](const int idx) const
-{
-  return m_data[idx];
-}
+  /*! Default constructor
+   */
+  Vec3();
 
-template <typename T, int SIZE>
-T& GALS::CPU::VecN<T, SIZE>::operator[](const int idx)
-{
-  return m_data[idx];
-}
+  /*! Destructor
+   */
+  ~Vec3();
 
-template class GALS::CPU::VecN<int, 1>;
-template class GALS::CPU::VecN<int, 2>;
-template class GALS::CPU::VecN<int, 3>;
-template class GALS::CPU::VecN<double, 1>;
-template class GALS::CPU::VecN<double, 2>;
-template class GALS::CPU::VecN<double, 3>;
+  /*! Returns number of elements.
+   *
+   * \return number of elements.
+   */
+  const int size() const;
+
+  /*! Overloaded subscript operator that returns a reference.
+   *
+   * \param idx zero based index of element.
+   *
+   * \return element at index (idx).
+   */
+  T &operator[](const int idx);
+
+ private:
+  T m_data[3];
+};
+
+}  // namespace CPU
+}  // namespace GALS
