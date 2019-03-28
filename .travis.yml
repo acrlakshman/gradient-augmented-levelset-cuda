@@ -9,33 +9,12 @@ sudo: false
 matrix:
     include:
         - dist: xenial
-          compiler: clang
-          env: INSTALL_CXX=clang++-3.5
-          addons:
-              apt:
-                  sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-precise-3.5', 'george-edison55-precise-backports']
-                  packages: ['clang-3.5', 'lcov', 'cmake', 'cmake-data', 'doxygen']
-        - dist: xenial
-          compiler: clang
-          env: INSTALL_CXX=clang++-3.6
-          addons:
-              apt:
-                  sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-precise-3.6', 'george-edison55-precise-backports']
-                  packages: ['clang-3.6', 'lcov', 'cmake', 'cmake-data', 'doxygen']
-        - dist: xenial
-          compiler: gcc-4.8
-          env: INSTALL_CXX=g++-4.8 INSTALL_CC=gcc-4.8
+          compiler: gcc-7
+          env: INSTALL_CXX=g++-7 INSTALL_CC=gcc-7
           addons:
               apt:
                   sources: ['ubuntu-toolchain-r-test', 'george-edison55-precise-backports']
-                  packages: ['g++-4.8', 'lcov', 'cmake', 'cmake-data', 'doxygen']
-        - dist: xenial
-          compiler: gcc-4.9
-          env: INSTALL_CXX=g++-4.9 INSTALL_CC=gcc-4.9
-          addons:
-              apt:
-                  sources: ['ubuntu-toolchain-r-test', 'george-edison55-precise-backports']
-                  packages: ['g++-4.9', 'lcov', 'cmake', 'cmake-data', 'doxygen']
+                  packages: ['g++-7', 'lcov', 'cmake', 'cmake-data', 'doxygen', 'graphviz']
         - os: osx
           osx_image: xcode10.1
           compiler: clang
@@ -60,6 +39,7 @@ after_success:
         brew install lcov;
       fi
     - lcov --directory . --base-directory ../src --capture --no-external --output-file coverage.info
+    - genhtml coverage.info --output-directory ./doc/html/coverage
     - lcov --remove coverage.info '/usr*' -o coverage.info
     - coveralls-lcov coverage.info
 
@@ -70,4 +50,4 @@ deploy:
    github_token: $GH_REPO_TOKEN
    on:
       branch: master
-      condition: "$INSTALL_CC = gcc-4.9"
+      condition: "$INSTALL_CC = gcc-7"

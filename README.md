@@ -16,7 +16,7 @@ cmake .. -GNinja && ninja -j 4
 License
 -------
 
-BSD 2-Clause License. Please check the accompanying [LICENSE].txt file
+BSD 3-Clause License. Please check the accompanying [LICENSE].txt file
 
 Acknowledgements
 ----------------
@@ -25,6 +25,9 @@ Acknowledgements
 
 [Ryan Krattiger] for helping with cmake.
 
+[John Van Gilder] for helping with coverage tools.
+
 [LICENSE]:https://github.com/acrlakshman/gradient_augmented_levelset_cuda/blob/master/LICENSE
 [Pradeep Garigipati]:https://github.com/9prady9
 [Ryan Krattiger]:https://github.com/rjk9w5
+[John Van Gilder]: https://github.com/JohnVanGilder

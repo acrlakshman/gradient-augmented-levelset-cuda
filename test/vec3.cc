@@ -29,44 +29,33 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "vec_n.h"
+#include <cpu/utilities.h>
+#include <cpu/vec3.h>
 
-template <typename T, int SIZE>
-GALS::CPU::VecN<T, SIZE>::VecN()
+#include <gtest/gtest.h>
+
+TEST(CPU, VEC3_INT)
 {
-  m_data.resize(SIZE);
+  GALS::CPU::Vec3<int> vec3;
 
-  for (int i = 0; i < SIZE; ++i) m_data[i] = static_cast<T>(0);
+  EXPECT_TRUE(vec3.size() == 3);
+
+  vec3[0] = 9;
+  EXPECT_TRUE(vec3[0] == 9);
+
+  const int i = vec3[0];
+  EXPECT_TRUE(i == 9);
 }
 
-template <typename T, int SIZE>
-GALS::CPU::VecN<T, SIZE>::~VecN()
+TEST(CPU, VEC3_DOUBLE)
 {
-  m_data.clear();
-  m_data.shrink_to_fit();
-}
+  GALS::CPU::Vec3<double> vec3;
 
-template <typename T, int SIZE>
-const int GALS::CPU::VecN<T, SIZE>::size() const
-{
-  return m_data.size();
-}
+  EXPECT_TRUE(vec3.size() == 3);
 
-template <typename T, int SIZE>
-const T GALS::CPU::VecN<T, SIZE>::operator[](const int idx) const
-{
-  return m_data[idx];
-}
+  vec3[0] = 9.;
+  EXPECT_TRUE(GALS::is_equal(vec3[0], 9.));
 
-template <typename T, int SIZE>
-T& GALS::CPU::VecN<T, SIZE>::operator[](const int idx)
-{
-  return m_data[idx];
+  const double i = vec3[0];
+  EXPECT_TRUE(GALS::is_equal(i, 9.));
 }
-
-template class GALS::CPU::VecN<int, 1>;
-template class GALS::CPU::VecN<int, 2>;
-template class GALS::CPU::VecN<int, 3>;
-template class GALS::CPU::VecN<double, 1>;
-template class GALS::CPU::VecN<double, 2>;
-template class GALS::CPU::VecN<double, 3>;
