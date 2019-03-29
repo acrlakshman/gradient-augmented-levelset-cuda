@@ -49,7 +49,7 @@ static double VSMALL = 1e-10;
 template <typename T>
 bool is_equal(T a, T b)
 {
-  return fabs(a - b) < static_cast<T>(VSMALL);
+  return fabs(a - b) <= static_cast<T>(VSMALL);
 }
 
 }  // namespace GALS

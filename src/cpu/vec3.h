@@ -67,7 +67,29 @@ class Vec3
    *
    * \return element at index (idx).
    */
+  const T operator[](const int idx) const;
+
+  /*! Overloaded subscript operator that returns a reference.
+   *
+   * \param idx zero based index of element.
+   *
+   * \return element at index (idx).
+   */
   T &operator[](const int idx);
+
+  /*! Overload assignment operator.
+   *
+   * \param vec variable whose values will be assigned.
+   */
+  void operator=(const Vec3<T> &vec);
+
+  /*! Equality operator.
+   *
+   * \param vec variable to compare against.
+   *
+   * \return true if equal, false otherwise.
+   */
+  bool operator==(const Vec3<T> &vec);
 
  private:
   T m_data[3];

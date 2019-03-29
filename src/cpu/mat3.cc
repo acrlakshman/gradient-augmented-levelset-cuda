@@ -29,50 +29,65 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "vec3.h"
+#include "mat3.h"
 #include "utilities.h"
 
 template <typename T>
-GALS::CPU::Vec3<T>::Vec3()
+GALS::CPU::Mat3<T>::Mat3()
 {
   for (int i = 0; i < 3; ++i) m_data[i] = static_cast<T>(0);
 }
 
 template <typename T>
-GALS::CPU::Vec3<T>::~Vec3()
+GALS::CPU::Mat3<T>::~Mat3()
 {
 }
 
 template <typename T>
-const int GALS::CPU::Vec3<T>::size() const
+const int GALS::CPU::Mat3<T>::size() const
 {
-  return 3;
+  return 9;
 }
 
 template <typename T>
-const T GALS::CPU::Vec3<T>::operator[](const int idx) const
+const T GALS::CPU::Mat3<T>::operator[](const int idx) const
 {
   return m_data[idx];
 }
 
 template <typename T>
-T& GALS::CPU::Vec3<T>::operator[](const int idx)
+T& GALS::CPU::Mat3<T>::operator[](const int idx)
 {
   return m_data[idx];
 }
 
 template <typename T>
-void GALS::CPU::Vec3<T>::operator=(const Vec3<T>& vec)
+const T GALS::CPU::Mat3<T>::operator()(const int i_row, const int i_col) const
 {
-  for (int i = 0; i < 3; ++i) m_data[i] = vec[i];
+  return m_data[i_row * 3 + i_col];
 }
 
 template <typename T>
-bool GALS::CPU::Vec3<T>::operator==(const Vec3<T>& vec)
+T& GALS::CPU::Mat3<T>::operator()(const int i_row, const int i_col)
 {
-  return (GALS::is_equal<T>(m_data[0], vec[0]) && GALS::is_equal<T>(m_data[1], vec[1]) &&
-          GALS::is_equal<T>(m_data[2], vec[2]));
+  return m_data[i_row * 3 + i_col];
 }
 
-template class GALS::CPU::Vec3<int>;
-template class GALS::CPU::Vec3<double>;
+template <typename T>
+void GALS::CPU::Mat3<T>::operator=(const Mat3<T>& mat)
+{
+  for (int i = 0; i < 9; ++i) m_data[i] = mat[i];
+}
+
+template <typename T>
+bool GALS::CPU::Mat3<T>::operator==(const Mat3<T>& mat)
+{
+  return (GALS::is_equal<T>(m_data[0], mat[0]) && GALS::is_equal<T>(m_data[1], mat[1]) &&
+          GALS::is_equal<T>(m_data[2], mat[2]) && GALS::is_equal<T>(m_data[3], mat[3]) &&
+          GALS::is_equal<T>(m_data[4], mat[4]) && GALS::is_equal<T>(m_data[5], mat[5]) &&
+          GALS::is_equal<T>(m_data[6], mat[6]) && GALS::is_equal<T>(m_data[7], mat[7]) &&
+          GALS::is_equal<T>(m_data[8], mat[8]));
+}
+
+template class GALS::CPU::Mat3<int>;
+template class GALS::CPU::Mat3<double>;

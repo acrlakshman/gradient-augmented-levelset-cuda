@@ -29,50 +29,87 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "vec3.h"
-#include "utilities.h"
+#pragma once
 
-template <typename T>
-GALS::CPU::Vec3<T>::Vec3()
+namespace GALS
 {
-  for (int i = 0; i < 3; ++i) m_data[i] = static_cast<T>(0);
-}
-
-template <typename T>
-GALS::CPU::Vec3<T>::~Vec3()
+namespace CPU
 {
-}
-
+/*! \class Mat3
+ *
+ * Class to create 9 component variable at a computational cell. For e.x. gradient of velocity.
+ */
 template <typename T>
-const int GALS::CPU::Vec3<T>::size() const
+class Mat3
 {
-  return 3;
-}
+ public:
+  typedef T value_type;
 
-template <typename T>
-const T GALS::CPU::Vec3<T>::operator[](const int idx) const
-{
-  return m_data[idx];
-}
+  /*! Default constructor
+   */
+  Mat3();
 
-template <typename T>
-T& GALS::CPU::Vec3<T>::operator[](const int idx)
-{
-  return m_data[idx];
-}
+  /*! Destructor
+   */
+  ~Mat3();
 
-template <typename T>
-void GALS::CPU::Vec3<T>::operator=(const Vec3<T>& vec)
-{
-  for (int i = 0; i < 3; ++i) m_data[i] = vec[i];
-}
+  /*! Returns number of elements.
+   *
+   * \return number of elements.
+   */
+  const int size() const;
 
-template <typename T>
-bool GALS::CPU::Vec3<T>::operator==(const Vec3<T>& vec)
-{
-  return (GALS::is_equal<T>(m_data[0], vec[0]) && GALS::is_equal<T>(m_data[1], vec[1]) &&
-          GALS::is_equal<T>(m_data[2], vec[2]));
-}
+  /*! Overloaded subscript operator that returns a reference.
+   *
+   * \param idx zero based index of element.
+   *
+   * \return element at index (idx).
+   */
+  const T operator[](const int idx) const;
 
-template class GALS::CPU::Vec3<int>;
-template class GALS::CPU::Vec3<double>;
+  /*! Overloaded subscript operator that returns a reference.
+   *
+   * \param idx zero based index of element.
+   *
+   * \return element at index (idx).
+   */
+  T &operator[](const int idx);
+
+  /*! Row column based element access.
+   *
+   * \param i_row row index (zero-based).
+   * \param i_col column index (zero-based).
+   *
+   * \return element at index (i_row, i_col).
+   */
+  const T operator()(const int i_row, const int i_col) const;
+
+  /*! Row column based element access.
+   *
+   * \param i_row row index (zero-based).
+   * \param i_col column index (zero-based).
+   *
+   * \return element at index (i_row, i_col).
+   */
+  T &operator()(const int i_row, const int i_col);
+
+  /*! Overload assignment operator.
+   *
+   * \param mat variable whose values will be assigned.
+   */
+  void operator=(const Mat3<T> &mat);
+
+  /*! Equality operator.
+   *
+   * \param mat variable to compare against.
+   *
+   * \return true if equal, false otherwise.
+   */
+  bool operator==(const Mat3<T> &mat);
+
+ private:
+  T m_data[9];
+};
+
+}  // namespace CPU
+}  // namespace GALS

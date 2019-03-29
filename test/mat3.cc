@@ -29,50 +29,67 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "vec3.h"
-#include "utilities.h"
+#include <cpu/mat3.h>
+#include <cpu/utilities.h>
 
-template <typename T>
-GALS::CPU::Vec3<T>::Vec3()
+#include <gtest/gtest.h>
+
+TEST(CPU, MAT3_INT)
 {
-  for (int i = 0; i < 3; ++i) m_data[i] = static_cast<T>(0);
+  GALS::CPU::Mat3<int> mat3;
+
+  EXPECT_TRUE(mat3.size() == 9);
+
+  mat3[0] = 9;
+  EXPECT_TRUE(mat3[0] == 9);
+
+  const int i = mat3[0];
+  EXPECT_TRUE(i == 9);
+
+  GALS::CPU::Mat3<int> mat_other;
+  mat_other[0] = 1, mat_other[1] = 2, mat_other[2] = 3;
+
+  // Assign mat_other to mat3.
+  mat3 = mat_other;
+  for (int i = 0; i < 9; ++i) EXPECT_TRUE(mat_other[i] == mat3[i]);
+
+  mat_other(1, 1) = mat3(1, 1);
+
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j) EXPECT_TRUE(mat_other(i, j) == mat3(i, j));
+
+  EXPECT_TRUE(mat3 == mat_other);
+
+  const int j = mat3(0, 2);
+  EXPECT_TRUE(j == mat3(0, 2));
 }
 
-template <typename T>
-GALS::CPU::Vec3<T>::~Vec3()
+TEST(CPU, MAT3_DOUBLE)
 {
-}
+  GALS::CPU::Mat3<double> mat3;
 
-template <typename T>
-const int GALS::CPU::Vec3<T>::size() const
-{
-  return 3;
-}
+  EXPECT_TRUE(mat3.size() == 9);
 
-template <typename T>
-const T GALS::CPU::Vec3<T>::operator[](const int idx) const
-{
-  return m_data[idx];
-}
+  mat3[0] = 9.;
+  EXPECT_TRUE(GALS::is_equal(mat3[0], 9.));
 
-template <typename T>
-T& GALS::CPU::Vec3<T>::operator[](const int idx)
-{
-  return m_data[idx];
-}
+  const double i = mat3[0];
+  EXPECT_TRUE(GALS::is_equal(i, 9.));
 
-template <typename T>
-void GALS::CPU::Vec3<T>::operator=(const Vec3<T>& vec)
-{
-  for (int i = 0; i < 3; ++i) m_data[i] = vec[i];
-}
+  GALS::CPU::Mat3<double> mat_other;
+  mat_other[0] = 1.1, mat_other[1] = 2.2, mat_other[2] = 3.3;
 
-template <typename T>
-bool GALS::CPU::Vec3<T>::operator==(const Vec3<T>& vec)
-{
-  return (GALS::is_equal<T>(m_data[0], vec[0]) && GALS::is_equal<T>(m_data[1], vec[1]) &&
-          GALS::is_equal<T>(m_data[2], vec[2]));
-}
+  // Assign mat_other to mat3.
+  mat3 = mat_other;
+  for (int i = 0; i < 9; ++i) EXPECT_TRUE(GALS::is_equal<double>(mat_other[i], mat3[i]));
 
-template class GALS::CPU::Vec3<int>;
-template class GALS::CPU::Vec3<double>;
+  mat_other(1, 1) = mat3(1, 1);
+
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j) EXPECT_TRUE(GALS::is_equal<double>(mat_other(i, j), mat3(i, j)));
+
+  EXPECT_TRUE(mat3 == mat_other);
+
+  const double j = mat3(0, 2);
+  EXPECT_TRUE(GALS::is_equal<double>(j, mat3(0, 2)));
+}
