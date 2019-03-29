@@ -32,6 +32,7 @@
 #pragma once
 
 #include "grid.h"
+#include "vec3.h"
 
 #include <vector>
 
@@ -51,7 +52,7 @@ class Array
    *
    * \param grid object of Grid.
    */
-  Array(Grid<typename T_GRID::value_type, T_GRID::dim> &grid);
+  Array(const Grid<typename T_GRID::value_type, T_GRID::dim> &grid);
 
   /*! Destructor
    */
@@ -64,6 +65,18 @@ class Array
    * \return 1D array size.
    */
   const std::size_t size() const;
+
+  /*! Returns attached grid.
+   */
+  const T_GRID &grid() const;
+
+  /*! Returns a vector of size 3 with number of cells along x, y, z directions.
+   *
+   * Vector of size 3: {nx, ny, nz}.
+   *
+   * \return vector of size 3.
+   */
+  const Vec3<int> numCells() const;
 
   /*! Overloaded subscript operator to return value of array at a given 1D array based index.
    *
@@ -102,7 +115,7 @@ class Array
   T_ARRAY &operator()(const int i, const int j, const int k);
 
  private:
-  T_GRID &m_grid;
+  const T_GRID &m_grid;
   const int m_nx, m_ny, m_nz, m_pad;
   std::vector<T_ARRAY> m_data;
 };

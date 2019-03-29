@@ -54,6 +54,10 @@ TEST(CPU, VEC3_INT)
   for (int i = 0; i < 3; ++i) EXPECT_TRUE(vec_other[i] == vec3[i]);
 
   EXPECT_TRUE(vec3 == vec_other);
+
+  // Constructor with 3 input arguments.
+  GALS::CPU::Vec3<int> vec_3(1, 2, 3);
+  EXPECT_TRUE(GALS::is_equal(vec_3[0], 1));
 }
 
 TEST(CPU, VEC3_DOUBLE)
@@ -73,7 +77,11 @@ TEST(CPU, VEC3_DOUBLE)
 
   // Assign vec_other to vec3.
   vec3 = vec_other;
-  for (int i = 0; i < 3; ++i) EXPECT_TRUE(GALS::is_equal<double>(vec_other[i], vec3[i]));
+  for (int i = 0; i < 3; ++i) EXPECT_TRUE(GALS::is_equal(vec_other[i], vec3[i]));
 
   EXPECT_TRUE(vec3 == vec_other);
+
+  // Constructor with 3 input arguments.
+  GALS::CPU::Vec3<double> vec_3(1.1, 2.1, 3.1);
+  EXPECT_TRUE(GALS::is_equal(vec_3[0], 1.1));
 }

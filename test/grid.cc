@@ -30,6 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include <cpu/grid.h>
+#include <cpu/mat3.h>
 
 #include <gtest/gtest.h>
 
@@ -37,15 +38,19 @@
 
 TEST(CPU, GRID_1D)
 {
+   // Test axis_vectors.
+   const GALS::CPU::Mat3<int> axis_vectors_ref(1, 0, 0, 0, 1, 0, 0, 0, 1);
+   EXPECT_TRUE((axis_vectors_ref == GALS::CPU::Grid<double, 1>::axis_vectors));
+
   int num_cells = 10;
   GALS::CPU::Grid<double, 1> grid_1(num_cells, 1, 1);
   GALS::CPU::Grid<double, 1> grid_2(num_cells, 1);
   GALS::CPU::Grid<double, 1> grid(num_cells);
 
   EXPECT_TRUE(grid.dimension() == 1);
-  EXPECT_TRUE(grid.getNumCells()[0] == 10);
-  EXPECT_TRUE(grid.getNumCells()[1] == 1);
-  EXPECT_TRUE(grid.getNumCells()[2] == 1);
+  EXPECT_TRUE(grid.numCells()[0] == 10);
+  EXPECT_TRUE(grid.numCells()[1] == 1);
+  EXPECT_TRUE(grid.numCells()[2] == 1);
 
   grid.setPadding(2);
   EXPECT_TRUE(grid.getPadding() == 2);
@@ -67,7 +72,7 @@ TEST(CPU, GRID_1D)
   EXPECT_TRUE(grid.getMask()[1] == 0);
   EXPECT_TRUE(grid.getMask()[2] == 0);
 
-  EXPECT_TRUE(grid.getIndex(0, 0, 0) == 1);
+  EXPECT_TRUE(grid.index(0, 0, 0) == 1);
 
   EXPECT_TRUE(fabs(grid.dX()[0] - dx) < 1e-10);
 
@@ -83,9 +88,9 @@ TEST(CPU, GRID_2D)
   GALS::CPU::Grid<double, 2> grid(n_x, n_y);
 
   EXPECT_TRUE(grid.dimension() == 2);
-  EXPECT_TRUE(grid.getNumCells()[0] == 10);
-  EXPECT_TRUE(grid.getNumCells()[1] == 10);
-  EXPECT_TRUE(grid.getNumCells()[2] == 1);
+  EXPECT_TRUE(grid.numCells()[0] == 10);
+  EXPECT_TRUE(grid.numCells()[1] == 10);
+  EXPECT_TRUE(grid.numCells()[2] == 1);
 
   grid.setPadding(2);
   EXPECT_TRUE(grid.getPadding() == 2);
@@ -112,7 +117,7 @@ TEST(CPU, GRID_2D)
   EXPECT_TRUE(grid.getMask()[1] == 1);
   EXPECT_TRUE(grid.getMask()[2] == 0);
 
-  EXPECT_TRUE(grid.getIndex(0, 0, 0) == 13);
+  EXPECT_TRUE(grid.index(0, 0, 0) == 13);
 
   EXPECT_TRUE(fabs(grid.dX()[0] - dx) < 1e-10);
   EXPECT_TRUE(fabs(grid.dX()[1] - dy) < 1e-10);
@@ -129,9 +134,9 @@ TEST(CPU, GRID_3D)
   GALS::CPU::Grid<double, 3> grid(num_cells, num_cells, num_cells);
 
   EXPECT_TRUE(grid.dimension() == 3);
-  EXPECT_TRUE(grid.getNumCells()[0] == 10);
-  EXPECT_TRUE(grid.getNumCells()[1] == 10);
-  EXPECT_TRUE(grid.getNumCells()[2] == 10);
+  EXPECT_TRUE(grid.numCells()[0] == 10);
+  EXPECT_TRUE(grid.numCells()[1] == 10);
+  EXPECT_TRUE(grid.numCells()[2] == 10);
 
   grid.setPadding(2);
   EXPECT_TRUE(grid.getPadding() == 2);
@@ -153,7 +158,7 @@ TEST(CPU, GRID_3D)
   EXPECT_TRUE(grid.getMask()[1] == 1);
   EXPECT_TRUE(grid.getMask()[2] == 1);
 
-  EXPECT_TRUE(grid.getIndex(0, 0, 0) == 157);
+  EXPECT_TRUE(grid.index(0, 0, 0) == 157);
 
   EXPECT_TRUE(fabs(grid.dX()[0] - dx) < 1e-10);
 

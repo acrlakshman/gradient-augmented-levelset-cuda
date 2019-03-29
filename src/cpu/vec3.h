@@ -46,8 +46,17 @@ class Vec3
 {
  public:
   typedef T value_type;
+  static const int SIZE = 3;
 
-  /*! Default constructor
+  /*! Constructor with 3 input arguments.
+   *
+   * \param a
+   * \param b
+   * \param c
+   */
+  Vec3(const T a, const T b, const T c);
+
+  /*! Default constructor.
    */
   Vec3();
 
@@ -61,7 +70,7 @@ class Vec3
    */
   const int size() const;
 
-  /*! Overloaded subscript operator that returns a reference.
+  /*! Overloaded subscript operator that returns a const value.
    *
    * \param idx zero based index of element.
    *
@@ -92,7 +101,7 @@ class Vec3
   bool operator==(const Vec3<T> &vec);
 
  private:
-  T m_data[3];
+  T m_data[SIZE];
 };
 
 }  // namespace CPU

@@ -33,9 +33,24 @@
 #include "utilities.h"
 
 template <typename T>
-GALS::CPU::Mat3<T>::Mat3()
+GALS::CPU::Mat3<T>::Mat3(T a00, T a01, T a02, T a10, T a11, T a12, T a20, T a21, T a22)
 {
-  for (int i = 0; i < 3; ++i) m_data[i] = static_cast<T>(0);
+  m_data[0] = a00;
+  m_data[1] = a01;
+  m_data[2] = a02;
+  m_data[3] = a10;
+  m_data[4] = a11;
+  m_data[5] = a12;
+  m_data[6] = a20;
+  m_data[7] = a21;
+  m_data[8] = a22;
+}
+
+template <typename T>
+GALS::CPU::Mat3<T>::Mat3()
+    : Mat3(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0),
+           static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0))
+{
 }
 
 template <typename T>
@@ -46,7 +61,7 @@ GALS::CPU::Mat3<T>::~Mat3()
 template <typename T>
 const int GALS::CPU::Mat3<T>::size() const
 {
-  return 9;
+  return SIZE;
 }
 
 template <typename T>
@@ -76,17 +91,15 @@ T& GALS::CPU::Mat3<T>::operator()(const int i_row, const int i_col)
 template <typename T>
 void GALS::CPU::Mat3<T>::operator=(const Mat3<T>& mat)
 {
-  for (int i = 0; i < 9; ++i) m_data[i] = mat[i];
+  for (int i = 0; i < SIZE; ++i) m_data[i] = mat[i];
 }
 
 template <typename T>
-bool GALS::CPU::Mat3<T>::operator==(const Mat3<T>& mat)
+bool GALS::CPU::Mat3<T>::operator==(const Mat3<T>& mat) const
 {
-  return (GALS::is_equal<T>(m_data[0], mat[0]) && GALS::is_equal<T>(m_data[1], mat[1]) &&
-          GALS::is_equal<T>(m_data[2], mat[2]) && GALS::is_equal<T>(m_data[3], mat[3]) &&
-          GALS::is_equal<T>(m_data[4], mat[4]) && GALS::is_equal<T>(m_data[5], mat[5]) &&
-          GALS::is_equal<T>(m_data[6], mat[6]) && GALS::is_equal<T>(m_data[7], mat[7]) &&
-          GALS::is_equal<T>(m_data[8], mat[8]));
+  return (GALS::is_equal(m_data[0], mat[0]) && GALS::is_equal(m_data[1], mat[1]) && GALS::is_equal(m_data[2], mat[2]) &&
+          GALS::is_equal(m_data[3], mat[3]) && GALS::is_equal(m_data[4], mat[4]) && GALS::is_equal(m_data[5], mat[5]) &&
+          GALS::is_equal(m_data[6], mat[6]) && GALS::is_equal(m_data[7], mat[7]) && GALS::is_equal(m_data[8], mat[8]));
 }
 
 template class GALS::CPU::Mat3<int>;

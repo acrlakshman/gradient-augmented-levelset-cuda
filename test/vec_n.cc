@@ -34,6 +34,14 @@
 
 #include <gtest/gtest.h>
 
+template<typename T, int dim>
+void test_subscript_operator(const GALS::CPU::VecN<T, dim> &vec_n)
+{
+   for (int i = 0; i < vec_n.size(); ++i) {
+      const T elem = vec_n[i];
+   }
+}
+
 TEST(CPU, VEC_N_INT_1)
 {
   GALS::CPU::VecN<int, 1> vec_n;
@@ -45,6 +53,8 @@ TEST(CPU, VEC_N_INT_1)
 
   const int i = vec_n[0];
   EXPECT_TRUE(i == 9);
+
+  test_subscript_operator<int, 1>(vec_n);
 }
 
 TEST(CPU, VEC_N_INT_2)
@@ -58,6 +68,8 @@ TEST(CPU, VEC_N_INT_2)
 
   const int i = vec_n[0];
   EXPECT_TRUE(i == 9);
+
+  test_subscript_operator<int, 2>(vec_n);
 }
 
 TEST(CPU, VEC_N_INT_3)
@@ -71,6 +83,8 @@ TEST(CPU, VEC_N_INT_3)
 
   const int i = vec_n[0];
   EXPECT_TRUE(i == 9);
+
+  test_subscript_operator<int, 3>(vec_n);
 }
 
 TEST(CPU, VEC_N_DOUBLE_1)
@@ -80,10 +94,12 @@ TEST(CPU, VEC_N_DOUBLE_1)
   EXPECT_TRUE(vec_n.size() == 1);
 
   vec_n[0] = 9.1;
-  EXPECT_TRUE(GALS::is_equal<double>(vec_n[0], 9.1));
+  EXPECT_TRUE(GALS::is_equal(vec_n[0], 9.1));
 
   const double i = vec_n[0];
-  EXPECT_TRUE(GALS::is_equal<double>(i, 9.1));
+  EXPECT_TRUE(GALS::is_equal(i, 9.1));
+
+  test_subscript_operator<double, 1>(vec_n);
 }
 
 TEST(CPU, VEC_N_DOUBLE_2)
@@ -93,10 +109,12 @@ TEST(CPU, VEC_N_DOUBLE_2)
   EXPECT_TRUE(vec_n.size() == 2);
 
   vec_n[0] = 9.1;
-  EXPECT_TRUE(GALS::is_equal<double>(vec_n[0], 9.1));
+  EXPECT_TRUE(GALS::is_equal(vec_n[0], 9.1));
 
   const double i = vec_n[0];
-  EXPECT_TRUE(GALS::is_equal<double>(i, 9.1));
+  EXPECT_TRUE(GALS::is_equal(i, 9.1));
+
+  test_subscript_operator<double, 2>(vec_n);
 }
 
 TEST(CPU, VEC_N_DOUBLE_3)
@@ -106,8 +124,10 @@ TEST(CPU, VEC_N_DOUBLE_3)
   EXPECT_TRUE(vec_n.size() == 3);
 
   vec_n[0] = 9.1;
-  EXPECT_TRUE(GALS::is_equal<double>(vec_n[0], 9.1));
+  EXPECT_TRUE(GALS::is_equal(vec_n[0], 9.1));
 
   const double i = vec_n[0];
-  EXPECT_TRUE(GALS::is_equal<double>(i, 9.1));
+  EXPECT_TRUE(GALS::is_equal(i, 9.1));
+
+  test_subscript_operator<double, 3>(vec_n);
 }

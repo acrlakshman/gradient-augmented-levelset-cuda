@@ -31,7 +31,8 @@
 
 #pragma once
 
-#include "vec_n.h"
+#include "mat3.h"
+#include "vec3.h"
 
 #include <string>
 #include <vector>
@@ -50,6 +51,9 @@ class Grid
  public:
   typedef T value_type;
   static const int dim = DIM;
+
+  //! vector along x: {1, 0, 0}; y: {0, 1, 0}; z: {0, 0, 1}.
+  static const Mat3<int> axis_vectors;
 
   /*! Constructor with arguments for number of cells across x, y, z.
    *
@@ -88,7 +92,7 @@ class Grid
    *
    * \return 3D position vector.
    */
-  VecN<T, 3>& x(const int i, const int j = 0, const int k = 0);
+  Vec3<T>& x(const int i, const int j = 0, const int k = 0);
 
   /*! Returns dimension of grid.
    *
@@ -121,7 +125,7 @@ class Grid
    *
    * \return vector of size 3.
    */
-  const std::vector<int> getNumCells() const;
+  const std::vector<int> numCells() const;
 
   /*! Return current padding.
    *
@@ -135,19 +139,19 @@ class Grid
    *
    * \return 1D index.
    */
-  const std::size_t getIndex(const int i, const int j, const int k);
+  const std::size_t index(const int i, const int j, const int k) const;
 
   /*! Returns cell size which is a vector of size 3.
    *
    * \return cell size.
    */
-  const VecN<T, 3> dX() const;
+  const Vec3<T>& dX() const;
 
   /*! Operator overloaded to return co-ordinate values at a given 3D index.
    *
    * \return position.
    */
-  VecN<T, 3>& operator()(const int i, const int j, const int k);
+  const Vec3<T>& operator()(const int i, const int j, const int k) const;
 
   /*! Set new padding value.
    *
@@ -168,7 +172,7 @@ class Grid
    */
   void generate(T x_min, T x_max, T y_min, T y_max, T z_min, T z_max);
 
-  /*! Print grid for debugging.
+  /*! Write grid data to a file.
    *
    * \param file_name writes grid file with the prescribed name.
    * \param dir_name writes grid in the prescribed directory.
@@ -179,9 +183,12 @@ class Grid
  private:
   int m_dimension, m_nx, m_ny, m_nz, m_pad;
   int m_mask[3];
-  std::vector<VecN<T, 3>> m_grid;
-  VecN<T, 3> m_dx;
+  Vec3<T> m_dx;
+  std::vector<Vec3<T>> m_grid;
 };
+
+template <typename T, int DIM>
+const Mat3<int> Grid<T, DIM>::axis_vectors = Mat3<int>(1, 0, 0, 0, 1, 0, 0, 0, 1);
 
 }  // namespace CPU
 }  // namespace GALS

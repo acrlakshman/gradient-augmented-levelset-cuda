@@ -62,9 +62,9 @@ GALS::CPU::Grid<T, DIM>::~Grid()
 }
 
 template <typename T, int DIM>
-GALS::CPU::VecN<T, 3>& GALS::CPU::Grid<T, DIM>::x(const int i, const int j, const int k)
+GALS::CPU::Vec3<T>& GALS::CPU::Grid<T, DIM>::x(const int i, const int j, const int k)
 {
-  return m_grid[this->getIndex(i, j, k)];
+  return m_grid[this->index(i, j, k)];
 }
 
 template <typename T, int DIM>
@@ -86,7 +86,7 @@ const int* GALS::CPU::Grid<T, DIM>::getMask() const
 }
 
 template <typename T, int DIM>
-const std::vector<int> GALS::CPU::Grid<T, DIM>::getNumCells() const
+const std::vector<int> GALS::CPU::Grid<T, DIM>::numCells() const
 {
   return std::vector<int>{m_nx, m_ny, m_nz};
 }
@@ -98,7 +98,7 @@ const int GALS::CPU::Grid<T, DIM>::getPadding() const
 }
 
 template <typename T, int DIM>
-const std::size_t GALS::CPU::Grid<T, DIM>::getIndex(const int i, const int j, const int k)
+const std::size_t GALS::CPU::Grid<T, DIM>::index(const int i, const int j, const int k) const
 {
   const std::size_t idx = ((k + m_pad) * (m_nx + 2 * m_pad) * (m_ny + 2 * m_pad) * m_mask[2]) +
                           ((j + m_pad) * (m_nx + 2 * m_pad) * m_mask[1]) + ((i + m_pad) * m_mask[0]);
@@ -107,15 +107,15 @@ const std::size_t GALS::CPU::Grid<T, DIM>::getIndex(const int i, const int j, co
 }
 
 template <typename T, int DIM>
-const GALS::CPU::VecN<T, 3> GALS::CPU::Grid<T, DIM>::dX() const
+const GALS::CPU::Vec3<T>& GALS::CPU::Grid<T, DIM>::dX() const
 {
   return m_dx;
 }
 
 template <typename T, int DIM>
-GALS::CPU::VecN<T, 3>& GALS::CPU::Grid<T, DIM>::operator()(const int i, const int j, const int k)
+const GALS::CPU::Vec3<T>& GALS::CPU::Grid<T, DIM>::operator()(const int i, const int j, const int k) const
 {
-  return m_grid[this->getIndex(i, j, k)];
+  return m_grid[this->index(i, j, k)];
 }
 
 template <typename T, int DIM>
@@ -139,7 +139,7 @@ void GALS::CPU::Grid<T, DIM>::generate(T x_min, T x_max, T y_min, T y_max, T z_m
 
   for (int i = 0; i < 3; ++i) domain_min_new[i] = domain_min[i] + (m_dx[i] * 0.5) - (m_dx[i] * m_mask[i]);
 
-  VecN<T, 3> elem;
+  Vec3<T> elem;
 
   int i_min = -m_pad * m_mask[0], j_min = -m_pad * m_mask[1], k_min = -m_pad * m_mask[2];
 
@@ -173,9 +173,9 @@ void GALS::CPU::Grid<T, DIM>::writeToFile(std::string file_name, std::string dir
   for (int i = i_min; i < i_max; ++i) {
     for (int j = j_min; j < j_max; ++j) {
       for (int k = k_min; k < k_max; ++k) {
-        VecN<T, 3> coordinate = this->x(i, j, k);
-        output_file << this->getIndex(i, j, k) << '\t' << coordinate[0] << '\t' << coordinate[1] << '\t'
-                    << coordinate[2] << std::endl;
+        Vec3<T> coordinate = this->x(i, j, k);
+        output_file << this->index(i, j, k) << '\t' << coordinate[0] << '\t' << coordinate[1] << '\t' << coordinate[2]
+                    << std::endl;
       }
     }
   }

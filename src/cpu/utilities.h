@@ -46,10 +46,9 @@ static double VSMALL = 1e-10;
  *
  * \return number of elements.
  */
-template <typename T>
-bool is_equal(T a, T b)
-{
-  return fabs(a - b) <= static_cast<T>(VSMALL);
-}
+static bool is_equal(double a, double b) { return fabs(a - b) <= VSMALL; }
+
+//! Check for equality between integers.
+static bool is_equal(int a, int b) { return a == b; }
 
 }  // namespace GALS

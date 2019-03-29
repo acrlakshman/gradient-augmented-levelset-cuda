@@ -44,8 +44,23 @@ class Mat3
 {
  public:
   typedef T value_type;
+  static const int SIZE = 9;
 
-  /*! Default constructor
+  /*! Constructor.
+   *
+   * \param a00 row 0, col 0
+   * \param a01 row 0, col 1
+   * \param a02 row 0, col 2
+   * \param a10 row 1, col 0
+   * \param a11 row 1, col 1
+   * \param a12 row 1, col 2
+   * \param a20 row 2, col 0
+   * \param a21 row 2, col 1
+   * \param a22 row 2, col 2
+   */
+  Mat3(T a00, T a01, T a02, T a10, T a11, T a12, T a20, T a21, T a22);
+
+  /*! Default constructor.
    */
   Mat3();
 
@@ -105,10 +120,10 @@ class Mat3
    *
    * \return true if equal, false otherwise.
    */
-  bool operator==(const Mat3<T> &mat);
+  bool operator==(const Mat3<T> &mat) const;
 
  private:
-  T m_data[9];
+  T m_data[SIZE];
 };
 
 }  // namespace CPU

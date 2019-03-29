@@ -29,55 +29,30 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "vec3.h"
-#include "utilities.h"
+#include "gradient.h"
 
-template <typename T>
-GALS::CPU::Vec3<T>::Vec3(const T a, const T b, const T c)
-{
-  m_data[0] = a;
-  m_data[1] = b;
-  m_data[2] = c;
-}
-template <typename T>
-GALS::CPU::Vec3<T>::Vec3() : Vec3(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0))
+template <typename T, typename T_GRID, typename GRADIENT_SCHEME>
+GALS::CPU::Gradient<T, T_GRID, GRADIENT_SCHEME>::Gradient()
 {
 }
 
-template <typename T>
-GALS::CPU::Vec3<T>::~Vec3()
+template <typename T, typename T_GRID, typename GRADIENT_SCHEME>
+GALS::CPU::Gradient<T, T_GRID, GRADIENT_SCHEME>::~Gradient()
 {
 }
 
-template <typename T>
-const int GALS::CPU::Vec3<T>::size() const
+template <typename T, typename T_GRID, typename GRADIENT_SCHEME>
+void GALS::CPU::Gradient<T, T_GRID, GRADIENT_SCHEME>::compute(const Array<T_GRID, T> &alpha,
+                                                              Array<T_GRID, Vec3<T>> &grad_alpha)
 {
-  return SIZE;
+  GRADIENT_SCHEME()(alpha, grad_alpha);
 }
 
-template <typename T>
-const T GALS::CPU::Vec3<T>::operator[](const int idx) const
-{
-  return m_data[idx];
-}
+template class GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>,
+                                   GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 1>>>;
 
-template <typename T>
-T& GALS::CPU::Vec3<T>::operator[](const int idx)
-{
-  return m_data[idx];
-}
+template class GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>,
+                                   GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 2>>>;
 
-template <typename T>
-void GALS::CPU::Vec3<T>::operator=(const Vec3<T>& vec)
-{
-  for (int i = 0; i < SIZE; ++i) m_data[i] = vec[i];
-}
-
-template <typename T>
-bool GALS::CPU::Vec3<T>::operator==(const Vec3<T>& vec)
-{
-  return (GALS::is_equal(m_data[0], vec[0]) && GALS::is_equal(m_data[1], vec[1]) && GALS::is_equal(m_data[2], vec[2]));
-}
-
-template class GALS::CPU::Vec3<int>;
-template class GALS::CPU::Vec3<double>;
+template class GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>,
+                                   GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 3>>>;
