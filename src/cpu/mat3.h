@@ -31,38 +31,42 @@
 
 #pragma once
 
-#include <vector>
-
 namespace GALS
 {
 namespace CPU
 {
-/*! \class Vec3
+/*! \class Mat3
  *
- * Class to create 3 component elements at a computational cell. For e.x. velocity, gradients, etc.
+ * Class to create 9 component variable at a computational cell. For e.x. gradient of velocity.
  */
 template <typename T>
-class Vec3
+class Mat3
 {
  public:
   typedef T value_type;
-  static const int SIZE = 3;
+  static const int SIZE = 9;
 
-  /*! Constructor with 3 input arguments.
+  /*! Constructor.
    *
-   * \param a
-   * \param b
-   * \param c
+   * \param a00 row 0, col 0
+   * \param a01 row 0, col 1
+   * \param a02 row 0, col 2
+   * \param a10 row 1, col 0
+   * \param a11 row 1, col 1
+   * \param a12 row 1, col 2
+   * \param a20 row 2, col 0
+   * \param a21 row 2, col 1
+   * \param a22 row 2, col 2
    */
-  Vec3(const T a, const T b, const T c);
+  Mat3(T a00, T a01, T a02, T a10, T a11, T a12, T a20, T a21, T a22);
 
   /*! Default constructor.
    */
-  Vec3();
+  Mat3();
 
   /*! Destructor
    */
-  ~Vec3();
+  ~Mat3();
 
   /*! Returns number of elements.
    *
@@ -70,7 +74,7 @@ class Vec3
    */
   const int size() const;
 
-  /*! Overloaded subscript operator that returns a const value.
+  /*! Overloaded subscript operator that returns a reference.
    *
    * \param idx zero based index of element.
    *
@@ -86,19 +90,37 @@ class Vec3
    */
   T &operator[](const int idx);
 
+  /*! Row column based element access.
+   *
+   * \param i_row row index (zero-based).
+   * \param i_col column index (zero-based).
+   *
+   * \return element at index (i_row, i_col).
+   */
+  const T operator()(const int i_row, const int i_col) const;
+
+  /*! Row column based element access.
+   *
+   * \param i_row row index (zero-based).
+   * \param i_col column index (zero-based).
+   *
+   * \return element at index (i_row, i_col).
+   */
+  T &operator()(const int i_row, const int i_col);
+
   /*! Overload assignment operator.
    *
-   * \param vec variable whose values will be assigned.
+   * \param mat variable whose values will be assigned.
    */
-  void operator=(const Vec3<T> &vec);
+  void operator=(const Mat3<T> &mat);
 
   /*! Equality operator.
    *
-   * \param vec variable to compare against.
+   * \param mat variable to compare against.
    *
    * \return true if equal, false otherwise.
    */
-  bool operator==(const Vec3<T> &vec);
+  bool operator==(const Mat3<T> &mat) const;
 
  private:
   T m_data[SIZE];

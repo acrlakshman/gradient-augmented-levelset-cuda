@@ -30,14 +30,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "array.h"
+#include "mat3.h"
 #include "vec_n.h"
 
 template <typename T_GRID, typename T_ARRAY>
-GALS::CPU::Array<T_GRID, T_ARRAY>::Array(Grid<typename T_GRID::value_type, T_GRID::dim>& grid)
+GALS::CPU::Array<T_GRID, T_ARRAY>::Array(const Grid<typename T_GRID::value_type, T_GRID::dim>& grid)
     : m_grid(grid),
-      m_nx(grid.getNumCells()[0]),
-      m_ny(grid.getNumCells()[1]),
-      m_nz(grid.getNumCells()[2]),
+      m_nx(grid.numCells()[0]),
+      m_ny(grid.numCells()[1]),
+      m_nz(grid.numCells()[2]),
       m_pad(grid.getPadding())
 {
   m_data.resize(m_grid.size());
@@ -61,6 +62,18 @@ const std::size_t GALS::CPU::Array<T_GRID, T_ARRAY>::size() const
 }
 
 template <typename T_GRID, typename T_ARRAY>
+const T_GRID& GALS::CPU::Array<T_GRID, T_ARRAY>::grid() const
+{
+  return m_grid;
+}
+
+template <typename T_GRID, typename T_ARRAY>
+const GALS::CPU::Vec3<int> GALS::CPU::Array<T_GRID, T_ARRAY>::numCells() const
+{
+  return Vec3<int>(m_nx, m_ny, m_nz);
+}
+
+template <typename T_GRID, typename T_ARRAY>
 const T_ARRAY& GALS::CPU::Array<T_GRID, T_ARRAY>::operator[](const std::size_t idx) const
 {
   return m_data[idx];
@@ -75,23 +88,23 @@ T_ARRAY& GALS::CPU::Array<T_GRID, T_ARRAY>::operator[](const std::size_t idx)
 template <typename T_GRID, typename T_ARRAY>
 const T_ARRAY& GALS::CPU::Array<T_GRID, T_ARRAY>::operator()(const int i, const int j, const int k) const
 {
-  const std::size_t idx = m_grid.getIndex(i, j, k);
+  const std::size_t idx = m_grid.index(i, j, k);
   return m_data[idx];
 }
 
 template <typename T_GRID, typename T_ARRAY>
 T_ARRAY& GALS::CPU::Array<T_GRID, T_ARRAY>::operator()(const int i, const int j, const int k)
 {
-  const std::size_t idx = m_grid.getIndex(i, j, k);
+  const std::size_t idx = m_grid.index(i, j, k);
   return m_data[idx];
 }
 
 template class GALS::CPU::Array<GALS::CPU::Grid<double, 1>, double>;
 template class GALS::CPU::Array<GALS::CPU::Grid<double, 2>, double>;
 template class GALS::CPU::Array<GALS::CPU::Grid<double, 3>, double>;
-template class GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::VecN<int, 2>>;
-template class GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::VecN<int, 2>>;
-template class GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::VecN<int, 2>>;
+template class GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::Vec3<double>>;
+template class GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::Vec3<double>>;
+template class GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::Vec3<double>>;
 template class GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::VecN<double, 2>>;
 template class GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::VecN<double, 2>>;
 template class GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::VecN<double, 2>>;

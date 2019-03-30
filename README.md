@@ -13,20 +13,37 @@ mkdir -p build && cd build
 cmake .. -GNinja && ninja -j 4
 ```
 
+#### Additional build instructions
+
+```sh
+cmake .. -DBUILD_DOCUMENTATION=ON -DBUILD_COVERAGE=ON -GNinja
+ninja -j 4
+./test/gals_unit_test
+lcov --directory . --base-directory ../src --capture --no-external --output-file coverage.info
+genhtml coverage.info --output-directory ./doc/html/coverage
+```
+
+* Documentation is now available at `./doc/html/index.html`.
+
+### Documentation
+
+* [Documentation]
+* [Coverage]
+
 License
 -------
 
-BSD 3-Clause License. Please check the accompanying [LICENSE].txt file
+BSD 3-Clause License. Please check the accompanying [LICENSE] file
 
 Acknowledgements
 ----------------
 
-[Pradeep Garigipati] for helping with cmake.
+* [Pradeep Garigipati] for helping with cmake.
+* [Ryan Krattiger] for helping with cmake.
+* [John Van Gilder] for helping with coverage tools.
 
-[Ryan Krattiger] for helping with cmake.
-
-[John Van Gilder] for helping with coverage tools.
-
+[Documentation]:https://acrlakshman.github.io/gradient-augmented-levelset-cuda
+[Coverage]:https://acrlakshman.github.io/gradient-augmented-levelset-cuda/coverage
 [LICENSE]:https://github.com/acrlakshman/gradient_augmented_levelset_cuda/blob/master/LICENSE
 [Pradeep Garigipati]:https://github.com/9prady9
 [Ryan Krattiger]:https://github.com/rjk9w5

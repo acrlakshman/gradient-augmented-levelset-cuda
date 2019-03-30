@@ -29,55 +29,49 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "vec3.h"
-#include "utilities.h"
+#pragma once
 
-template <typename T>
-GALS::CPU::Vec3<T>::Vec3(const T a, const T b, const T c)
-{
-  m_data[0] = a;
-  m_data[1] = b;
-  m_data[2] = c;
-}
-template <typename T>
-GALS::CPU::Vec3<T>::Vec3() : Vec3(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0))
-{
-}
+#include "../array.h"
+#include "../grid.h"
+#include "../mat3.h"
+#include "../vec3.h"
 
-template <typename T>
-GALS::CPU::Vec3<T>::~Vec3()
+namespace GALS
 {
-}
-
-template <typename T>
-const int GALS::CPU::Vec3<T>::size() const
+namespace CPU
 {
-  return SIZE;
-}
-
-template <typename T>
-const T GALS::CPU::Vec3<T>::operator[](const int idx) const
+/*! \class SecondOrderCentral
+ *
+ * Gradient computation using second order central scheme.
+ */
+template <typename T, typename T_GRID>
+class SecondOrderCentral
 {
-  return m_data[idx];
-}
+ public:
+  typedef T value_type;
 
-template <typename T>
-T& GALS::CPU::Vec3<T>::operator[](const int idx)
-{
-  return m_data[idx];
-}
+  /*! Default constructor
+   */
+  SecondOrderCentral();
 
-template <typename T>
-void GALS::CPU::Vec3<T>::operator=(const Vec3<T>& vec)
-{
-  for (int i = 0; i < SIZE; ++i) m_data[i] = vec[i];
-}
+  /*! Destructor
+   */
+  ~SecondOrderCentral();
 
-template <typename T>
-bool GALS::CPU::Vec3<T>::operator==(const Vec3<T>& vec)
-{
-  return (GALS::is_equal(m_data[0], vec[0]) && GALS::is_equal(m_data[1], vec[1]) && GALS::is_equal(m_data[2], vec[2]));
-}
+  /*! Compute gradient of scalar.
+   *
+   * \param alpha variable for which gradient will be computed.
+   * \param grad_alpha gradient of alpha is written to this.
+   */
+  void compute(const Array<T_GRID, T> &alpha, Array<T_GRID, Vec3<T>> &grad_alpha);
 
-template class GALS::CPU::Vec3<int>;
-template class GALS::CPU::Vec3<double>;
+  /*! Overload operator to compute gradient.
+   *
+   * \param alpha variable for which gradient will be computed.
+   * \param grad_alpha gradient of alpha is written to this.
+   */
+  void operator()(const Array<T_GRID, T> &alpha, Array<T_GRID, Vec3<T>> &grad_alpha);
+};
+
+}  // namespace CPU
+}  // namespace GALS

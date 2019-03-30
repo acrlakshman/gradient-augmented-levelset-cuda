@@ -26,10 +26,10 @@ Implementation of Gradient Augmented Levelset method in CPU and GPU.
 
 ### Primary developers
 
-* [Lakshman Anumolu] [acrlakshman@yahoo.co.in]
-* [Raunak Bardia] [raunakbardia@gmail.com]
+* [Lakshman Anumolu][Lakshman] (acrlakshman@yahoo.co.in)
+* [Raunak Bardia][Raunak] (raunakbardia@gmail.com)
 
-[src]: <https://github.com/acrlakshman/gradient_augmented_levelset_cuda>
-[Coverage]: <https://acrlakshman.github.io/gradient-augmented-levelset-cuda/coverage>
-[Lakshman Anumolu]:https://lakshmananumolu.com
-[Raunak Bardia]:https://raunakbardia.wordpress.com
+[src]:https://github.com/acrlakshman/gradient_augmented_levelset_cuda
+[Coverage]:https://acrlakshman.github.io/gradient-augmented-levelset-cuda/coverage
+[Lakshman]:https://lakshmananumolu.com
+[Raunak]:https://raunakbardia.wordpress.com

@@ -38,12 +38,5 @@ int main()
 {
   std::cout << "Running CPU version of GALS implementation" << std::endl;
 
-  int n_x = 10, n_y = 10;
-
-  GALS::CPU::Grid<double, 2> grid(n_x, n_y);
-
-  grid.generate(-1, 1, -1, 1, -1, 1);
-
-  grid.writeToFile();
   return 0;
 }

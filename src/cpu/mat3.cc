@@ -29,55 +29,78 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "vec3.h"
+#include "mat3.h"
 #include "utilities.h"
 
 template <typename T>
-GALS::CPU::Vec3<T>::Vec3(const T a, const T b, const T c)
+GALS::CPU::Mat3<T>::Mat3(T a00, T a01, T a02, T a10, T a11, T a12, T a20, T a21, T a22)
 {
-  m_data[0] = a;
-  m_data[1] = b;
-  m_data[2] = c;
+  m_data[0] = a00;
+  m_data[1] = a01;
+  m_data[2] = a02;
+  m_data[3] = a10;
+  m_data[4] = a11;
+  m_data[5] = a12;
+  m_data[6] = a20;
+  m_data[7] = a21;
+  m_data[8] = a22;
 }
+
 template <typename T>
-GALS::CPU::Vec3<T>::Vec3() : Vec3(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0))
+GALS::CPU::Mat3<T>::Mat3()
+    : Mat3(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0),
+           static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(0))
 {
 }
 
 template <typename T>
-GALS::CPU::Vec3<T>::~Vec3()
+GALS::CPU::Mat3<T>::~Mat3()
 {
 }
 
 template <typename T>
-const int GALS::CPU::Vec3<T>::size() const
+const int GALS::CPU::Mat3<T>::size() const
 {
   return SIZE;
 }
 
 template <typename T>
-const T GALS::CPU::Vec3<T>::operator[](const int idx) const
+const T GALS::CPU::Mat3<T>::operator[](const int idx) const
 {
   return m_data[idx];
 }
 
 template <typename T>
-T& GALS::CPU::Vec3<T>::operator[](const int idx)
+T& GALS::CPU::Mat3<T>::operator[](const int idx)
 {
   return m_data[idx];
 }
 
 template <typename T>
-void GALS::CPU::Vec3<T>::operator=(const Vec3<T>& vec)
+const T GALS::CPU::Mat3<T>::operator()(const int i_row, const int i_col) const
 {
-  for (int i = 0; i < SIZE; ++i) m_data[i] = vec[i];
+  return m_data[i_row * 3 + i_col];
 }
 
 template <typename T>
-bool GALS::CPU::Vec3<T>::operator==(const Vec3<T>& vec)
+T& GALS::CPU::Mat3<T>::operator()(const int i_row, const int i_col)
 {
-  return (GALS::is_equal(m_data[0], vec[0]) && GALS::is_equal(m_data[1], vec[1]) && GALS::is_equal(m_data[2], vec[2]));
+  return m_data[i_row * 3 + i_col];
 }
 
-template class GALS::CPU::Vec3<int>;
-template class GALS::CPU::Vec3<double>;
+template <typename T>
+void GALS::CPU::Mat3<T>::operator=(const Mat3<T>& mat)
+{
+  for (int i = 0; i < SIZE; ++i) m_data[i] = mat[i];
+}
+
+template <typename T>
+bool GALS::CPU::Mat3<T>::operator==(const Mat3<T>& mat) const
+{
+  return (GALS::is_equal(m_data[0], mat[0]) && GALS::is_equal(m_data[1], mat[1]) && GALS::is_equal(m_data[2], mat[2]) &&
+          GALS::is_equal(m_data[3], mat[3]) && GALS::is_equal(m_data[4], mat[4]) && GALS::is_equal(m_data[5], mat[5]) &&
+          GALS::is_equal(m_data[6], mat[6]) && GALS::is_equal(m_data[7], mat[7]) && GALS::is_equal(m_data[8], mat[8]));
+}
+
+template class GALS::CPU::Mat3<int>;
+template class GALS::CPU::Mat3<double>;

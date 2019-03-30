@@ -29,55 +29,50 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
+#pragma once
+
+#include "./gradient/second-order-central.h"
+#include "array.h"
+#include "grid.h"
+#include "mat3.h"
 #include "vec3.h"
-#include "utilities.h"
 
-template <typename T>
-GALS::CPU::Vec3<T>::Vec3(const T a, const T b, const T c)
+namespace GALS
 {
-  m_data[0] = a;
-  m_data[1] = b;
-  m_data[2] = c;
-}
-template <typename T>
-GALS::CPU::Vec3<T>::Vec3() : Vec3(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0))
+namespace CPU
 {
-}
+/*! \class Gradient
+ *
+ * Class to create 3 component elements at a computational cell. For e.x. velocity, gradients, etc.
+ */
+template <typename T, typename T_GRID, typename GRADIENT_SCHEME = SecondOrderCentral<T, T_GRID>>
+class Gradient
+{
+ public:
+  typedef T value_type;
 
-template <typename T>
-GALS::CPU::Vec3<T>::~Vec3()
-{
-}
+  /*! Default constructor
+   */
+  Gradient();
 
-template <typename T>
-const int GALS::CPU::Vec3<T>::size() const
-{
-  return SIZE;
-}
+  /*! Destructor
+   */
+  ~Gradient();
 
-template <typename T>
-const T GALS::CPU::Vec3<T>::operator[](const int idx) const
-{
-  return m_data[idx];
-}
+  /*! Compute gradient of scalar.
+   *
+   * \param alpha variable for which gradient will be computed.
+   * \param grad_alpha gradient of alpha is written to this.
+   */
+  static void compute(const Array<T_GRID, T> &alpha, Array<T_GRID, Vec3<T>> &grad_alpha);
 
-template <typename T>
-T& GALS::CPU::Vec3<T>::operator[](const int idx)
-{
-  return m_data[idx];
-}
+  /*! Compute gradient of vector.
+   *
+   * \param alpha vec3 variable for which gradient will be computed.
+   * \param grad_alpha gradient of alpha is written to this.
+   */
+  // void compute(const Array<T_GRID, Vec3<T>> &alpha, Array<T_GRID, Mat3<T>> &grad_alpha);
+};
 
-template <typename T>
-void GALS::CPU::Vec3<T>::operator=(const Vec3<T>& vec)
-{
-  for (int i = 0; i < SIZE; ++i) m_data[i] = vec[i];
-}
-
-template <typename T>
-bool GALS::CPU::Vec3<T>::operator==(const Vec3<T>& vec)
-{
-  return (GALS::is_equal(m_data[0], vec[0]) && GALS::is_equal(m_data[1], vec[1]) && GALS::is_equal(m_data[2], vec[2]));
-}
-
-template class GALS::CPU::Vec3<int>;
-template class GALS::CPU::Vec3<double>;
+}  // namespace CPU
+}  // namespace GALS

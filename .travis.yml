@@ -30,7 +30,6 @@ script:
     - cd build
     - CC=$INSTALL_CC CXX=$INSTALL_CXX cmake ../ -DBUILD_COVERAGE:BOOL=ON -DBUILD_DOCUMENTATION:BOOL=ON
     - make -j 4
-    - ./gals_cuda
     - ctest --output-on-failure
 
 after_success:

@@ -29,105 +29,82 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <cpu/mat3.h>
 #include <cpu/utilities.h>
-#include <cpu/vec_n.h>
 
 #include <gtest/gtest.h>
 
-template<typename T, int dim>
-void test_subscript_operator(const GALS::CPU::VecN<T, dim> &vec_n)
+template<typename T>
+void test_subscript_operator(const GALS::CPU::Mat3<T> &mat3)
 {
-   for (int i = 0; i < vec_n.size(); ++i) {
-      const T elem = vec_n[i];
-   }
+   for (int i = 0; i < 3; ++i)
+      for (int j = 0; j < 3; ++j)
+         const T elem = mat3(i, j);
 }
 
-TEST(CPU, VEC_N_INT_1)
+TEST(CPU, MAT3_INT)
 {
-  GALS::CPU::VecN<int, 1> vec_n;
+   GALS::CPU::Mat3<int> mat3_1(1, 2, 3, 4, 5, 6, 7, 8, 9);
+  GALS::CPU::Mat3<int> mat3;
 
-  EXPECT_TRUE(vec_n.size() == 1);
+  EXPECT_TRUE(mat3.size() == 9);
 
-  vec_n[0] = 9;
-  EXPECT_TRUE(vec_n[0] == 9);
+  mat3[0] = 9;
+  EXPECT_TRUE(mat3[0] == 9);
 
-  const int i = vec_n[0];
+  const int i = mat3[0];
   EXPECT_TRUE(i == 9);
 
-  test_subscript_operator<int, 1>(vec_n);
+  GALS::CPU::Mat3<int> mat_other;
+  mat_other[0] = 1, mat_other[1] = 2, mat_other[2] = 3;
+
+  // Assign mat_other to mat3.
+  mat3 = mat_other;
+  for (int i = 0; i < 9; ++i) EXPECT_TRUE(mat_other[i] == mat3[i]);
+
+  mat_other(1, 1) = mat3(1, 1);
+
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j) EXPECT_TRUE(mat_other(i, j) == mat3(i, j));
+
+  EXPECT_TRUE(mat3 == mat_other);
+
+  const int j = mat3(0, 2);
+  EXPECT_TRUE(j == mat3(0, 2));
+
+  test_subscript_operator<int>(mat3);
 }
 
-TEST(CPU, VEC_N_INT_2)
+TEST(CPU, MAT3_DOUBLE)
 {
-  GALS::CPU::VecN<int, 2> vec_n;
+   GALS::CPU::Mat3<double> mat3_1(1., 2., 3., 4, 5, 6, 7, 8, 9);
 
-  EXPECT_TRUE(vec_n.size() == 2);
+  GALS::CPU::Mat3<double> mat3;
 
-  vec_n[0] = 9;
-  EXPECT_TRUE(vec_n[0] == 9);
+  EXPECT_TRUE(mat3.size() == 9);
 
-  const int i = vec_n[0];
-  EXPECT_TRUE(i == 9);
+  mat3[0] = 9.;
+  EXPECT_TRUE(GALS::is_equal(mat3[0], 9.));
 
-  test_subscript_operator<int, 2>(vec_n);
-}
+  const double i = mat3[0];
+  EXPECT_TRUE(GALS::is_equal(i, 9.));
 
-TEST(CPU, VEC_N_INT_3)
-{
-  GALS::CPU::VecN<int, 3> vec_n;
+  GALS::CPU::Mat3<double> mat_other;
+  mat_other[0] = 1.1, mat_other[1] = 2.2, mat_other[2] = 3.3;
 
-  EXPECT_TRUE(vec_n.size() == 3);
+  // Assign mat_other to mat3.
+  mat3 = mat_other;
+  for (int i = 0; i < 9; ++i) EXPECT_TRUE(GALS::is_equal(mat_other[i], mat3[i]));
 
-  vec_n[0] = 9;
-  EXPECT_TRUE(vec_n[0] == 9);
+  mat_other(1, 1) = mat3(1, 1);
 
-  const int i = vec_n[0];
-  EXPECT_TRUE(i == 9);
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j) EXPECT_TRUE(GALS::is_equal(mat_other(i, j), mat3(i, j)));
 
-  test_subscript_operator<int, 3>(vec_n);
-}
+  EXPECT_TRUE(mat3 == mat_other);
 
-TEST(CPU, VEC_N_DOUBLE_1)
-{
-  GALS::CPU::VecN<double, 1> vec_n;
+  const double j = mat3(0, 2);
+  EXPECT_TRUE(GALS::is_equal(j, mat3(0, 2)));
 
-  EXPECT_TRUE(vec_n.size() == 1);
-
-  vec_n[0] = 9.1;
-  EXPECT_TRUE(GALS::is_equal(vec_n[0], 9.1));
-
-  const double i = vec_n[0];
-  EXPECT_TRUE(GALS::is_equal(i, 9.1));
-
-  test_subscript_operator<double, 1>(vec_n);
-}
-
-TEST(CPU, VEC_N_DOUBLE_2)
-{
-  GALS::CPU::VecN<double, 2> vec_n;
-
-  EXPECT_TRUE(vec_n.size() == 2);
-
-  vec_n[0] = 9.1;
-  EXPECT_TRUE(GALS::is_equal(vec_n[0], 9.1));
-
-  const double i = vec_n[0];
-  EXPECT_TRUE(GALS::is_equal(i, 9.1));
-
-  test_subscript_operator<double, 2>(vec_n);
-}
-
-TEST(CPU, VEC_N_DOUBLE_3)
-{
-  GALS::CPU::VecN<double, 3> vec_n;
-
-  EXPECT_TRUE(vec_n.size() == 3);
-
-  vec_n[0] = 9.1;
-  EXPECT_TRUE(GALS::is_equal(vec_n[0], 9.1));
-
-  const double i = vec_n[0];
-  EXPECT_TRUE(GALS::is_equal(i, 9.1));
-
-  test_subscript_operator<double, 3>(vec_n);
+  test_subscript_operator<double>(mat3);
 }
