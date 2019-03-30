@@ -29,56 +29,17 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "vec3.h"
-#include "utilities.h"
+#include "input-parser.h"
+#include "input-parser/grid-parser.h"
+#include "input-parser/input-parser-base.h"
 
-template <typename T>
-GALS::CPU::Vec3<T>::Vec3(const T a, const T b, const T c)
+GALS::CPU::InputParser::InputParser() {}
+
+GALS::CPU::InputParser::~InputParser() {}
+
+void GALS::CPU::InputParser::parse(const std::string input_file, GALS::INPUT_FIELDS::InputFields *p_input_fields)
 {
-  m_data[0] = a;
-  m_data[1] = b;
-  m_data[2] = c;
-}
+  YAML::Node inputs = YAML::LoadFile(input_file);
 
-template <typename T>
-GALS::CPU::Vec3<T>::Vec3() : Vec3(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0))
-{
+  if (inputs["grid"]) GALS::CPU::InputParserBase<GALS::CPU::GridParser>()(inputs["grid"], p_input_fields);
 }
-
-template <typename T>
-GALS::CPU::Vec3<T>::~Vec3()
-{
-}
-
-template <typename T>
-const int GALS::CPU::Vec3<T>::size() const
-{
-  return SIZE;
-}
-
-template <typename T>
-const T GALS::CPU::Vec3<T>::operator[](const int idx) const
-{
-  return m_data[idx];
-}
-
-template <typename T>
-T& GALS::CPU::Vec3<T>::operator[](const int idx)
-{
-  return m_data[idx];
-}
-
-template <typename T>
-void GALS::CPU::Vec3<T>::operator=(const Vec3<T>& vec)
-{
-  for (int i = 0; i < SIZE; ++i) m_data[i] = vec[i];
-}
-
-template <typename T>
-bool GALS::CPU::Vec3<T>::operator==(const Vec3<T>& vec)
-{
-  return (GALS::is_equal(m_data[0], vec[0]) && GALS::is_equal(m_data[1], vec[1]) && GALS::is_equal(m_data[2], vec[2]));
-}
-
-template class GALS::CPU::Vec3<int>;
-template class GALS::CPU::Vec3<double>;

@@ -30,8 +30,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "grid.h"
+#include "input-parser.h"
+
 #include <fstream>
-#include <iostream>
 
 template <typename T, int DIM>
 GALS::CPU::Grid<T, DIM>::Grid(int nx, int ny, int nz) : m_dimension(DIM), m_nx(nx), m_ny(ny), m_nz(nz), m_pad(1)

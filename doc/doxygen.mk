@@ -161,7 +161,10 @@ FULL_PATH_NAMES        = YES
 # This tag requires that the tag FULL_PATH_NAMES is set to YES.
 
 STRIP_FROM_PATH        = ${SRC_DIR} \
-                         ${SRC_DIR}/cpu
+                         ${SRC_DIR}/cpu \
+                         ${SRC_DIR}/cpu/gradient \
+                         ${SRC_DIR}/cpu/input-parser \
+                         ${SRC_DIR}/cpu/input-fields
 
 # The STRIP_FROM_INC_PATH tag can be used to strip a user-defined part of the
 # path mentioned in the documentation of a class, which tells the reader which
@@ -807,6 +810,9 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = ${DOCS_DIR}/pages \
+                         ${SRC_DIR}/cpu/input-parser \
+                         ${SRC_DIR}/cpu/input-fields \
+                         ${SRC_DIR}/cpu/gradient \
                          ${SRC_DIR}/cpu \
                          ${SRC_DIR}
 

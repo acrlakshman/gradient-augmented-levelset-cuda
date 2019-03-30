@@ -67,8 +67,8 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_1D)
 
   GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::Vec3<double>> grad_levelset(grid);
 
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>> gradient;
-  gradient.compute(levelset, grad_levelset);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>> grad_temp;
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>>::compute(levelset, grad_levelset);
 
   // for (int i = i_min; i < i_max; ++i)
   // for (int j = j_min; j < j_max; ++j)
@@ -108,8 +108,8 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_2D)
 
   GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::Vec3<double>> grad_levelset(grid);
 
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>> gradient;
-  gradient.compute(levelset, grad_levelset);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>> grad_temp;
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>>::compute(levelset, grad_levelset);
 
   for (int i = 0; i < num_cells[0]; ++i)
     for (int j = 0; j < num_cells[1]; ++j)
@@ -142,8 +142,8 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_3D)
 
   GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::Vec3<double>> grad_levelset(grid);
 
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>> gradient;
-  gradient.compute(levelset, grad_levelset);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>> grad_temp;
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>>::compute(levelset, grad_levelset);
 
   for (int i = 0; i < num_cells[0]; ++i)
     for (int j = 0; j < num_cells[1]; ++j)

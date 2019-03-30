@@ -1,0 +1,12 @@
+grid:
+   box:                                # Bounding box dimensions.
+      x_min: -1.0                      # x_min
+      x_max: 1.0                       # x_max
+      y_min: -1.0                      # y_min
+      y_max: 1.0                       # y_max
+      z_min: -1.0                      # z_min
+      z_max: 1.0                       # z_max
+   cells: [10, 10, 10]                 # [n_x, n_y, n_z]
+levelset:
+   gradient:
+      scheme:        CENTRAL           # Available schemes: CENTRAL

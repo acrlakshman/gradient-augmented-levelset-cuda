@@ -29,56 +29,30 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "vec3.h"
-#include "utilities.h"
+#include "input-parser-base.h"
+#include "grid-parser.h"
 
-template <typename T>
-GALS::CPU::Vec3<T>::Vec3(const T a, const T b, const T c)
-{
-  m_data[0] = a;
-  m_data[1] = b;
-  m_data[2] = c;
-}
-
-template <typename T>
-GALS::CPU::Vec3<T>::Vec3() : Vec3(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0))
+template <typename FIELD>
+GALS::CPU::InputParserBase<FIELD>::InputParserBase()
 {
 }
 
-template <typename T>
-GALS::CPU::Vec3<T>::~Vec3()
+template <typename FIELD>
+GALS::CPU::InputParserBase<FIELD>::~InputParserBase()
 {
 }
 
-template <typename T>
-const int GALS::CPU::Vec3<T>::size() const
+template <typename FIELD>
+void GALS::CPU::InputParserBase<FIELD>::parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
 {
-  return SIZE;
+  FIELD()(field, p_input_fields);
 }
 
-template <typename T>
-const T GALS::CPU::Vec3<T>::operator[](const int idx) const
+template <typename FIELD>
+void GALS::CPU::InputParserBase<FIELD>::operator()(const YAML::Node &field,
+                                                   GALS::INPUT_FIELDS::InputFields *p_input_fields)
 {
-  return m_data[idx];
+  this->parse(field, p_input_fields);
 }
 
-template <typename T>
-T& GALS::CPU::Vec3<T>::operator[](const int idx)
-{
-  return m_data[idx];
-}
-
-template <typename T>
-void GALS::CPU::Vec3<T>::operator=(const Vec3<T>& vec)
-{
-  for (int i = 0; i < SIZE; ++i) m_data[i] = vec[i];
-}
-
-template <typename T>
-bool GALS::CPU::Vec3<T>::operator==(const Vec3<T>& vec)
-{
-  return (GALS::is_equal(m_data[0], vec[0]) && GALS::is_equal(m_data[1], vec[1]) && GALS::is_equal(m_data[2], vec[2]));
-}
-
-template class GALS::CPU::Vec3<int>;
-template class GALS::CPU::Vec3<double>;
+template class GALS::CPU::InputParserBase<GALS::CPU::GridParser>;

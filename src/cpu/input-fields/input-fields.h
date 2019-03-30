@@ -29,56 +29,31 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "vec3.h"
-#include "utilities.h"
+#pragma once
 
-template <typename T>
-GALS::CPU::Vec3<T>::Vec3(const T a, const T b, const T c)
+#include "grid.h"
+
+namespace GALS
 {
-  m_data[0] = a;
-  m_data[1] = b;
-  m_data[2] = c;
-}
-
-template <typename T>
-GALS::CPU::Vec3<T>::Vec3() : Vec3(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0))
+namespace INPUT_FIELDS
 {
-}
-
-template <typename T>
-GALS::CPU::Vec3<T>::~Vec3()
+/*! \class InputFields
+ *
+ * Class to store objects to all input fields.
+ */
+class InputFields
 {
-}
+ public:
+  /*! Default constructor.
+   */
+  InputFields();
 
-template <typename T>
-const int GALS::CPU::Vec3<T>::size() const
-{
-  return SIZE;
-}
+  /*! Destructor
+   */
+  ~InputFields();
 
-template <typename T>
-const T GALS::CPU::Vec3<T>::operator[](const int idx) const
-{
-  return m_data[idx];
-}
+  GALS::INPUT_FIELDS::grid *m_grid;
+};
 
-template <typename T>
-T& GALS::CPU::Vec3<T>::operator[](const int idx)
-{
-  return m_data[idx];
-}
-
-template <typename T>
-void GALS::CPU::Vec3<T>::operator=(const Vec3<T>& vec)
-{
-  for (int i = 0; i < SIZE; ++i) m_data[i] = vec[i];
-}
-
-template <typename T>
-bool GALS::CPU::Vec3<T>::operator==(const Vec3<T>& vec)
-{
-  return (GALS::is_equal(m_data[0], vec[0]) && GALS::is_equal(m_data[1], vec[1]) && GALS::is_equal(m_data[2], vec[2]));
-}
-
-template class GALS::CPU::Vec3<int>;
-template class GALS::CPU::Vec3<double>;
+}  // namespace INPUT_FIELDS
+}  // namespace GALS
