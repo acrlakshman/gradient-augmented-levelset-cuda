@@ -34,6 +34,8 @@
 
 #include <gtest/gtest.h>
 
+#include <iostream>
+
 TEST(CPU, VEC3_INT)
 {
   GALS::CPU::Vec3<int> vec3;
@@ -58,6 +60,9 @@ TEST(CPU, VEC3_INT)
   // Constructor with 3 input arguments.
   GALS::CPU::Vec3<int> vec_3(1, 2, 3);
   EXPECT_TRUE(GALS::is_equal(vec_3[0], 1));
+
+  // Overloaded output operator.
+  std::cout << "VEC3_DOUBLE (<<): " << vec3 << std::endl;
 }
 
 TEST(CPU, VEC3_DOUBLE)
@@ -84,4 +89,7 @@ TEST(CPU, VEC3_DOUBLE)
   // Constructor with 3 input arguments.
   GALS::CPU::Vec3<double> vec_3(1.1, 2.1, 3.1);
   EXPECT_TRUE(GALS::is_equal(vec_3[0], 1.1));
+
+  // Overloaded output operator.
+  std::cout << "VEC3_DOUBLE (<<): " << vec3 << std::endl;
 }

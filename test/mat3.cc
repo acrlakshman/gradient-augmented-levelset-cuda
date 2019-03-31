@@ -34,17 +34,18 @@
 
 #include <gtest/gtest.h>
 
-template<typename T>
+#include <iostream>
+
+template <typename T>
 void test_subscript_operator(const GALS::CPU::Mat3<T> &mat3)
 {
-   for (int i = 0; i < 3; ++i)
-      for (int j = 0; j < 3; ++j)
-         const T elem = mat3(i, j);
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j) const T elem = mat3(i, j);
 }
 
 TEST(CPU, MAT3_INT)
 {
-   GALS::CPU::Mat3<int> mat3_1(1, 2, 3, 4, 5, 6, 7, 8, 9);
+  GALS::CPU::Mat3<int> mat3_1(1, 2, 3, 4, 5, 6, 7, 8, 9);
   GALS::CPU::Mat3<int> mat3;
 
   EXPECT_TRUE(mat3.size() == 9);
@@ -73,11 +74,14 @@ TEST(CPU, MAT3_INT)
   EXPECT_TRUE(j == mat3(0, 2));
 
   test_subscript_operator<int>(mat3);
+
+  // Overloaded output operator.
+  std::cout << "MAT3_INT (<<): " << mat3 << std::endl;
 }
 
 TEST(CPU, MAT3_DOUBLE)
 {
-   GALS::CPU::Mat3<double> mat3_1(1., 2., 3., 4, 5, 6, 7, 8, 9);
+  GALS::CPU::Mat3<double> mat3_1(1., 2., 3., 4, 5, 6, 7, 8, 9);
 
   GALS::CPU::Mat3<double> mat3;
 
@@ -107,4 +111,7 @@ TEST(CPU, MAT3_DOUBLE)
   EXPECT_TRUE(GALS::is_equal(j, mat3(0, 2)));
 
   test_subscript_operator<double>(mat3);
+
+  // Overloaded output operator.
+  std::cout << "MAT3_DOUBLE (<<): " << mat3 << std::endl;
 }

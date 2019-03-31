@@ -31,6 +31,8 @@
 
 #pragma once
 
+#include <iostream>
+
 namespace GALS
 {
 namespace CPU
@@ -121,6 +123,20 @@ class Mat3
    * \return true if equal, false otherwise.
    */
   bool operator==(const Mat3<T> &mat) const;
+
+  /*! Output operator overload.
+   *
+   * \param out output stream.
+   * \param mat Mat3 object to output stream.
+   *
+   * \return reference to output stream.
+   */
+  friend std::ostream &operator<<(std::ostream &out, const Mat3<T> &mat)
+  {
+    for (int i = 0; i < mat.size(); ++i) out << mat[i] << "\t";
+
+    return out;
+  }
 
  private:
   T m_data[SIZE];

@@ -31,6 +31,7 @@
 
 #pragma once
 
+#include <iostream>
 #include <vector>
 
 namespace GALS
@@ -99,6 +100,20 @@ class Vec3
    * \return true if equal, false otherwise.
    */
   bool operator==(const Vec3<T> &vec);
+
+  /*! Output operator overload.
+   *
+   * \param out output stream.
+   * \param vec Vec3 object to output stream.
+   *
+   * \return reference to output stream.
+   */
+  friend std::ostream &operator<<(std::ostream &out, const Vec3<T> &vec)
+  {
+    out << vec[0] << "\t" << vec[1] << "\t" << vec[2];
+
+    return out;
+  }
 
  private:
   T m_data[SIZE];

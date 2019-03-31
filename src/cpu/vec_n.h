@@ -31,6 +31,7 @@
 
 #pragma once
 
+#include <iostream>
 #include <vector>
 
 namespace GALS
@@ -76,6 +77,20 @@ class VecN
    * \return element at index (idx).
    */
   T &operator[](const int idx);
+
+  /*! Output operator overload.
+   *
+   * \param out output stream.
+   * \param vec VecN object to output stream.
+   *
+   * \return reference to output stream.
+   */
+  friend std::ostream &operator<<(std::ostream &out, const VecN<T, SIZE> &vec)
+  {
+    for (int i = 0; i < vec.size(); ++i) out << vec[i] << "\t";
+
+    return out;
+  }
 
  private:
   std::vector<T> m_data;
