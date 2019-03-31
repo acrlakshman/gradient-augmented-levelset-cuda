@@ -48,6 +48,13 @@ void GALS::CPU::Gradient<T, T_GRID, GRADIENT_SCHEME>::compute(const Array<T_GRID
   GRADIENT_SCHEME()(alpha, grad_alpha);
 }
 
+template <typename T, typename T_GRID, typename GRADIENT_SCHEME>
+void GALS::CPU::Gradient<T, T_GRID, GRADIENT_SCHEME>::compute(const Array<T_GRID, Vec3<T>> &alpha,
+                                                              Array<T_GRID, Mat3<T>> &grad_alpha)
+{
+  GRADIENT_SCHEME()(alpha, grad_alpha);
+}
+
 template class GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>,
                                    GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 1>>>;
 

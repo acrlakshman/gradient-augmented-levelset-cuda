@@ -71,6 +71,38 @@ void GALS::CPU::SecondOrderCentral<T, T_GRID>::operator()(const Array<T_GRID, T>
   this->compute(alpha, grad_alpha);
 }
 
+template <typename T, typename T_GRID>
+void GALS::CPU::SecondOrderCentral<T, T_GRID>::compute(const Array<T_GRID, Vec3<T>> &alpha,
+                                                       Array<T_GRID, Mat3<T>> &grad_alpha)
+{
+  const Vec3<int> num_cells = alpha.numCells();
+  const T_GRID &grid = alpha.grid();
+  const Vec3<typename T_GRID::value_type> dx = grid.dX();
+  const auto &axis_vectors = GALS::CPU::Grid<typename T_GRID::value_type, T_GRID::dim>::axis_vectors;
+
+  for (int i = 0; i < num_cells[0]; ++i)
+    for (int j = 0; j < num_cells[1]; ++j)
+      for (int k = 0; k < num_cells[2]; ++k) {
+        for (int axis = 0; axis < T_GRID::dim; ++axis) {
+          for (int cmpt = 0; cmpt < T_GRID::dim; ++cmpt) {
+            typename T_GRID::value_type one_by_dx = static_cast<typename T_GRID::value_type>(1.) / dx[cmpt];
+
+            grad_alpha(i, j, k)(axis, cmpt) =
+                (alpha(i + axis_vectors(axis, 0), j + axis_vectors(axis, 1), k + axis_vectors(axis, 2))[axis] -
+                 alpha(i - axis_vectors(axis, 0), j - axis_vectors(axis, 1), k - axis_vectors(axis, 2))[axis]) *
+                one_by_dx * static_cast<T>(0.5);
+          }
+        }
+      }
+}
+
+template <typename T, typename T_GRID>
+void GALS::CPU::SecondOrderCentral<T, T_GRID>::operator()(const Array<T_GRID, Vec3<T>> &alpha,
+                                                          Array<T_GRID, Mat3<T>> &grad_alpha)
+{
+  this->compute(alpha, grad_alpha);
+}
+
 template class GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 1>>;
 template class GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 2>>;
 template class GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 3>>;
