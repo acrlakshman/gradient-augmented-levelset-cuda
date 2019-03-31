@@ -61,17 +61,25 @@ class Gradient
 
   /*! Compute gradient of scalar.
    *
-   * \param alpha variable for which gradient will be computed.
+   * For a scalar the gradient is stored in Vec3, for e.x.:
+   *  \f$\left(\nabla \alpha\right)_i = \{\partial_x \alpha, \partial_y \alpha, \partial_z \alpha\}_i.\f$
+   *
+   * \param alpha scalar variable for which gradient will be computed.
    * \param grad_alpha gradient of alpha is written to this.
    */
   static void compute(const Array<T_GRID, T> &alpha, Array<T_GRID, Vec3<T>> &grad_alpha);
 
   /*! Compute gradient of vector.
    *
+   * For a Vec3 the gradient is stored in Mat3, for e.x.:
+   *  Let \f$\boldsymbol{u} = \{u, v, w\} \f$ then,
+   *  \f$\left(\nabla \boldsymbol{u}\right)_i = \begin{bmatrix}\partial_x u & \partial_y u & \partial_z u \\ \partial_x
+   * v & \partial_y v & \partial_z v \\ \partial_x w & \partial_y w & \partial_z w \end{bmatrix}_i.\f$
+   *
    * \param alpha vec3 variable for which gradient will be computed.
    * \param grad_alpha gradient of alpha is written to this.
    */
-  // void compute(const Array<T_GRID, Vec3<T>> &alpha, Array<T_GRID, Mat3<T>> &grad_alpha);
+  static void compute(const Array<T_GRID, Vec3<T>> &alpha, Array<T_GRID, Mat3<T>> &grad_alpha);
 };
 
 }  // namespace CPU
