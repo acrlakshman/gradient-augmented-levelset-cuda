@@ -53,7 +53,8 @@ TARGET_INCLUDE_DIRECTORIES(${TEST_NAME}
 
 TARGET_LINK_LIBRARIES(${TEST_NAME}
   PUBLIC
-    cpu_test
+    gals_cpu
+    yaml_cpp
   PRIVATE
     gtest
     gtest_main

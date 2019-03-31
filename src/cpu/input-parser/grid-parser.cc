@@ -29,56 +29,34 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "vec3.h"
-#include "utilities.h"
+#include "grid-parser.h"
+#include "../input-fields/grid.h"
 
-template <typename T>
-GALS::CPU::Vec3<T>::Vec3(const T a, const T b, const T c)
+#include <vector>
+
+GALS::CPU::GridParser::GridParser() {}
+
+GALS::CPU::GridParser::~GridParser() {}
+
+void GALS::CPU::GridParser::parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
 {
-  m_data[0] = a;
-  m_data[1] = b;
-  m_data[2] = c;
+  auto &input_fields = *p_input_fields;
+
+  // Domain bounds.
+  input_fields.m_grid->x_min = field["box"]["x_min"].as<double>();
+  input_fields.m_grid->x_max = field["box"]["x_max"].as<double>();
+  input_fields.m_grid->y_min = field["box"]["y_min"].as<double>();
+  input_fields.m_grid->y_max = field["box"]["y_max"].as<double>();
+  input_fields.m_grid->z_min = field["box"]["z_min"].as<double>();
+  input_fields.m_grid->z_max = field["box"]["z_max"].as<double>();
+
+  // Number of cells.
+  input_fields.m_grid->nx = field["cells"].as<std::vector<int>>()[0];
+  input_fields.m_grid->ny = field["cells"].as<std::vector<int>>()[1];
+  input_fields.m_grid->nz = field["cells"].as<std::vector<int>>()[2];
 }
 
-template <typename T>
-GALS::CPU::Vec3<T>::Vec3() : Vec3(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0))
+void GALS::CPU::GridParser::operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
 {
+  this->parse(field, p_input_fields);
 }
-
-template <typename T>
-GALS::CPU::Vec3<T>::~Vec3()
-{
-}
-
-template <typename T>
-const int GALS::CPU::Vec3<T>::size() const
-{
-  return SIZE;
-}
-
-template <typename T>
-const T GALS::CPU::Vec3<T>::operator[](const int idx) const
-{
-  return m_data[idx];
-}
-
-template <typename T>
-T& GALS::CPU::Vec3<T>::operator[](const int idx)
-{
-  return m_data[idx];
-}
-
-template <typename T>
-void GALS::CPU::Vec3<T>::operator=(const Vec3<T>& vec)
-{
-  for (int i = 0; i < SIZE; ++i) m_data[i] = vec[i];
-}
-
-template <typename T>
-bool GALS::CPU::Vec3<T>::operator==(const Vec3<T>& vec)
-{
-  return (GALS::is_equal(m_data[0], vec[0]) && GALS::is_equal(m_data[1], vec[1]) && GALS::is_equal(m_data[2], vec[2]));
-}
-
-template class GALS::CPU::Vec3<int>;
-template class GALS::CPU::Vec3<double>;

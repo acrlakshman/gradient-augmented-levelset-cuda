@@ -6,24 +6,34 @@
 
 ### Build instructions
 
+#### Dependencies
+
+* [CMake]
+* Compiler that supports C++11
+
 ```sh
 git clone https://github.com/acrlakshman/gradient-augmented-levelset-cuda --recursive
 cd gradient-augmented-levelset-cuda
 mkdir -p build && cd build
-cmake .. -GNinja && ninja -j 4
+cmake .. && make -j 4
 ```
 
-#### Additional build instructions
+### Additional build options
+
+#### Dependencies
+
+* [Doxygen]
+* [lcov]
 
 ```sh
-cmake .. -DBUILD_DOCUMENTATION=ON -DBUILD_COVERAGE=ON -GNinja
-ninja -j 4
+cmake .. -DBUILD_DOCUMENTATION=ON -DBUILD_COVERAGE=ON
+make -j 4
 ./test/gals_unit_test
 lcov --directory . --base-directory ../src --capture --no-external --output-file coverage.info
 genhtml coverage.info --output-directory ./doc/html/coverage
 ```
 
-* Documentation is now available at `./doc/html/index.html`.
+* Documentation can be found at `./doc/html/index.html`.
 
 ### Documentation
 
@@ -42,6 +52,9 @@ Acknowledgements
 * [Ryan Krattiger] for helping with cmake.
 * [John Van Gilder] for helping with coverage tools.
 
+[CMake]:https://github.com/Kitware/CMake
+[Doxygen]:https://github.com/doxygen/doxygen
+[lcov]:https://github.com/linux-test-project/lcov
 [Documentation]:https://acrlakshman.github.io/gradient-augmented-levelset-cuda
 [Coverage]:https://acrlakshman.github.io/gradient-augmented-levelset-cuda/coverage
 [LICENSE]:https://github.com/acrlakshman/gradient_augmented_levelset_cuda/blob/master/LICENSE

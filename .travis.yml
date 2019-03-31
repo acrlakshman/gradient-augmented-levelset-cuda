@@ -30,7 +30,7 @@ script:
     - cd build
     - CC=$INSTALL_CC CXX=$INSTALL_CXX cmake ../ -DBUILD_COVERAGE:BOOL=ON -DBUILD_DOCUMENTATION:BOOL=ON
     - make -j 4
-    - ctest --output-on-failure
+    - ./gals_cuda && ctest -R gals_unit_test --output-on-failure
 
 after_success:
     - if [ "$TRAVIS_OS_NAME" = "osx" ]; then

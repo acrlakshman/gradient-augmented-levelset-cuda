@@ -11,13 +11,16 @@ OPTION(BUILD_COVERAGE "Create test coverage report" OFF)
 OPTION(USE_SYSTEM_GTEST "Use GTEST from system libraries" OFF)
 OPTION(USE_RELATIVE_TEST_DIR "Use relative paths for the test data directory(For continious integration(CI) purposes only)" OFF)
 
-IF (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/googletest")
-  MESSAGE(WARNING "test/googletest is not available. Tests will not built.")
+IF ((NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/googletest") OR
+  (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/yaml-cpp"))
+
+  MESSAGE(WARNING "third party libraries are missing.")
   MESSAGE("Did you miss the --recursive option when cloning?")
   MESSAGE("Run the following commands to correct this:")
   MESSAGE("git submodule init")
   MESSAGE("git submodule update")
   MESSAGE("git submodule foreach git pull origin master")
+
 ENDIF ()
 
 # Set a default build type if none was specified
@@ -28,8 +31,6 @@ IF(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
       "MinSizeRel" "RelWithDebInfo")
 ENDIF()
 
-### Marking BUILD_COVERAGE as advanced as it won't be
-### used by regular developers
 MARK_AS_ADVANCED(BUILD_COVERAGE)
 
 IF(UNIX)
@@ -60,11 +61,25 @@ IF(BUILD_TESTS)
     ADD_SUBDIRECTORY(test)
 ENDIF()
 
-FILE(GLOB_RECURSE SRC src/cpu/*.cc src/cpu/*.h)
+# TODO: Just got this to partially work, but need to make this nice.
+# YAML-CPP
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/third_party/yaml-cpp)
 
-ADD_LIBRARY(cpu_test SHARED ${SRC})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/third_party/yaml-cpp/include)
+FILE(GLOB_RECURSE YAML_SRC
+  ${CMAKE_CURRENT_SOURCE_DIR}/third_party/yaml-cpp/src/*.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/third_party/yaml-cpp/src/*.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/third_party/yaml-cpp/src/*.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/third_party/yaml-cpp/include/*.h)
+
+ADD_LIBRARY(yaml_cpp SHARED ${YAML_SRC})
+# YAML-CPP
+
+FILE(GLOB_RECURSE GALS_CPU_SRC src/cpu/*.cc src/cpu/*.h)
+
+ADD_LIBRARY(gals_cpu SHARED ${GALS_CPU_SRC} ${YAML_SRC})
 ADD_EXECUTABLE(gals_cuda src/main.cc)
-TARGET_INCLUDE_DIRECTORIES(gals_cuda PUBLIC src/cpu)
-TARGET_LINK_LIBRARIES(gals_cuda PUBLIC cpu_test)
+TARGET_INCLUDE_DIRECTORIES(gals_cuda PUBLIC src/cpu third_party/yaml-cpp/include)
+TARGET_LINK_LIBRARIES(gals_cuda PUBLIC gals_cpu yaml_cpp)
 
 INSTALL(TARGETS gals_cuda DESTINATION .)

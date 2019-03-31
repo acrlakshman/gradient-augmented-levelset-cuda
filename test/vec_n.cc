@@ -34,6 +34,8 @@
 
 #include <gtest/gtest.h>
 
+#include <iostream>
+
 template<typename T, int dim>
 void test_subscript_operator(const GALS::CPU::VecN<T, dim> &vec_n)
 {
@@ -55,6 +57,9 @@ TEST(CPU, VEC_N_INT_1)
   EXPECT_TRUE(i == 9);
 
   test_subscript_operator<int, 1>(vec_n);
+
+  // Overloaded output operator.
+  std::cout << "VEC_N_INT_1 (<<): " << vec_n << std::endl;
 }
 
 TEST(CPU, VEC_N_INT_2)
@@ -70,6 +75,9 @@ TEST(CPU, VEC_N_INT_2)
   EXPECT_TRUE(i == 9);
 
   test_subscript_operator<int, 2>(vec_n);
+
+  // Overloaded output operator.
+  std::cout << "VEC_N_INT_2 (<<): " << vec_n << std::endl;
 }
 
 TEST(CPU, VEC_N_INT_3)
@@ -85,6 +93,9 @@ TEST(CPU, VEC_N_INT_3)
   EXPECT_TRUE(i == 9);
 
   test_subscript_operator<int, 3>(vec_n);
+
+  // Overloaded output operator.
+  std::cout << "VEC_N_INT_3 (<<): " << vec_n << std::endl;
 }
 
 TEST(CPU, VEC_N_DOUBLE_1)
@@ -100,6 +111,9 @@ TEST(CPU, VEC_N_DOUBLE_1)
   EXPECT_TRUE(GALS::is_equal(i, 9.1));
 
   test_subscript_operator<double, 1>(vec_n);
+
+  // Overloaded output operator.
+  std::cout << "VEC_N_DOUBLE_1 (<<): " << vec_n << std::endl;
 }
 
 TEST(CPU, VEC_N_DOUBLE_2)
@@ -115,6 +129,9 @@ TEST(CPU, VEC_N_DOUBLE_2)
   EXPECT_TRUE(GALS::is_equal(i, 9.1));
 
   test_subscript_operator<double, 2>(vec_n);
+
+  // Overloaded output operator.
+  std::cout << "VEC_N_DOUBLE_2 (<<): " << vec_n << std::endl;
 }
 
 TEST(CPU, VEC_N_DOUBLE_3)
@@ -130,4 +147,7 @@ TEST(CPU, VEC_N_DOUBLE_3)
   EXPECT_TRUE(GALS::is_equal(i, 9.1));
 
   test_subscript_operator<double, 3>(vec_n);
+
+  // Overloaded output operator.
+  std::cout << "VEC_N_DOUBLE_3 (<<): " << vec_n << std::endl;
 }
