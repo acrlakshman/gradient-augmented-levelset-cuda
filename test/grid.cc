@@ -29,18 +29,19 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <gtest/gtest.h>
+
+#include <limits.h>
+#include <math.h>
+
 #include <cpu/grid.h>
 #include <cpu/mat3.h>
 
-#include <gtest/gtest.h>
-
-#include <math.h>
-
 TEST(CPU, GRID_1D)
 {
-   // Test axis_vectors.
-   const GALS::CPU::Mat3<int> axis_vectors_ref(1, 0, 0, 0, 1, 0, 0, 0, 1);
-   EXPECT_TRUE((axis_vectors_ref == GALS::CPU::Grid<double, 1>::axis_vectors));
+  // Test axis_vectors.
+  const GALS::CPU::Mat3<int> axis_vectors_ref(1, 0, 0, 0, 1, 0, 0, 0, 1);
+  EXPECT_TRUE((axis_vectors_ref == GALS::CPU::Grid<double, 1>::axis_vectors));
 
   int num_cells = 10;
   GALS::CPU::Grid<double, 1> grid_1(num_cells, 1, 1);
@@ -57,6 +58,15 @@ TEST(CPU, GRID_1D)
 
   grid.setPadding(1);
   grid.generate(-1, 1, -1, 1, -1, 1);
+
+  // get index given node_id in GALS::CPU::Vec3<int>.
+  EXPECT_TRUE(grid.index(GALS::CPU::Vec3<int>(0, 0, 0)) == 1);
+
+  // baseNodeId
+  GALS::CPU::Vec3<double> x;
+  x[0] = -0.7, x[1] = 1., x[2] = 1.;
+  const auto base_node_id = grid.baseNodeId(x);
+  EXPECT_TRUE(base_node_id == GALS::CPU::Vec3<int>(1, INT_MAX, INT_MAX));
 
   double dx = 2. / num_cells;
   double x_min = -1 + (dx * 0.5);
@@ -97,6 +107,15 @@ TEST(CPU, GRID_2D)
 
   grid.setPadding(1);
   grid.generate(-1, 1, -1, 1, -1, 1);
+
+  // get index given node_id in GALS::CPU::Vec3<int>.
+  EXPECT_TRUE(grid.index(GALS::CPU::Vec3<int>(0, 0, 0)) == 13);
+
+  // baseNodeId
+  GALS::CPU::Vec3<double> x;
+  x[0] = -0.69, x[1] = -0.69, x[2] = 1.;
+  const auto base_node_id = grid.baseNodeId(x);
+  EXPECT_TRUE(base_node_id == GALS::CPU::Vec3<int>(1, 1, INT_MAX));
 
   double dx = 2. / n_x, dy = 2. / n_y;
   double x_min = -1 + (dx * 0.5);
@@ -144,6 +163,14 @@ TEST(CPU, GRID_3D)
   grid.setPadding(1);
   grid.generate(-1, 1, -1, 1, -1, 1);
 
+  // get index given node_id in GALS::CPU::Vec3<int>.
+  EXPECT_TRUE(grid.index(GALS::CPU::Vec3<int>(0, 0, 0)) == 157);
+
+  // baseNodeId
+  GALS::CPU::Vec3<double> x;
+  x[0] = -0.69, x[1] = -0.69, x[2] = -0.69;
+  const auto base_node_id = grid.baseNodeId(x);
+  EXPECT_TRUE(base_node_id == GALS::CPU::Vec3<int>(1, 1, 1));
   double dx = 2. / num_cells;
   double x_min = -1 + (dx * 0.5);
 

@@ -54,7 +54,7 @@ TARGET_INCLUDE_DIRECTORIES(${TEST_NAME}
 TARGET_LINK_LIBRARIES(${TEST_NAME}
   PUBLIC
     gals_cpu
-    yaml_cpp
+    yaml-cpp
   PRIVATE
     gtest
     gtest_main

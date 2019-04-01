@@ -163,6 +163,7 @@ FULL_PATH_NAMES        = YES
 STRIP_FROM_PATH        = ${SRC_DIR} \
                          ${SRC_DIR}/cpu \
                          ${SRC_DIR}/cpu/gradient \
+                         ${SRC_DIR}/cpu/interpolation \
                          ${SRC_DIR}/cpu/input-parser \
                          ${SRC_DIR}/cpu/input-fields
 
@@ -810,6 +811,7 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = ${DOCS_DIR}/pages \
+                         ${SRC_DIR}/cpu/interpolation \
                          ${SRC_DIR}/cpu/input-parser \
                          ${SRC_DIR}/cpu/input-fields \
                          ${SRC_DIR}/cpu/gradient \

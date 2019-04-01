@@ -29,49 +29,31 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "interpolate.h"
 
-#include "../input-fields/input-fields.h"
-
-#include "yaml-cpp/yaml.h"
-
-namespace GALS
+template <typename T, typename T_GRID, typename INTERPOLATION_SCHEME>
+GALS::CPU::Interpolate<T, T_GRID, INTERPOLATION_SCHEME>::Interpolate()
 {
-namespace CPU
+}
+
+template <typename T, typename T_GRID, typename INTERPOLATION_SCHEME>
+GALS::CPU::Interpolate<T, T_GRID, INTERPOLATION_SCHEME>::~Interpolate()
 {
-/*! \class InputParserBase
- *
- * Class to parse input fields.
- */
-template <typename FIELD>
-class InputParserBase
+}
+
+template <typename T, typename T_GRID, typename INTERPOLATION_SCHEME>
+void GALS::CPU::Interpolate<T, T_GRID, INTERPOLATION_SCHEME>::compute(
+    const Array<T_GRID, typename T_GRID::position_type> &x_interp, const Array<T_GRID, T> &alpha,
+    Array<T_GRID, T> &alpha_interpolated)
 {
- public:
-  /*! Default constructor
-   */
-  InputParserBase();
+  INTERPOLATION_SCHEME()(x_interp, alpha, alpha_interpolated);
+}
 
-  /*! Destructor
-   */
-  ~InputParserBase();
+template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 1>,
+                                      GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 1>>>;
 
-  /*! Parse input variables for FIELD section.
-   *
-   * \param field YAML node for FIELD.
-   * \param p_input_fields pointer to input fields object.
-   */
-  static void parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
+template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 2>,
+                                      GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 2>>>;
 
-  /*! Overloaded operator to parse input variables for FIELD section.
-   *
-   * \param field YAML node for FIELD.
-   * \param p_input_fields pointer to input fields object.
-   */
-  void operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
-  {
-    parse(field, p_input_fields);
-  }
-};
-
-}  // namespace CPU
-}  // namespace GALS
+template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 3>,
+                                      GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 3>>>;

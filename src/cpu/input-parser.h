@@ -31,11 +31,10 @@
 
 #pragma once
 
-#include "input-fields/input-fields.h"
-
-#include "yaml-cpp/yaml.h"
-
 #include <string.h>
+
+#include <yaml-cpp/yaml.h>
+#include "input-fields/input-fields.h"
 
 namespace GALS
 {

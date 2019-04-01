@@ -76,7 +76,7 @@ class SecondOrderCentral
    * \param alpha scalar variable for which gradient will be computed.
    * \param grad_alpha gradient of alpha is written to this.
    */
-  void operator()(const Array<T_GRID, T> &alpha, Array<T_GRID, Vec3<T>> &grad_alpha);
+  void operator()(const Array<T_GRID, T> &alpha, Array<T_GRID, Vec3<T>> &grad_alpha) { compute(alpha, grad_alpha); }
 
   /*! Compute gradient of Vec3.
    *
@@ -100,7 +100,10 @@ class SecondOrderCentral
    * \param alpha Vec3 variable for which gradient will be computed.
    * \param grad_alpha gradient of alpha is written to this.
    */
-  void operator()(const Array<T_GRID, Vec3<T>> &alpha, Array<T_GRID, Mat3<T>> &grad_alpha);
+  void operator()(const Array<T_GRID, Vec3<T>> &alpha, Array<T_GRID, Mat3<T>> &grad_alpha)
+  {
+    compute(alpha, grad_alpha);
+  }
 };
 
 }  // namespace CPU

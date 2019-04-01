@@ -30,9 +30,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "grid.h"
-#include "input-parser.h"
 
+#include <limits.h>
+#include <math.h>
 #include <fstream>
+
+#include "input-parser.h"
 
 template <typename T, int DIM>
 GALS::CPU::Grid<T, DIM>::Grid(int nx, int ny, int nz) : m_dimension(DIM), m_nx(nx), m_ny(ny), m_nz(nz), m_pad(1)
@@ -43,6 +46,11 @@ GALS::CPU::Grid<T, DIM>::Grid(int nx, int ny, int nz) : m_dimension(DIM), m_nx(n
     m_mask[1] = 1;
   else if (dim == 3)
     m_mask[1] = 1, m_mask[2] = 1;
+
+  m_box_min = Vec3<T>(INT_MIN, INT_MIN, INT_MIN);
+  m_box_max = Vec3<T>(INT_MAX, INT_MAX, INT_MAX);
+
+  m_dx = GALS::CPU::Vec3<T>(INT_MAX, INT_MAX, INT_MAX), m_one_by_dx = GALS::CPU::Vec3<T>(INT_MIN, INT_MIN, INT_MIN);
 }
 
 template <typename T, int DIM>
@@ -108,6 +116,24 @@ const std::size_t GALS::CPU::Grid<T, DIM>::index(const int i, const int j, const
 }
 
 template <typename T, int DIM>
+const std::size_t GALS::CPU::Grid<T, DIM>::index(const Vec3<int> node_id) const
+{
+  return this->index(node_id[0], node_id[1], node_id[2]);
+}
+
+template <typename T, int DIM>
+const GALS::CPU::Vec3<int> GALS::CPU::Grid<T, DIM>::baseNodeId(const Vec3<T>& x) const
+{
+  Vec3<int> base_node_id(INT_MAX, INT_MAX, INT_MAX);
+
+  for (int axis = 0; axis < DIM; ++axis) {
+    base_node_id[axis] = floor(((x[axis] - m_box_min[axis]) * m_one_by_dx[axis]) - 0.5);
+  }
+
+  return base_node_id;
+}
+
+template <typename T, int DIM>
 const GALS::CPU::Vec3<T>& GALS::CPU::Grid<T, DIM>::dX() const
 {
   return m_dx;
@@ -130,6 +156,9 @@ void GALS::CPU::Grid<T, DIM>::generate(T x_min, T x_max, T y_min, T y_max, T z_m
 {
   if (m_grid.size()) m_grid.clear(), m_grid.shrink_to_fit();
 
+  m_box_min[0] = x_min, m_box_min[1] = y_min, m_box_min[2] = z_min;
+  m_box_max[0] = x_max, m_box_max[1] = y_max, m_box_max[2] = z_max;
+
   m_grid.resize((m_nz + 2 * m_pad * m_mask[2]) * (m_ny + 2 * m_pad * m_mask[1]) * (m_nx + 2 * m_pad * m_mask[0]));
 
   std::vector<T> domain_min({x_min, y_min, z_min}), domain_min_new(3);
@@ -137,6 +166,8 @@ void GALS::CPU::Grid<T, DIM>::generate(T x_min, T x_max, T y_min, T y_max, T z_m
   m_dx[0] = (x_max - x_min) / m_nx;
   m_dx[1] = (y_max - y_min) / m_ny;
   m_dx[2] = (z_max - z_min) / m_nz;
+
+  for (int i = 0; i < 3; ++i) m_one_by_dx[i] = static_cast<T>(1.) / m_dx[i];
 
   for (int i = 0; i < 3; ++i) domain_min_new[i] = domain_min[i] + (m_dx[i] * 0.5) - (m_dx[i] * m_mask[i]);
 

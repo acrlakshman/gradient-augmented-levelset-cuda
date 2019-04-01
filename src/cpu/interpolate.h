@@ -31,92 +31,42 @@
 
 #pragma once
 
-#include <iostream>
-#include <vector>
+#include "./interpolation/linear.h"
+#include "array.h"
+#include "grid.h"
+#include "mat3.h"
+#include "vec3.h"
 
 namespace GALS
 {
 namespace CPU
 {
-/*! \class Vec3
+/*! \class Interpolate
  *
- * Class to create 3 component elements at a computational cell. For e.x. velocity, gradients, etc.
+ * Class to perform interpolation. Default interpolation scheme is set to GALS::INTERPOLATION::Linear<...>.
  */
-template <typename T>
-class Vec3
+template <typename T, typename T_GRID, typename INTERPOLATION_SCHEME = GALS::INTERPOLATION::Linear<T, T_GRID>>
+class Interpolate
 {
  public:
   typedef T value_type;
-  static const int SIZE = 3;
 
-  /*! Constructor with 3 input arguments.
-   *
-   * \param a
-   * \param b
-   * \param c
+  /*! Default constructor
    */
-  Vec3(const T a, const T b, const T c);
-
-  /*! Default constructor.
-   */
-  Vec3();
+  Interpolate();
 
   /*! Destructor
    */
-  ~Vec3();
+  ~Interpolate();
 
-  /*! Returns number of elements.
+  /*! Compute interpolation of a scalar.
    *
-   * \return number of elements.
+   * \param x_interp interpolation points.
+   * \param alpha variable to interpolate.
+   * \param alpha_interpolated interpolated values are written to this variable.
    */
-  const int size() const;
-
-  /*! Overloaded subscript operator that returns a const value.
-   *
-   * \param idx zero based index of element.
-   *
-   * \return element at index (idx).
-   */
-  const T operator[](const int idx) const;
-
-  /*! Overloaded subscript operator that returns a reference.
-   *
-   * \param idx zero based index of element.
-   *
-   * \return element at index (idx).
-   */
-  T &operator[](const int idx);
-
-  /*! Overload assignment operator.
-   *
-   * \param vec variable whose values will be assigned.
-   */
-  void operator=(const Vec3<T> &vec);
-
-  /*! Equality operator.
-   *
-   * \param vec variable to compare against.
-   *
-   * \return true if equal, false otherwise.
-   */
-  bool operator==(const Vec3<T> &vec) const;
-
-  /*! Output operator overload.
-   *
-   * \param out output stream.
-   * \param vec Vec3 object to output stream.
-   *
-   * \return reference to output stream.
-   */
-  friend std::ostream &operator<<(std::ostream &out, const Vec3<T> &vec)
-  {
-    out << vec[0] << "\t" << vec[1] << "\t" << vec[2];
-
-    return out;
-  }
-
- private:
-  T m_data[SIZE];
+  static void compute(const Array<T_GRID, typename T_GRID::position_type> &x_interp, const Array<T_GRID, T> &alpha,
+                      Array<T_GRID, T> &alpha_interpolated);
 };
 
 }  // namespace CPU

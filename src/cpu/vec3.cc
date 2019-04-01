@@ -30,6 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "vec3.h"
+
 #include "utilities.h"
 
 template <typename T>
@@ -75,7 +76,7 @@ void GALS::CPU::Vec3<T>::operator=(const Vec3<T>& vec)
 }
 
 template <typename T>
-bool GALS::CPU::Vec3<T>::operator==(const Vec3<T>& vec)
+bool GALS::CPU::Vec3<T>::operator==(const Vec3<T>& vec) const
 {
   return (GALS::is_equal(m_data[0], vec[0]) && GALS::is_equal(m_data[1], vec[1]) && GALS::is_equal(m_data[2], vec[2]));
 }

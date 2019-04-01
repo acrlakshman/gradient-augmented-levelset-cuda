@@ -36,12 +36,12 @@
 
 #include <iostream>
 
-template<typename T, int dim>
+template <typename T, int dim>
 void test_subscript_operator(const GALS::CPU::VecN<T, dim> &vec_n)
 {
-   for (int i = 0; i < vec_n.size(); ++i) {
-      const T elem = vec_n[i];
-   }
+  for (int i = 0; i < vec_n.size(); ++i) {
+    const T elem = vec_n[i];
+  }
 }
 
 TEST(CPU, VEC_N_INT_1)
