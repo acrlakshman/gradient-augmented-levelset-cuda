@@ -48,11 +48,4 @@ void GALS::CPU::InputParserBase<FIELD>::parse(const YAML::Node &field, GALS::INP
   FIELD()(field, p_input_fields);
 }
 
-template <typename FIELD>
-void GALS::CPU::InputParserBase<FIELD>::operator()(const YAML::Node &field,
-                                                   GALS::INPUT_FIELDS::InputFields *p_input_fields)
-{
-  this->parse(field, p_input_fields);
-}
-
 template class GALS::CPU::InputParserBase<GALS::CPU::GridParser>;

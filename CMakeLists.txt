@@ -23,6 +23,18 @@ IF ((NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/googletest") OR
 
 ENDIF ()
 
+IF( NOT TARGET yaml-cpp )
+  # Turn off YAML-CPP targets
+  set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "Turn off YAML-CPP tools target" FORCE)
+  set(YAML_CPP_INSTALL     OFF CACHE BOOL "Turn off YAML-CPP install target" FORCE)
+  set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "Turn off YAML-CPP tests target" FORCE)
+
+  ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/third_party/yaml-cpp)
+  SET_TARGET_PROPERTIES(yaml-cpp
+    PROPERTIES
+      FOLDER "ExternalProjectTargets/yaml-cpp")
+ENDIF()
+
 # Set a default build type if none was specified
 IF(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     SET(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
@@ -61,25 +73,14 @@ IF(BUILD_TESTS)
     ADD_SUBDIRECTORY(test)
 ENDIF()
 
-# TODO: Just got this to partially work, but need to make this nice.
-# YAML-CPP
-ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/third_party/yaml-cpp)
-
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/third_party/yaml-cpp/include)
-FILE(GLOB_RECURSE YAML_SRC
-  ${CMAKE_CURRENT_SOURCE_DIR}/third_party/yaml-cpp/src/*.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/third_party/yaml-cpp/src/*.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/third_party/yaml-cpp/src/*.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/third_party/yaml-cpp/include/*.h)
-
-ADD_LIBRARY(yaml_cpp SHARED ${YAML_SRC})
-# YAML-CPP
-
 FILE(GLOB_RECURSE GALS_CPU_SRC src/cpu/*.cc src/cpu/*.h)
 
-ADD_LIBRARY(gals_cpu SHARED ${GALS_CPU_SRC} ${YAML_SRC})
+# Add third party dependencies
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/third_party/yaml-cpp/include/)
+
+ADD_LIBRARY(gals_cpu SHARED ${GALS_CPU_SRC})
 ADD_EXECUTABLE(gals_cuda src/main.cc)
-TARGET_INCLUDE_DIRECTORIES(gals_cuda PUBLIC src/cpu third_party/yaml-cpp/include)
-TARGET_LINK_LIBRARIES(gals_cuda PUBLIC gals_cpu yaml_cpp)
+TARGET_INCLUDE_DIRECTORIES(gals_cuda PUBLIC src/cpu)
+TARGET_LINK_LIBRARIES(gals_cuda PUBLIC gals_cpu PRIVATE yaml-cpp)
 
 INSTALL(TARGETS gals_cuda DESTINATION .)

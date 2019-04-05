@@ -31,10 +31,10 @@
 
 #pragma once
 
+#include <vector>
+
 #include "grid.h"
 #include "vec3.h"
-
-#include <vector>
 
 namespace GALS
 {
@@ -48,6 +48,8 @@ template <typename T_GRID, typename T_ARRAY>
 class Array
 {
  public:
+  typedef T_ARRAY value_type;
+
   /*! Constructor called using grid.
    *
    * \param grid object of Grid.
@@ -94,25 +96,41 @@ class Array
    */
   T_ARRAY &operator[](const std::size_t idx);
 
-  /*! Overloaded operator to return value of array using 3D cell index.
+  /*! Overloaded operator to return value of array using 3D cell indices.
    *
    * \param i zero based index along x-direction.
    * \param j zero based index along y-direction.
    * \param k zero based index along z-direction.
    *
-   * \return value at given 3D cell index.
+   * \return value at given 3D cell indices.
    */
   const T_ARRAY &operator()(const int i, const int j, const int k) const;
 
-  /*! Overloaded operator to return reference to value of array using 3D cell index.
+  /*! Overloaded operator to return reference to value of array using 3D cell indices.
    *
    * \param i zero based index along x-direction.
    * \param j zero based index along y-direction.
    * \param k zero based index along z-direction.
    *
-   * \return reference to value at given 3D cell index.
+   * \return reference to value at given 3D cell indices.
    */
   T_ARRAY &operator()(const int i, const int j, const int k);
+
+  /*! Overloaded operator to return value of array using 3D cell index.
+   *
+   * \param node_id node id of type GALS::CPU::Vec3<int>.
+   *
+   * \return value at given 3D cell index.
+   */
+  const T_ARRAY &operator()(const Vec3<int> node_id) const;
+
+  /*! Overloaded operator to return value of array using 3D cell index.
+   *
+   * \param node_id node id of type GALS::CPU::Vec3<int>.
+   *
+   * \return value at given 3D cell index.
+   */
+  T_ARRAY &operator()(const Vec3<int> node_id);
 
  private:
   const T_GRID &m_grid;

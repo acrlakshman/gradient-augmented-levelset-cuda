@@ -30,6 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "array.h"
+
 #include "mat3.h"
 #include "vec_n.h"
 
@@ -97,6 +98,18 @@ T_ARRAY& GALS::CPU::Array<T_GRID, T_ARRAY>::operator()(const int i, const int j,
 {
   const std::size_t idx = m_grid.index(i, j, k);
   return m_data[idx];
+}
+
+template <typename T_GRID, typename T_ARRAY>
+const T_ARRAY& GALS::CPU::Array<T_GRID, T_ARRAY>::operator()(const Vec3<int> node_id) const
+{
+  return m_data[m_grid.index(node_id)];
+}
+
+template <typename T_GRID, typename T_ARRAY>
+T_ARRAY& GALS::CPU::Array<T_GRID, T_ARRAY>::operator()(const Vec3<int> node_id)
+{
+  return m_data[m_grid.index(node_id)];
 }
 
 template class GALS::CPU::Array<GALS::CPU::Grid<double, 1>, double>;

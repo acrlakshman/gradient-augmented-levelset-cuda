@@ -65,13 +65,6 @@ void GALS::CPU::SecondOrderCentral<T, T_GRID>::compute(const Array<T_GRID, T> &a
 }
 
 template <typename T, typename T_GRID>
-void GALS::CPU::SecondOrderCentral<T, T_GRID>::operator()(const Array<T_GRID, T> &alpha,
-                                                          Array<T_GRID, Vec3<T>> &grad_alpha)
-{
-  this->compute(alpha, grad_alpha);
-}
-
-template <typename T, typename T_GRID>
 void GALS::CPU::SecondOrderCentral<T, T_GRID>::compute(const Array<T_GRID, Vec3<T>> &alpha,
                                                        Array<T_GRID, Mat3<T>> &grad_alpha)
 {
@@ -94,13 +87,6 @@ void GALS::CPU::SecondOrderCentral<T, T_GRID>::compute(const Array<T_GRID, Vec3<
           }
         }
       }
-}
-
-template <typename T, typename T_GRID>
-void GALS::CPU::SecondOrderCentral<T, T_GRID>::operator()(const Array<T_GRID, Vec3<T>> &alpha,
-                                                          Array<T_GRID, Mat3<T>> &grad_alpha)
-{
-  this->compute(alpha, grad_alpha);
 }
 
 template class GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 1>>;

@@ -31,12 +31,12 @@
 
 #pragma once
 
+#include <string>
+#include <vector>
+
 #include "input-fields/grid.h"
 #include "mat3.h"
 #include "vec3.h"
-
-#include <string>
-#include <vector>
 
 namespace GALS
 {
@@ -51,6 +51,7 @@ class Grid
 {
  public:
   typedef T value_type;
+  typedef Vec3<T> position_type;
   static const int dim = DIM;
 
   //! vector along x: {1, 0, 0}; y: {0, 1, 0}; z: {0, 0, 1}.
@@ -138,9 +139,29 @@ class Grid
    *
    * 3D to 1D index mapping.
    *
+   * \param i zero based index along x-direction.
+   * \param j zero based index along y-direction.
+   * \param k zero based index along z-direction.
+   *
    * \return 1D index.
    */
   const std::size_t index(const int i, const int j, const int k) const;
+
+  /*! Given a node id, returns 1D index in stored array.
+   *
+   * \param node_id node id of type GALS::CPU::Vec3<int>.
+   *
+   * \return 1D index.
+   */
+  const std::size_t index(const Vec3<int> node_id) const;
+
+  /*! Return base node id (i, j, k) that encloses given position.
+   *
+   * \param x position.
+   *
+   * \return base node id (i, j, k).
+   */
+  const Vec3<int> baseNodeId(const Vec3<T>& x) const;
 
   /*! Returns cell size which is a vector of size 3.
    *
@@ -184,7 +205,8 @@ class Grid
  private:
   int m_dimension, m_nx, m_ny, m_nz, m_pad;
   int m_mask[3];
-  Vec3<T> m_dx;
+  Vec3<T> m_box_min, m_box_max;
+  Vec3<T> m_dx, m_one_by_dx;
   std::vector<Vec3<T>> m_grid;
 };
 
