@@ -11,8 +11,9 @@ OPTION(BUILD_COVERAGE "Create test coverage report" OFF)
 OPTION(USE_SYSTEM_GTEST "Use GTEST from system libraries" OFF)
 OPTION(USE_RELATIVE_TEST_DIR "Use relative paths for the test data directory(For continious integration(CI) purposes only)" OFF)
 
-IF ((NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/googletest") OR
-  (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/yaml-cpp"))
+# TODO (lakshman): Move googletest to ext/
+IF ((NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/googletest") OR
+  (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ext/yaml-cpp"))
 
   MESSAGE(WARNING "third party libraries are missing.")
   MESSAGE("Did you miss the --recursive option when cloning?")
@@ -22,18 +23,6 @@ IF ((NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test/googletest") OR
   MESSAGE("git submodule foreach git pull origin master")
 
 ENDIF ()
-
-IF( NOT TARGET yaml-cpp )
-  # Turn off YAML-CPP targets
-  set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "Turn off YAML-CPP tools target" FORCE)
-  set(YAML_CPP_INSTALL     OFF CACHE BOOL "Turn off YAML-CPP install target" FORCE)
-  set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "Turn off YAML-CPP tests target" FORCE)
-
-  ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/third_party/yaml-cpp)
-  SET_TARGET_PROPERTIES(yaml-cpp
-    PROPERTIES
-      FOLDER "ExternalProjectTargets/yaml-cpp")
-ENDIF()
 
 # Set a default build type if none was specified
 IF(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
@@ -60,25 +49,32 @@ IF (BUILD_COVERAGE)
 ENDIF()
 
 # Generate documentation
-IF(BUILD_DOCUMENTATION)
-    ADD_SUBDIRECTORY(doc)
+IF (BUILD_DOCUMENTATION)
+    ADD_SUBDIRECTORY(docs)
 ENDIF(BUILD_DOCUMENTATION)
 
-IF(BUILD_EXAMPLES)
+IF (BUILD_EXAMPLES)
     ADD_SUBDIRECTORY(examples)
 ENDIF()
 
-IF(BUILD_TESTS)
+IF (BUILD_TESTS)
     ENABLE_TESTING()
-    ADD_SUBDIRECTORY(test)
+    ADD_SUBDIRECTORY(tests)
 ENDIF()
 
 FILE(GLOB_RECURSE GALS_CPU_SRC src/cpu/*.cc src/cpu/*.h)
 
-# Add third party dependencies
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/third_party/yaml-cpp/include/)
+# Add external dependencies
+ADD_SUBDIRECTORY(ext)
+
+INCLUDE_DIRECTORIES(${YAML_CPP_INCLUDE_DIR})
 
 ADD_LIBRARY(gals_cpu SHARED ${GALS_CPU_SRC})
+
+IF (APPLE)
+  TARGET_LINK_LIBRARIES(gals_cpu PRIVATE yaml-cpp)
+ENDIF()
+
 ADD_EXECUTABLE(gals_cuda src/main.cc)
 TARGET_INCLUDE_DIRECTORIES(gals_cuda PUBLIC src/cpu)
 TARGET_LINK_LIBRARIES(gals_cuda PUBLIC gals_cpu PRIVATE yaml-cpp)

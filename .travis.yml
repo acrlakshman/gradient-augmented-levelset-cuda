@@ -15,12 +15,12 @@ matrix:
               apt:
                   sources: ['ubuntu-toolchain-r-test', 'george-edison55-precise-backports']
                   packages: ['g++-7', 'lcov', 'cmake', 'cmake-data', 'doxygen', 'graphviz']
-        #- os: osx
-          #osx_image: xcode10.1
-          #compiler: clang
-          #env: INSTALL_CXX=clang++ INSTALL_CC=clang
-          #install:
-             #- brew install doxygen
+        - os: osx
+          osx_image: xcode10.1
+          compiler: clang
+          env: INSTALL_CXX=clang++ INSTALL_CC=clang
+          install:
+             - brew install doxygen
 
 before_install:
     - gem install coveralls-lcov
@@ -30,22 +30,22 @@ script:
     - cd build
     - CC=$INSTALL_CC CXX=$INSTALL_CXX cmake ../ -DBUILD_COVERAGE:BOOL=ON -DBUILD_DOCUMENTATION:BOOL=ON
     - make -j 4
-    - ./gals_cuda && ctest -R gals_unit_test --output-on-failure
+    - ./gals_cuda && ctest -R gals_unit_tests --output-on-failure
 
 after_success:
-    #- if [ "$TRAVIS_OS_NAME" = "osx" ]; then
-        #ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" < /dev/null 2> /dev/null;
-        #brew install lcov;
-      #fi
+    - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" < /dev/null 2> /dev/null;
+        brew install lcov;
+      fi
     - lcov --directory . --base-directory ../src --capture --no-external --output-file coverage.info
-    - genhtml coverage.info --output-directory ./doc/html/coverage
+    - genhtml coverage.info --output-directory ./docs/html/coverage
     - lcov --remove coverage.info '/usr*' -o coverage.info
     - coveralls-lcov coverage.info
 
 deploy:
    provider: pages
    skip_cleanup: true
-   local_dir: ./build/doc/html
+   local_dir: ./build/docs/html
    github_token: $GH_REPO_TOKEN
    on:
       branch: master

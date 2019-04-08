@@ -35,7 +35,9 @@
 
 TEST(CPU, INPUTS_PARSER)
 {
-  // GALS::CPU::InputParser input_parser;
+  // Input fields.
+  GALS::INPUT_FIELDS::InputFields input_fields;
 
-  // input_parser.parse("./inputs");
+  GALS::CPU::InputParser input_parser;
+  input_parser.parse("../../tests/inputs", &input_fields);
 }
