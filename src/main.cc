@@ -38,13 +38,5 @@ int main()
 {
   std::cout << "Running CPU version of GALS implementation" << std::endl;
 
-  // Input fields.
-  GALS::INPUT_FIELDS::InputFields input_fields;
-
-  GALS::CPU::InputParser input_parser;
-  input_parser.parse("../test/inputs", &input_fields);
-
-  // TODO (lakshman): Move above tests for input_parser to unit tests.
-
   return 0;
 }
