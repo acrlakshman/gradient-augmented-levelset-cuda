@@ -67,8 +67,8 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_1D)
 
   GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::Vec3<double>> grad_levelset(grid);
 
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>> grad_temp;
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>>::compute(levelset, grad_levelset);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>, GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 1>>> grad_temp;
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>, GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 1>>>::compute(levelset, grad_levelset);
 
   // for (int i = i_min; i < i_max; ++i)
   // for (int j = j_min; j < j_max; ++j)
@@ -92,7 +92,7 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_1D)
         // std::cout << "velocity(" << i << ", " << j << ", " << k << "): " << velocity(i,j,k) << std::endl;
       }
 
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>>::compute(velocity, grad_velocity);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>, GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 1>>>::compute(velocity, grad_velocity);
   // for (int i = 0; i < num_cells[0]; ++i)
   // for (int j = 0; j < num_cells[1]; ++j)
   // for (int k = 0; k < num_cells[2]; ++k)
@@ -129,8 +129,8 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_2D)
 
   GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::Vec3<double>> grad_levelset(grid);
 
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>> grad_temp;
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>>::compute(levelset, grad_levelset);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>, GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 2>>> grad_temp;
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>, GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 2>>>::compute(levelset, grad_levelset);
 
   for (int i = 0; i < num_cells[0]; ++i)
     for (int j = 0; j < num_cells[1]; ++j)
@@ -146,7 +146,7 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_2D)
         velocity(i, j, k) = GALS::CPU::Vec3<double>(i, j, k);
       }
 
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>>::compute(velocity, grad_velocity);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>, GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 2>>>::compute(velocity, grad_velocity);
 
   for (int i = 0; i < num_cells[0]; ++i)
     for (int j = 0; j < num_cells[1]; ++j)
@@ -179,8 +179,8 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_3D)
 
   GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::Vec3<double>> grad_levelset(grid);
 
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>> grad_temp;
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>>::compute(levelset, grad_levelset);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>, GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 3>>> grad_temp;
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>, GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 3>>>::compute(levelset, grad_levelset);
 
   for (int i = 0; i < num_cells[0]; ++i)
     for (int j = 0; j < num_cells[1]; ++j)
@@ -196,9 +196,65 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_3D)
         velocity(i, j, k) = GALS::CPU::Vec3<double>(i, j, k);
       }
 
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>>::compute(velocity, grad_velocity);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>, GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 3>>>::compute(velocity, grad_velocity);
 
   for (int i = 0; i < num_cells[0]; ++i)
     for (int j = 0; j < num_cells[1]; ++j)
       for (int k = 0; k < num_cells[2]; ++k) EXPECT_TRUE(GALS::is_equal(5., grad_velocity(i, j, k)[0]));
+}
+
+TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_1D)
+{
+  // scalar array on 1D grid.
+  GALS::CPU::Grid<double, 1> grid(10, 1, 1);
+  grid.setPadding(2);
+  grid.generate(-1, 1, -1, 1, -1, 1);
+  GALS::CPU::Array<GALS::CPU::Grid<double, 1>, double> levelset(grid);
+
+  const auto mask = grid.getMask();
+  const int pad = grid.getPadding();
+  const auto num_cells = grid.numCells();
+
+  int i_min = -pad * mask[0];
+  int j_min = -pad * mask[1];
+  int k_min = -pad * mask[2];
+  int i_max = num_cells[0] + pad * mask[0];
+  int j_max = num_cells[1] + pad * mask[1];
+  int k_max = num_cells[2] + pad * mask[2];
+
+  for (int i = i_min; i < i_max; ++i)
+    for (int j = j_min; j < j_max; ++j)
+      for (int k = k_min; k < k_max; ++k) {
+        levelset(i, j, k) = i;
+      }
+
+  GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::Vec3<double>> grad_levelset(grid);
+
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>>::compute(levelset, grad_levelset);
+
+  for (int i = 0; i < num_cells[0]; ++i)
+    for (int j = 0; j < num_cells[1]; ++j)
+      for (int k = 0; k < num_cells[2]; ++k) 
+      {
+        EXPECT_TRUE(GALS::is_equal(5., grad_levelset(i, j, k)[0]));
+      }
+  
+  // Testing gradient of Vec3
+  GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::Vec3<double>> velocity(grid);
+  GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::Mat3<double>> grad_velocity(grid);
+
+  for (int i = i_min; i < i_max; ++i)
+    for (int j = j_min; j < j_max; ++j)
+      for (int k = k_min; k < k_max; ++k) {
+        velocity(i, j, k) = GALS::CPU::Vec3<double>(i, j, k);
+      }
+
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>>::compute(velocity, grad_velocity);
+
+  for (int i = 0; i < num_cells[0]; ++i)
+    for (int j = 0; j < num_cells[1]; ++j)
+      for (int k = 0; k < num_cells[2]; ++k) 
+      {
+        EXPECT_TRUE(GALS::is_equal(5., grad_velocity(i, j, k)[0]));
+      }
 }
