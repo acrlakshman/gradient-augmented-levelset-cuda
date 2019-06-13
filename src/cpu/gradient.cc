@@ -63,3 +63,12 @@ template class GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>,
 
 template class GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>,
                                    GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 3>>>;
+
+template class GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>,
+                                   GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 1>>>;
+
+template class GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>,
+                                   GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 2>>>;
+
+template class GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>,
+                                   GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 3>>>;
