@@ -46,7 +46,7 @@ namespace CPU
  *
  * Class to create 3 component elements at a computational cell. For e.x. velocity, gradients, etc.
  */
-template <typename T, typename T_GRID, typename GRADIENT_SCHEME = ThirdOrder<T,T_GRID>>
+template <typename T, typename T_GRID, typename GRADIENT_SCHEME = ThirdOrder<T, T_GRID>>
 class Gradient
 {
  public:

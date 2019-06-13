@@ -45,10 +45,10 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_1D)
 {
   // initializing 1-D test grid.
   GALS::CPU::Grid<double, 1> grid(10, 1, 1);
-  
+
   // grid generation
   grid.generate(-1, 1, -1, 1, -1, 1);
-  
+
   // accessing grid details
   const auto mask = grid.getMask();
   const int pad = grid.getPadding();
@@ -69,7 +69,7 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_1D)
   // initializing vector array to store gradient of the scalar array
   GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::Vec3<double>> grad_levelset(grid);
 
-  // defining scalar array value 
+  // defining scalar array value
   for (int i = i_min; i < i_max; ++i)
     for (int j = j_min; j < j_max; ++j)
       for (int k = k_min; k < k_max; ++k) {
@@ -77,7 +77,9 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_1D)
       }
 
   // computing gradient using second order central scheme
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>, GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 1>>>::compute(levelset, grad_levelset);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>,
+                      GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 1>>>::compute(levelset,
+                                                                                                  grad_levelset);
 
   // running test procedure to check the correctness of the produced output
   for (int i = 0; i < num_cells[0]; ++i)
@@ -87,7 +89,7 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_1D)
   /* * * * * * SUB-TEST 2 * * * * * */
   // initializing 1-D vector array
   GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::Vec3<double>> velocity(grid);
-  
+
   // initializing a matrix array to store gradient of the vector array
   GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::Mat3<double>> grad_velocity(grid);
 
@@ -99,7 +101,9 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_1D)
       }
 
   // computing the gradient of vector array using second order scheme
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>, GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 1>>>::compute(velocity, grad_velocity);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>,
+                      GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 1>>>::compute(velocity,
+                                                                                                  grad_velocity);
 
   // running test procedure to check the correctness of the produced output
   for (int i = 0; i < num_cells[0]; ++i)
@@ -112,10 +116,10 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_2D)
 {
   // initializing 2-D test grid.
   GALS::CPU::Grid<double, 2> grid(10, 10, 1);
-  
+
   // grid generation
   grid.generate(-1, 1, -1, 1, -1, 1);
-  
+
   // accessing grid details
   const auto mask = grid.getMask();
   const int pad = grid.getPadding();
@@ -136,7 +140,7 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_2D)
   // initializing vector array to store gradient of the scalar array
   GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::Vec3<double>> grad_levelset(grid);
 
-  // defining scalar array value 
+  // defining scalar array value
   for (int i = i_min; i < i_max; ++i)
     for (int j = j_min; j < j_max; ++j)
       for (int k = k_min; k < k_max; ++k) {
@@ -144,7 +148,9 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_2D)
       }
 
   // computing gradient using second order central scheme
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>, GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 2>>>::compute(levelset, grad_levelset);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>,
+                      GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 2>>>::compute(levelset,
+                                                                                                  grad_levelset);
 
   // running test procedure to check the correctness of the produced output
   for (int i = 0; i < num_cells[0]; ++i)
@@ -154,7 +160,7 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_2D)
   /* * * * * * SUB-TEST 2 * * * * * */
   // initializing 2-D vector array
   GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::Vec3<double>> velocity(grid);
-  
+
   // initializing a matrix array to store gradient of the vector array
   GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::Mat3<double>> grad_velocity(grid);
 
@@ -166,7 +172,9 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_2D)
       }
 
   // computing the gradient of vector array using second order scheme
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>, GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 2>>>::compute(velocity, grad_velocity);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>,
+                      GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 2>>>::compute(velocity,
+                                                                                                  grad_velocity);
 
   // running test procedure to check the correctness of the produced output
   for (int i = 0; i < num_cells[0]; ++i)
@@ -179,10 +187,10 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_3D)
 {
   // initializing 3-D test grid.
   GALS::CPU::Grid<double, 3> grid(10, 10, 10);
-  
+
   // grid generation
   grid.generate(-1, 1, -1, 1, -1, 1);
-  
+
   // accessing grid details
   const auto mask = grid.getMask();
   const int pad = grid.getPadding();
@@ -203,7 +211,7 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_3D)
   // initializing vector array to store gradient of the scalar array
   GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::Vec3<double>> grad_levelset(grid);
 
-  // defining scalar array value 
+  // defining scalar array value
   for (int i = i_min; i < i_max; ++i)
     for (int j = j_min; j < j_max; ++j)
       for (int k = k_min; k < k_max; ++k) {
@@ -211,7 +219,9 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_3D)
       }
 
   // computing gradient using second order central scheme
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>, GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 3>>>::compute(levelset, grad_levelset);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>,
+                      GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 3>>>::compute(levelset,
+                                                                                                  grad_levelset);
 
   // running test procedure to check the correctness of the produced output
   for (int i = 0; i < num_cells[0]; ++i)
@@ -221,7 +231,7 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_3D)
   /* * * * * * SUB-TEST 2 * * * * * */
   // initializing 3-D vector array
   GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::Vec3<double>> velocity(grid);
-  
+
   // initializing a matrix array to store gradient of the vector array
   GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::Mat3<double>> grad_velocity(grid);
 
@@ -233,7 +243,9 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_3D)
       }
 
   // computing the gradient of vector array using second order scheme
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>, GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 3>>>::compute(velocity, grad_velocity);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>,
+                      GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 3>>>::compute(velocity,
+                                                                                                  grad_velocity);
 
   // running test procedure to check the correctness of the produced output
   for (int i = 0; i < num_cells[0]; ++i)
@@ -247,10 +259,10 @@ TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_1D)
   // initializing 1-D test grid.
   GALS::CPU::Grid<double, 1> grid(10, 1, 1);
   grid.setPadding(2);
-  
+
   // grid generation
   grid.generate(-1, 1, -1, 1, -1, 1);
-  
+
   // accessing grid details
   const auto mask = grid.getMask();
   const int pad = grid.getPadding();
@@ -271,7 +283,7 @@ TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_1D)
   // initializing vector array to store gradient of the scalar array
   GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::Vec3<double>> grad_levelset(grid);
 
-  // defining scalar array value 
+  // defining scalar array value
   for (int i = i_min; i < i_max; ++i)
     for (int j = j_min; j < j_max; ++j)
       for (int k = k_min; k < k_max; ++k) {
@@ -279,7 +291,8 @@ TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_1D)
       }
 
   // computing gradient using second order central scheme
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>, GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 1>>>::compute(levelset, grad_levelset);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>,
+                      GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 1>>>::compute(levelset, grad_levelset);
 
   // running test procedure to check the correctness of the produced output
   for (int i = 0; i < num_cells[0]; ++i)
@@ -289,7 +302,7 @@ TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_1D)
   /* * * * * * SUB-TEST 2 * * * * * */
   // initializing 1-D vector array
   GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::Vec3<double>> velocity(grid);
-  
+
   // initializing a matrix array to store gradient of the vector array
   GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::Mat3<double>> grad_velocity(grid);
 
@@ -301,7 +314,8 @@ TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_1D)
       }
 
   // computing the gradient of vector array using second order scheme
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>, GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 1>>>::compute(velocity, grad_velocity);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>,
+                      GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 1>>>::compute(velocity, grad_velocity);
 
   // running test procedure to check the correctness of the produced output
   for (int i = 0; i < num_cells[0]; ++i)
@@ -315,10 +329,10 @@ TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_2D)
   // initializing 2-D test grid.
   GALS::CPU::Grid<double, 2> grid(10, 10, 1);
   grid.setPadding(2);
-  
+
   // grid generation
   grid.generate(-1, 1, -1, 1, -1, 1);
-  
+
   // accessing grid details
   const auto mask = grid.getMask();
   const int pad = grid.getPadding();
@@ -339,7 +353,7 @@ TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_2D)
   // initializing vector array to store gradient of the scalar array
   GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::Vec3<double>> grad_levelset(grid);
 
-  // defining scalar array value 
+  // defining scalar array value
   for (int i = i_min; i < i_max; ++i)
     for (int j = j_min; j < j_max; ++j)
       for (int k = k_min; k < k_max; ++k) {
@@ -347,7 +361,8 @@ TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_2D)
       }
 
   // computing gradient using second order central scheme
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>, GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 2>>>::compute(levelset, grad_levelset);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>,
+                      GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 2>>>::compute(levelset, grad_levelset);
 
   // running test procedure to check the correctness of the produced output
   for (int i = 0; i < num_cells[0]; ++i)
@@ -357,7 +372,7 @@ TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_2D)
   /* * * * * * SUB-TEST 2 * * * * * */
   // initializing 2-D vector array
   GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::Vec3<double>> velocity(grid);
-  
+
   // initializing a matrix array to store gradient of the vector array
   GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::Mat3<double>> grad_velocity(grid);
 
@@ -369,7 +384,8 @@ TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_2D)
       }
 
   // computing the gradient of vector array using second order scheme
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>, GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 2>>>::compute(velocity, grad_velocity);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>,
+                      GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 2>>>::compute(velocity, grad_velocity);
 
   // running test procedure to check the correctness of the produced output
   for (int i = 0; i < num_cells[0]; ++i)
@@ -383,10 +399,10 @@ TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_3D)
   // initializing 3-D test grid.
   GALS::CPU::Grid<double, 3> grid(10, 10, 10);
   grid.setPadding(2);
-  
+
   // grid generation
   grid.generate(-1, 1, -1, 1, -1, 1);
-  
+
   // accessing grid details
   const auto mask = grid.getMask();
   const int pad = grid.getPadding();
@@ -407,7 +423,7 @@ TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_3D)
   // initializing vector array to store gradient of the scalar array
   GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::Vec3<double>> grad_levelset(grid);
 
-  // defining scalar array value 
+  // defining scalar array value
   for (int i = i_min; i < i_max; ++i)
     for (int j = j_min; j < j_max; ++j)
       for (int k = k_min; k < k_max; ++k) {
@@ -415,7 +431,8 @@ TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_3D)
       }
 
   // computing gradient using second order central scheme
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>, GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 3>>>::compute(levelset, grad_levelset);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>,
+                      GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 3>>>::compute(levelset, grad_levelset);
 
   // running test procedure to check the correctness of the produced output
   for (int i = 0; i < num_cells[0]; ++i)
@@ -425,7 +442,7 @@ TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_3D)
   /* * * * * * SUB-TEST 2 * * * * * */
   // initializing 3-D vector array
   GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::Vec3<double>> velocity(grid);
-  
+
   // initializing a matrix array to store gradient of the vector array
   GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::Mat3<double>> grad_velocity(grid);
 
@@ -437,7 +454,8 @@ TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_3D)
       }
 
   // computing the gradient of vector array using second order scheme
-  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>, GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 3>>>::compute(velocity, grad_velocity);
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>,
+                      GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 3>>>::compute(velocity, grad_velocity);
 
   // running test procedure to check the correctness of the produced output
   for (int i = 0; i < num_cells[0]; ++i)

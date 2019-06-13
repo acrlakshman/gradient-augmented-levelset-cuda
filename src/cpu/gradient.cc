@@ -72,4 +72,3 @@ template class GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>,
 
 template class GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>,
                                    GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 3>>>;
-

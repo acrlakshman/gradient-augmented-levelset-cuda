@@ -42,8 +42,7 @@ GALS::CPU::ThirdOrder<T, T_GRID>::~ThirdOrder()
 }
 
 template <typename T, typename T_GRID>
-void GALS::CPU::ThirdOrder<T, T_GRID>::compute(const Array<T_GRID, T> &alpha,
-                                                       Array<T_GRID, Vec3<T>> &grad_alpha)
+void GALS::CPU::ThirdOrder<T, T_GRID>::compute(const Array<T_GRID, T> &alpha, Array<T_GRID, Vec3<T>> &grad_alpha)
 {
   const Vec3<int> num_cells = alpha.numCells();
   const T_GRID &grid = alpha.grid();
@@ -57,19 +56,17 @@ void GALS::CPU::ThirdOrder<T, T_GRID>::compute(const Array<T_GRID, T> &alpha,
           typename T_GRID::value_type one_by_dx = static_cast<typename T_GRID::value_type>(1.) / (6.0 * dx[axis]);
 
           grad_alpha(i, j, k)[axis] =
-              (
-               2 * alpha(i + axis_vectors(axis, 0), j + axis_vectors(axis, 1), k + axis_vectors(axis, 2)) +
+              (2 * alpha(i + axis_vectors(axis, 0), j + axis_vectors(axis, 1), k + axis_vectors(axis, 2)) +
                3 * alpha(i, j, k) -
                6 * alpha(i - axis_vectors(axis, 0), j - axis_vectors(axis, 1), k - axis_vectors(axis, 2)) +
-               1 * alpha(i - 2 * axis_vectors(axis, 0), j - 2 * axis_vectors(axis, 1), k - 2 * axis_vectors(axis, 2))
-              ) * one_by_dx;
+               1 * alpha(i - 2 * axis_vectors(axis, 0), j - 2 * axis_vectors(axis, 1), k - 2 * axis_vectors(axis, 2))) *
+              one_by_dx;
         }
       }
 }
 
 template <typename T, typename T_GRID>
-void GALS::CPU::ThirdOrder<T, T_GRID>::compute(const Array<T_GRID, Vec3<T>> &alpha,
-                                                       Array<T_GRID, Mat3<T>> &grad_alpha)
+void GALS::CPU::ThirdOrder<T, T_GRID>::compute(const Array<T_GRID, Vec3<T>> &alpha, Array<T_GRID, Mat3<T>> &grad_alpha)
 {
   const Vec3<int> num_cells = alpha.numCells();
   const T_GRID &grid = alpha.grid();
@@ -84,12 +81,12 @@ void GALS::CPU::ThirdOrder<T, T_GRID>::compute(const Array<T_GRID, Vec3<T>> &alp
             typename T_GRID::value_type one_by_dx = static_cast<typename T_GRID::value_type>(1.) / (6 * dx[cmpt]);
 
             grad_alpha(i, j, k)(axis, cmpt) =
-              (
-               2 * alpha(i + axis_vectors(axis, 0), j + axis_vectors(axis, 1), k + axis_vectors(axis, 2))[axis] +
-               3 * alpha(i, j, k)[axis] -
-               6 * alpha(i - axis_vectors(axis, 0), j - axis_vectors(axis, 1), k - axis_vectors(axis, 2))[axis] +
-               1 * alpha(i - 2 * axis_vectors(axis, 0), j - 2 * axis_vectors(axis, 1), k - 2 * axis_vectors(axis, 2))[axis]
-              ) * one_by_dx;
+                (2 * alpha(i + axis_vectors(axis, 0), j + axis_vectors(axis, 1), k + axis_vectors(axis, 2))[axis] +
+                 3 * alpha(i, j, k)[axis] -
+                 6 * alpha(i - axis_vectors(axis, 0), j - axis_vectors(axis, 1), k - axis_vectors(axis, 2))[axis] +
+                 1 * alpha(i - 2 * axis_vectors(axis, 0), j - 2 * axis_vectors(axis, 1),
+                           k - 2 * axis_vectors(axis, 2))[axis]) *
+                one_by_dx;
           }
         }
       }
