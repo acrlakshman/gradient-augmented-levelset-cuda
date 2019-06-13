@@ -42,7 +42,7 @@ namespace CPU
 {
 /*! \class ThirdOrder
  *
- * Gradient computation using second order central scheme.
+ * Gradient computation using third order scheme.
  */
 template <typename T, typename T_GRID>
 class ThirdOrder
