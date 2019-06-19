@@ -38,7 +38,8 @@
 #include "input-parser.h"
 
 template <typename T, int DIM>
-GALS::CPU::Grid<T, DIM>::Grid(int nx, int ny, int nz) : m_dimension(DIM), m_nx(nx), m_ny(ny), m_nz(nz), m_pad(1)
+GALS::CPU::Grid<T, DIM>::Grid(int nx, int ny, int nz)
+    : m_dimension(DIM), m_nx(nx), m_ny(ny), m_nz(nz), m_pad(1), m_total_cells(nx * ny * nz)
 {
   m_mask[0] = 1, m_mask[1] = 0, m_mask[2] = 0;
 
@@ -50,7 +51,7 @@ GALS::CPU::Grid<T, DIM>::Grid(int nx, int ny, int nz) : m_dimension(DIM), m_nx(n
   m_box_min = Vec3<T>(INT_MIN, INT_MIN, INT_MIN);
   m_box_max = Vec3<T>(INT_MAX, INT_MAX, INT_MAX);
 
-  m_dx = GALS::CPU::Vec3<T>(INT_MAX, INT_MAX, INT_MAX), m_one_by_dx = GALS::CPU::Vec3<T>(INT_MIN, INT_MIN, INT_MIN);
+  m_dx = GALS::CPU::Vec3<T>(INT_MAX, INT_MAX, INT_MAX), m_one_over_dx = GALS::CPU::Vec3<T>(INT_MIN, INT_MIN, INT_MIN);
 }
 
 template <typename T, int DIM>
@@ -101,6 +102,12 @@ const std::vector<int> GALS::CPU::Grid<T, DIM>::numCells() const
 }
 
 template <typename T, int DIM>
+const size_t GALS::CPU::Grid<T, DIM>::totalCells() const
+{
+  return m_total_cells;
+}
+
+template <typename T, int DIM>
 const int GALS::CPU::Grid<T, DIM>::getPadding() const
 {
   return m_pad;
@@ -127,7 +134,7 @@ const GALS::CPU::Vec3<int> GALS::CPU::Grid<T, DIM>::baseNodeId(const Vec3<T>& x)
   Vec3<int> base_node_id(INT_MAX, INT_MAX, INT_MAX);
 
   for (int axis = 0; axis < DIM; ++axis) {
-    base_node_id[axis] = floor(((x[axis] - m_box_min[axis]) * m_one_by_dx[axis]) - 0.5);
+    base_node_id[axis] = floor(((x[axis] - m_box_min[axis]) * m_one_over_dx[axis]) - 0.5);
   }
 
   return base_node_id;
@@ -140,9 +147,21 @@ const GALS::CPU::Vec3<T>& GALS::CPU::Grid<T, DIM>::dX() const
 }
 
 template <typename T, int DIM>
+const GALS::CPU::Vec3<T>& GALS::CPU::Grid<T, DIM>::oneOverDX() const
+{
+  return m_one_over_dx;
+}
+
+template <typename T, int DIM>
 const GALS::CPU::Vec3<T>& GALS::CPU::Grid<T, DIM>::operator()(const int i, const int j, const int k) const
 {
   return m_grid[this->index(i, j, k)];
+}
+
+template <typename T, int DIM>
+const GALS::CPU::Vec3<T>& GALS::CPU::Grid<T, DIM>::operator()(const Vec3<int> node_id) const
+{
+  return m_grid[this->index(node_id)];
 }
 
 template <typename T, int DIM>
@@ -167,7 +186,7 @@ void GALS::CPU::Grid<T, DIM>::generate(T x_min, T x_max, T y_min, T y_max, T z_m
   m_dx[1] = (y_max - y_min) / m_ny;
   m_dx[2] = (z_max - z_min) / m_nz;
 
-  for (int i = 0; i < 3; ++i) m_one_by_dx[i] = static_cast<T>(1.) / m_dx[i];
+  for (int i = 0; i < 3; ++i) m_one_over_dx[i] = static_cast<T>(1.) / m_dx[i];
 
   for (int i = 0; i < 3; ++i) domain_min_new[i] = domain_min[i] + (m_dx[i] * 0.5) - (m_dx[i] * m_mask[i]);
 
@@ -186,6 +205,10 @@ void GALS::CPU::Grid<T, DIM>::generate(T x_min, T x_max, T y_min, T y_max, T z_m
       }
     }
   }
+
+  // Update total cells.
+  m_total_cells = 1;
+  for (int d = 0; d < DIM; ++d) m_total_cells *= this->numCells()[d];
 }
 
 template <typename T, int DIM>

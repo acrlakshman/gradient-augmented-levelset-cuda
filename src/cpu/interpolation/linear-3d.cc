@@ -31,51 +31,26 @@
 
 #include "linear.h"
 
-#include <iostream>
-
-#include "../vec3.h"
-
-template <typename T, typename T_GRID>
-GALS::INTERPOLATION::Linear<T, T_GRID>::Linear()
+// Template specialized for 1D
+template <typename T>
+T GALS::INTERPOLATION::Linear<T, GALS::CPU::Grid<T, 3>>::linearInterpolation(
+    const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 3>::value_type, GALS::CPU::Grid<T, 3>::dim> &grid,
+    const typename GALS::CPU::Grid<T, 3>::position_type &x_interp,
+    const GALS::CPU::Array<GALS::CPU::Grid<T, 3>, T> &alpha)
 {
-}
-
-template <typename T, typename T_GRID>
-GALS::INTERPOLATION::Linear<T, T_GRID>::~Linear()
-{
-}
-
-template <typename T, typename T_GRID>
-T GALS::INTERPOLATION::Linear<T, T_GRID>::linearInterpolation(
-    const GALS::CPU::Grid<typename T_GRID::value_type, T_GRID::dim> &grid,
-    const typename T_GRID::position_type &x_interp, const GALS::CPU::Array<T_GRID, T> &alpha)
-{
-  std::cout << "generalized" << std::endl;
-  T alpha_interpolated;
-
-  const GALS::CPU::Vec3<int> base_node_id = grid.baseNodeId(x_interp);
-
-  const typename T_GRID::position_type x_base = grid(base_node_id);
-  const auto &one_over_dx = grid.oneOverDX();
-
-  GALS::CPU::Vec3<T> eta;
-  for (int d = 0; d < T_GRID::dim; ++d) eta[d] = (x_interp[d] - x_base[d]) * one_over_dx[d];
-
-  for (int d = 0; d < T_GRID::dim; ++d) {
-    // TODO (lakshman), complete this.
-  }
+  std::cout << "specialized for 3D" << std::endl;
+  T alpha_interpolated = 0;
 
   return alpha_interpolated;
 }
 
-template <typename T, typename T_GRID>
-void GALS::INTERPOLATION::Linear<T, T_GRID>::compute(
-    const GALS::CPU::Array<T_GRID, typename T_GRID::position_type> &x_interp, const GALS::CPU::Array<T_GRID, T> &alpha,
-    GALS::CPU::Array<T_GRID, T> &alpha_interpolated)
+template <typename T>
+void GALS::INTERPOLATION::Linear<T, GALS::CPU::Grid<T, 3>>::compute(
+    const GALS::CPU::Array<GALS::CPU::Grid<T, 3>, typename GALS::CPU::Grid<T, 3>::position_type> &x_interp,
+    const GALS::CPU::Array<GALS::CPU::Grid<T, 3>, T> &alpha,
+    GALS::CPU::Array<GALS::CPU::Grid<T, 3>, T> &alpha_interpolated)
 {
-  std::cout << "compute: generalized" << std::endl;
+  std::cout << "compute: specialized for 3D" << std::endl;
 }
 
-template class GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 1>>;
-template class GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 2>>;
 template class GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 3>>;

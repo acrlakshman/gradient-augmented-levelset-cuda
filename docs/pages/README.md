@@ -35,12 +35,12 @@ Implementation of Gradient Augmented Levelset method in CPU and GPU.
 ```sh
 cmake .. -DBUILD_DOCUMENTATION=ON -DBUILD_COVERAGE=ON
 make -j 4
-./test/gals_unit_test
+./tests/gals_unit_tests
 lcov --directory . --base-directory ../src --capture --no-external --output-file coverage.info
-genhtml coverage.info --output-directory ./doc/html/coverage
+genhtml coverage.info --output-directory ./docs/html/coverage
 ```
 
-* Documentation can be found at `./doc/html/index.html`.
+* Documentation can be found at `./docs/html/index.html`.
 
 ## Coverage
 

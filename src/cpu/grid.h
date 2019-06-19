@@ -129,6 +129,12 @@ class Grid
    */
   const std::vector<int> numCells() const;
 
+  /*! Returns total number of cells excluding ghost (padded) cells.
+   *
+   * \return number of cells of type size_t.
+   */
+  const size_t totalCells() const;
+
   /*! Return current padding.
    *
    * \return padding.
@@ -169,11 +175,25 @@ class Grid
    */
   const Vec3<T>& dX() const;
 
+  /*! Returns one over cell size which is a vector of size 3.
+   *
+   * \return one over cell size.
+   */
+  const Vec3<T>& oneOverDX() const;
+
   /*! Operator overloaded to return co-ordinate values at a given 3D index.
    *
    * \return position.
    */
   const Vec3<T>& operator()(const int i, const int j, const int k) const;
+
+  /*! Operator overloaded to return co-ordinate values at a given 3D index.
+   *
+   * \param node_id node index of type NodeId.
+   *
+   * \return position.
+   */
+  const Vec3<T>& operator()(const Vec3<int> node_id) const;
 
   /*! Set new padding value.
    *
@@ -204,9 +224,10 @@ class Grid
 
  private:
   int m_dimension, m_nx, m_ny, m_nz, m_pad;
+  size_t m_total_cells;
   int m_mask[3];
   Vec3<T> m_box_min, m_box_max;
-  Vec3<T> m_dx, m_one_by_dx;
+  Vec3<T> m_dx, m_one_over_dx;
   std::vector<Vec3<T>> m_grid;
 };
 
