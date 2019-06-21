@@ -29,42 +29,28 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "hermite.h"
 
-#include <math.h>
-
-namespace GALS
-{
-static double VSMALL = 1e-10;
-static const double one_third = 1. / 3.;
-static const double two_thirds = 2. / 3.;
-
-/*! Check for equality within a tolerance.
- *
- * Tolerance is by default 1e-10.
- *
- * \param a first argument
- * \param b second argument
- *
- * \return number of elements.
- */
-static bool is_equal(double a, double b) { return fabs(a - b) <= VSMALL; }
-
-//! Check for equality between integers.
-static bool is_equal(int a, int b) { return a == b; }
-
-//! Compute square.
+// Template specialized for 1D
 template <typename T>
-static T sqr(T a)
+T GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 3>>::interpolate(
+    const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 3>::value_type, GALS::CPU::Grid<T, 3>::dim> &grid,
+    const typename GALS::CPU::Grid<T, 3>::position_type &x_interp,
+    const GALS::CPU::Array<GALS::CPU::Grid<T, 3>, T> &alpha)
 {
-  return a * a;
+  std::cout << "specialized for 3D" << std::endl;
+  T alpha_interpolated = 0;
+
+  return alpha_interpolated;
 }
 
-//! Compute cube.
 template <typename T>
-static T cube(T a)
+void GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 3>>::compute(
+    const GALS::CPU::Array<GALS::CPU::Grid<T, 3>, typename GALS::CPU::Grid<T, 3>::position_type> &x_interp,
+    const GALS::CPU::Array<GALS::CPU::Grid<T, 3>, T> &alpha,
+    GALS::CPU::Array<GALS::CPU::Grid<T, 3>, T> &alpha_interpolated)
 {
-  return a * a * a;
+  std::cout << "compute: specialized for 3D" << std::endl;
 }
 
-}  // namespace GALS
+template class GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 3>>;

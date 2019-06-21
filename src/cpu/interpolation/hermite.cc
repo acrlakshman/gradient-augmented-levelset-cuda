@@ -29,42 +29,53 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "hermite.h"
 
-#include <math.h>
+#include <iostream>
 
-namespace GALS
+#include "../vec3.h"
+
+template <typename T, typename T_GRID>
+GALS::INTERPOLATION::Hermite<T, T_GRID>::Hermite()
 {
-static double VSMALL = 1e-10;
-static const double one_third = 1. / 3.;
-static const double two_thirds = 2. / 3.;
-
-/*! Check for equality within a tolerance.
- *
- * Tolerance is by default 1e-10.
- *
- * \param a first argument
- * \param b second argument
- *
- * \return number of elements.
- */
-static bool is_equal(double a, double b) { return fabs(a - b) <= VSMALL; }
-
-//! Check for equality between integers.
-static bool is_equal(int a, int b) { return a == b; }
-
-//! Compute square.
-template <typename T>
-static T sqr(T a)
-{
-  return a * a;
 }
 
-//! Compute cube.
-template <typename T>
-static T cube(T a)
+template <typename T, typename T_GRID>
+GALS::INTERPOLATION::Hermite<T, T_GRID>::~Hermite()
 {
-  return a * a * a;
 }
 
-}  // namespace GALS
+template <typename T, typename T_GRID>
+T GALS::INTERPOLATION::Hermite<T, T_GRID>::interpolate(
+    const GALS::CPU::Grid<typename T_GRID::value_type, T_GRID::dim> &grid,
+    const typename T_GRID::position_type &x_interp, const GALS::CPU::Array<T_GRID, T> &alpha)
+{
+  std::cout << "generalized" << std::endl;
+  T alpha_interpolated;
+
+  const GALS::CPU::Vec3<int> base_node_id = grid.baseNodeId(x_interp);
+
+  const typename T_GRID::position_type x_base = grid(base_node_id);
+  const auto &one_over_dx = grid.oneOverDX();
+
+  GALS::CPU::Vec3<T> eta;
+  for (int d = 0; d < T_GRID::dim; ++d) eta[d] = (x_interp[d] - x_base[d]) * one_over_dx[d];
+
+  for (int d = 0; d < T_GRID::dim; ++d) {
+    // TODO (lakshman), complete this.
+  }
+
+  return alpha_interpolated;
+}
+
+template <typename T, typename T_GRID>
+void GALS::INTERPOLATION::Hermite<T, T_GRID>::compute(
+    const GALS::CPU::Array<T_GRID, typename T_GRID::position_type> &x_interp, const GALS::CPU::Array<T_GRID, T> &alpha,
+    GALS::CPU::Array<T_GRID, T> &alpha_interpolated)
+{
+  std::cout << "compute: generalized" << std::endl;
+}
+
+template class GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 1>>;
+template class GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 2>>;
+template class GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 3>>;

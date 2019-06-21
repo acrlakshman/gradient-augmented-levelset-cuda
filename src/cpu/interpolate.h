@@ -31,6 +31,7 @@
 
 #pragma once
 
+#include "./interpolation/hermite.h"
 #include "./interpolation/linear.h"
 #include "array.h"
 #include "grid.h"

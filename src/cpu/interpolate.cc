@@ -51,9 +51,13 @@ void GALS::CPU::Interpolate<T, T_GRID, INTERPOLATION_SCHEME>::compute(
 
 template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 1>,
                                       GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 1>>>;
-
 template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 2>,
                                       GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 2>>>;
-
 template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 3>,
                                       GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 3>>>;
+template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 1>,
+                                      GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 1>>>;
+template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 2>,
+                                      GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 2>>>;
+template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 3>,
+                                      GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 3>>>;
