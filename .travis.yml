@@ -9,16 +9,16 @@ sudo: false
 matrix:
     include:
         - dist: xenial
-          compiler: gcc-7
-          env: INSTALL_CXX=g++-7 INSTALL_CC=gcc-7
+          compiler: gcc-9
+          env: INSTALL_CXX=g++-9 INSTALL_CC=gcc-9
           addons:
               apt:
                   sources: ['ubuntu-toolchain-r-test', 'george-edison55-precise-backports']
-                  packages: ['g++-7', 'lcov', 'cmake', 'cmake-data', 'doxygen', 'graphviz']
+                  packages: ['g++-9', 'lcov', 'cmake', 'cmake-data', 'doxygen', 'graphviz']
         - os: osx
-          osx_image: xcode10.1
-          compiler: clang
-          env: INSTALL_CXX=clang++ INSTALL_CC=clang
+          osx_image: xcode10.2
+          compiler: gcc-8
+          env: INSTALL_CXX=g++-8 INSTALL_CC=gcc-8
           install:
              - brew install doxygen
 

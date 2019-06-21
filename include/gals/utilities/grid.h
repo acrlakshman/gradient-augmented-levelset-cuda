@@ -33,6 +33,7 @@
 
 #include <string>
 #include <vector>
+#include <filesystem>
 
 #include "gals/input-fields/grid.h"
 #include "gals/utilities/utilities.h"
