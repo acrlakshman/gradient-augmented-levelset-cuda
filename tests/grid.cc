@@ -59,6 +59,9 @@ TEST(CPU, GRID_1D)
   grid.setPadding(1);
   grid.generate(-1, 1, -1, 1, -1, 1);
 
+  // Total cells, excluding ghost (padded) cells.
+  EXPECT_TRUE(grid.totalCells() == 10);
+
   // get index given node_id in GALS::CPU::Vec3<int>.
   EXPECT_TRUE(grid.index(GALS::CPU::Vec3<int>(0, 0, 0)) == 1);
 
@@ -75,6 +78,7 @@ TEST(CPU, GRID_1D)
     double x_expect = x_min + i * dx;
     EXPECT_TRUE(fabs(grid(i, 0, 0)[0] - x_expect) < 1e-10);
     EXPECT_TRUE(fabs(grid.x(i, 0, 0)[0] - x_expect) < 1e-10);
+    EXPECT_TRUE(fabs(grid(GALS::CPU::Vec3<int>(i, INT_MAX, INT_MAX))[0] - x_expect) < 1e-10);
   }
 
   EXPECT_TRUE(grid.size() == 12);
@@ -85,6 +89,7 @@ TEST(CPU, GRID_1D)
   EXPECT_TRUE(grid.index(0, 0, 0) == 1);
 
   EXPECT_TRUE(fabs(grid.dX()[0] - dx) < 1e-10);
+  EXPECT_TRUE(fabs(grid.oneOverDX()[0] - (1. / dx)) < 1e-10);
 
   grid.writeToFile();
 }
@@ -108,6 +113,9 @@ TEST(CPU, GRID_2D)
   grid.setPadding(1);
   grid.generate(-1, 1, -1, 1, -1, 1);
 
+  // Total cells, excluding ghost (padded) cells.
+  EXPECT_TRUE(grid.totalCells() == 10 * 10);
+
   // get index given node_id in GALS::CPU::Vec3<int>.
   EXPECT_TRUE(grid.index(GALS::CPU::Vec3<int>(0, 0, 0)) == 13);
 
@@ -129,6 +137,8 @@ TEST(CPU, GRID_2D)
       EXPECT_TRUE(fabs(grid(i, j, 0)[1] - y_expect) < 1e-10);
       EXPECT_TRUE(fabs(grid.x(i, j, 0)[0] - x_expect) < 1e-10);
       EXPECT_TRUE(fabs(grid.x(i, j, 0)[1] - y_expect) < 1e-10);
+      EXPECT_TRUE(fabs(grid(GALS::CPU::Vec3<int>(i, j, INT_MAX))[0] - x_expect) < 1e-10);
+      EXPECT_TRUE(fabs(grid(GALS::CPU::Vec3<int>(i, j, INT_MAX))[1] - y_expect) < 1e-10);
     }
 
   EXPECT_TRUE(grid.size() == 144);
@@ -141,6 +151,9 @@ TEST(CPU, GRID_2D)
   EXPECT_TRUE(fabs(grid.dX()[0] - dx) < 1e-10);
   EXPECT_TRUE(fabs(grid.dX()[1] - dy) < 1e-10);
   EXPECT_TRUE(fabs(grid.dX()[2] - 2.) < 1e-10);
+  EXPECT_TRUE(fabs(grid.oneOverDX()[0] - (1. / dx)) < 1e-10);
+  EXPECT_TRUE(fabs(grid.oneOverDX()[1] - (1. / dy)) < 1e-10);
+  EXPECT_TRUE(fabs(grid.oneOverDX()[2] - 0.5) < 1e-10);
 
   grid.writeToFile();
 }
@@ -163,6 +176,9 @@ TEST(CPU, GRID_3D)
   grid.setPadding(1);
   grid.generate(-1, 1, -1, 1, -1, 1);
 
+  // Total cells, excluding ghost (padded) cells.
+  EXPECT_TRUE(grid.totalCells() == 10 * 10 * 10);
+
   // get index given node_id in GALS::CPU::Vec3<int>.
   EXPECT_TRUE(grid.index(GALS::CPU::Vec3<int>(0, 0, 0)) == 157);
 
@@ -178,6 +194,7 @@ TEST(CPU, GRID_3D)
     double x_expect = x_min + i * dx;
     EXPECT_TRUE(fabs(grid(i, 0, 0)[0] - x_expect) < 1e-10);
     EXPECT_TRUE(fabs(grid.x(i, 0, 0)[0] - x_expect) < 1e-10);
+    EXPECT_TRUE(fabs(grid(GALS::CPU::Vec3<int>(i, 0, 0))[0] - x_expect) < 1e-10);
   }
 
   EXPECT_TRUE(grid.size() == 1728);
@@ -188,6 +205,7 @@ TEST(CPU, GRID_3D)
   EXPECT_TRUE(grid.index(0, 0, 0) == 157);
 
   EXPECT_TRUE(fabs(grid.dX()[0] - dx) < 1e-10);
+  EXPECT_TRUE(fabs(grid.oneOverDX()[0] - (1. / dx)) < 1e-10);
 
   grid.writeToFile();
 }

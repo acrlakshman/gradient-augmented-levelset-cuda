@@ -38,10 +38,15 @@
 #include <math.h>
 #include <iostream>
 
-TEST(CPU, INTERPOLATION_LINEAR_DOUBLE_1D)
+const double xo = 0.;
+const double ro = 0.5;
+
+static double oned_levelset(double x, double xo, double ro) { return (x - xo) * (x - xo) - ro * ro; }
+
+static double test_oned(const int nx)
 {
   // scalar array on 1D grid.
-  GALS::CPU::Grid<double, 1> grid(10, 1, 1);
+  GALS::CPU::Grid<double, 1> grid(nx, 1, 1);
   grid.generate(-1, 1, -1, 1, -1, 1);
   GALS::CPU::Array<GALS::CPU::Grid<double, 1>, double> levelset(grid);
 
@@ -59,19 +64,68 @@ TEST(CPU, INTERPOLATION_LINEAR_DOUBLE_1D)
   for (int i = i_min; i < i_max; ++i)
     for (int j = j_min; j < j_max; ++j)
       for (int k = k_min; k < k_max; ++k) {
-        levelset(i, j, k) = i;
-        // std::cout << "levelset(" << i << ", " << j << ", " << k << ") = " << levelset(i, j, k) << std::endl;
+        levelset(i, j, k) = oned_levelset(grid(i, j, k)[0], xo, ro);
+        // std::cout << "grid(" << i << ", " << j << ", " << k << ") = " << grid(i, j, k) << "; levelset(" << i << ", "
+        //<< j << ", " << k << ") = " << levelset(i, j, k) << std::endl;
       }
 
-  GALS::CPU::Array<GALS::CPU::Grid<double, 1>, double> levelset_interpolated(grid);
-  GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::Vec3<double>> x_interp(grid);
+  // Create interpolating points.
+  GALS::CPU::Grid<double, 1> grid_interp(23, 1, 1);
+  grid_interp.generate(-0.87, 0.87, -1, 1, -1, 1);
+  GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::Vec3<double>> x_interp(grid_interp);
+  for (int i = 0; i < grid_interp.numCells()[0]; ++i)
+    for (int j = 0; j < grid_interp.numCells()[1]; ++j)
+      for (int k = 0; k < grid_interp.numCells()[2]; ++k) {
+        x_interp(i, j, k)[0] = grid_interp(i, j, k)[0];
 
-  GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 1>> interpolate_tmp;
+        // std::cout << "x_interp(" << i << ", " << j << ", " << k << ") = " << x_interp(i, j, k) << std::endl;
+      }
 
+  GALS::CPU::Array<GALS::CPU::Grid<double, 1>, double> levelset_interpolated(grid_interp);
   GALS::CPU::Interpolate<
       double, GALS::CPU::Grid<double, 1>,
       GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 1>>>::compute(x_interp, levelset,
                                                                                 levelset_interpolated);
+
+  // Compute error.
+  double l1err = 0.;
+
+  for (int i = 0; i < x_interp.grid().numCells()[0]; ++i)
+    for (int j = 0; j < x_interp.grid().numCells()[1]; ++j)
+      for (int k = 0; k < x_interp.grid().numCells()[2]; ++k) {
+        auto levelset_interp = levelset_interpolated(i, j, k);
+        auto levelset_exact = oned_levelset(x_interp(i, j, k)[0], xo, ro);
+        l1err += fabs(levelset_interp - levelset_exact);
+      }
+  l1err /= grid.totalCells();
+
+  return l1err;
+}
+
+TEST(CPU, INTERPOLATION_LINEAR_DOUBLE_1D)
+{
+  std::vector<int> nx = {10, 20, 40, 80, 160};
+  std::vector<double> l1err(nx.size());
+  std::vector<double> rate(nx.size() - 1);
+
+  for (int i = 0; i < nx.size(); ++i) {
+    // std::cout << "------------ nx = " << nx[i] << "------------" << std::endl;
+    l1err[i] = test_oned(nx[i]);
+  }
+
+  // Debug: output error.
+  // for (int i = 0; i < nx.size(); ++i) {
+  // std::cout << "l1err[" << i << "]: " << l1err[i] << std::endl;
+  //}
+
+  // Compute rate of convergence.
+  for (int i = 0; i < nx.size() - 1; ++i) {
+    rate[i] = log(l1err[i + 1] / l1err[i]) / log(static_cast<double>(nx[i]) / static_cast<double>(nx[i + 1]));
+    std::cout << "rate (" << nx[i] << " -> " << nx[i + 1] << "): " << rate[i] << std::endl;
+  }
+
+  // temperary object, for code coverage.
+  GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 1>> interpolate_tmp;
 }
 
 TEST(CPU, INTERPOLATION_LINEAR_DOUBLE_2D)
@@ -108,7 +162,7 @@ TEST(CPU, INTERPOLATION_LINEAR_DOUBLE_2D)
   GALS::CPU::Interpolate<
       double, GALS::CPU::Grid<double, dim>,
       GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, dim>>>::compute(x_interp, levelset,
-                                                                                levelset_interpolated);
+                                                                                  levelset_interpolated);
 }
 
 TEST(CPU, INTERPOLATION_LINEAR_DOUBLE_3D)
@@ -145,5 +199,5 @@ TEST(CPU, INTERPOLATION_LINEAR_DOUBLE_3D)
   GALS::CPU::Interpolate<
       double, GALS::CPU::Grid<double, dim>,
       GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, dim>>>::compute(x_interp, levelset,
-                                                                                levelset_interpolated);
+                                                                                  levelset_interpolated);
 }
