@@ -31,42 +31,43 @@
 
 #pragma once
 
-#include "../input-fields/input-fields.h"
-
-#include "yaml-cpp/yaml.h"
+#include "../utilities/array.h"
+#include "../utilities/grid.h"
+#include "../utilities/mat3.h"
+#include "../utilities/vec3.h"
+#include "./interpolation/hermite.h"
+#include "./interpolation/linear.h"
 
 namespace GALS
 {
 namespace CPU
 {
-/*! \class GridParser
+/*! \class Interpolate
  *
- * Class to parse input fields for grid.
+ * Class to perform interpolation. Default interpolation scheme is set to GALS::INTERPOLATION::Linear<...>.
  */
-class GridParser
+template <typename T, typename T_GRID, typename INTERPOLATION_SCHEME = GALS::INTERPOLATION::Linear<T, T_GRID>>
+class Interpolate
 {
  public:
+  typedef T value_type;
+
   /*! Default constructor
    */
-  GridParser();
+  Interpolate();
 
   /*! Destructor
    */
-  ~GridParser();
+  ~Interpolate();
 
-  /*! Parse input variables for grid section.
+  /*! Compute interpolation of a scalar.
    *
-   * \param field YAML node for grid.
-   * \param p_input_fields pointer to input fields object.
+   * \param x_interp interpolation points.
+   * \param alpha variable to interpolate.
+   * \param alpha_interpolated interpolated values are written to this variable.
    */
-  void parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
-
-  /*! Overloaded operator to parse.
-   *
-   * \param field YAML node for grid.
-   * \param p_input_fields pointer to input fields object.
-   */
-  void operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
+  static void compute(const Array<T_GRID, typename T_GRID::position_type> &x_interp, const Array<T_GRID, T> &alpha,
+                      Array<T_GRID, T> &alpha_interpolated);
 };
 
 }  // namespace CPU

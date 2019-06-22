@@ -29,8 +29,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "input-fields/input-fields.h"
-#include "input-parser.h"
+#include "gals/input-fields/input-fields.h"
+#include "gals/input-parser.h"
 
 #include <iostream>
 

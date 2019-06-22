@@ -29,7 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "interpolate.h"
+#include "gals/cpu/interpolate.h"
 
 template <typename T, typename T_GRID, typename INTERPOLATION_SCHEME>
 GALS::CPU::Interpolate<T, T_GRID, INTERPOLATION_SCHEME>::Interpolate()

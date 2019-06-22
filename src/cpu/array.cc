@@ -29,10 +29,10 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "array.h"
+#include "gals/utilities/array.h"
 
-#include "mat3.h"
-#include "vec_n.h"
+#include "gals/utilities/mat3.h"
+#include "gals/utilities/vec_n.h"
 
 template <typename T_GRID, typename T_ARRAY>
 GALS::CPU::Array<T_GRID, T_ARRAY>::Array(const Grid<typename T_GRID::value_type, T_GRID::dim>& grid)

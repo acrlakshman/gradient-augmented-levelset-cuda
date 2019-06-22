@@ -29,11 +29,9 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "hermite.h"
+#include "gals/cpu/interpolation/hermite.h"
 
 #include <iostream>
-
-#include "../vec3.h"
 
 template <typename T, typename T_GRID>
 GALS::INTERPOLATION::Hermite<T, T_GRID>::Hermite()

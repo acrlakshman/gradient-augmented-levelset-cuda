@@ -29,7 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <cpu/input-parser.h>
+#include "gals/input-parser.h"
 
 #include <gtest/gtest.h>
 

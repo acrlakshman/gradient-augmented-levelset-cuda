@@ -29,8 +29,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <cpu/utilities.h>
-#include <cpu/vec3.h>
+#include "gals/utilities/vec3.h"
+#include "gals/utilities/utilities.h"
 
 #include <gtest/gtest.h>
 

@@ -31,10 +31,10 @@
 
 #pragma once
 
-#include "../array.h"
-#include "../grid.h"
-#include "../mat3.h"
-#include "../vec3.h"
+#include "../../utilities/array.h"
+#include "../../utilities/grid.h"
+#include "../../utilities/mat3.h"
+#include "../../utilities/vec3.h"
 
 namespace GALS
 {

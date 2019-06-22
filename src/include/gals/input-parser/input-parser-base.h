@@ -31,7 +31,7 @@
 
 #pragma once
 
-#include "../input-fields/input-fields.h"
+#include "gals/input-fields/input-fields.h"
 
 #include "yaml-cpp/yaml.h"
 

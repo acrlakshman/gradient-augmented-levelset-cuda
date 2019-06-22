@@ -31,32 +31,32 @@
 
 #pragma once
 
-#include "../array.h"
-#include "../grid.h"
-#include "../mat3.h"
-#include "../vec3.h"
+#include "gals/utilities/array.h"
+#include "gals/utilities/grid.h"
+#include "gals/utilities/mat3.h"
+#include "gals/utilities/vec3.h"
 
 namespace GALS
 {
 namespace CPU
 {
-/*! \class SecondOrderCentral
+/*! \class ThirdOrder
  *
- * Gradient computation using second order central scheme.
+ * Gradient computation using third order scheme.
  */
 template <typename T, typename T_GRID>
-class SecondOrderCentral
+class ThirdOrder
 {
  public:
   typedef T value_type;
 
   /*! Default constructor
    */
-  SecondOrderCentral();
+  ThirdOrder();
 
   /*! Destructor
    */
-  ~SecondOrderCentral();
+  ~ThirdOrder();
 
   /*! Compute gradient of scalar.
    *

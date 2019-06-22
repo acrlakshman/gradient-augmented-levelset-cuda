@@ -29,9 +29,9 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "mat3.h"
+#include "gals/utilities/mat3.h"
 
-#include "utilities.h"
+#include "gals/utilities/utilities.h"
 
 template <typename T>
 GALS::CPU::Mat3<T>::Mat3(T a00, T a01, T a02, T a10, T a11, T a12, T a20, T a21, T a22)

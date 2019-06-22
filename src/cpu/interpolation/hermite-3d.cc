@@ -29,7 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "hermite.h"
+#include "gals/cpu/interpolation/hermite.h"
 
 // Template specialized for 1D
 template <typename T>

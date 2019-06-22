@@ -29,13 +29,13 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "grid.h"
+#include "gals/utilities/grid.h"
 
 #include <limits.h>
 #include <math.h>
 #include <fstream>
 
-#include "input-parser.h"
+#include "gals/input-parser.h"
 
 template <typename T, int DIM>
 GALS::CPU::Grid<T, DIM>::Grid(int nx, int ny, int nz)

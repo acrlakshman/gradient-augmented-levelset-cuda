@@ -29,7 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "third-order.h"
+#include "gals/cpu/gradient/third-order.h"
 
 template <typename T, typename T_GRID>
 GALS::CPU::ThirdOrder<T, T_GRID>::ThirdOrder()

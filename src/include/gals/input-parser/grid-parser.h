@@ -31,38 +31,42 @@
 
 #pragma once
 
-#include <string.h>
+#include "gals/input-fields/input-fields.h"
 
-#include <yaml-cpp/yaml.h>
-#include "input-fields/input-fields.h"
+#include "yaml-cpp/yaml.h"
 
 namespace GALS
 {
 namespace CPU
 {
-/*! \class InputParser
+/*! \class GridParser
  *
- * Class to parse input files with yaml-cpp.
+ * Class to parse input fields for grid.
  */
-class InputParser
+class GridParser
 {
  public:
-  /*! Default constructor.
+  /*! Default constructor
    */
-  InputParser();
+  GridParser();
 
   /*! Destructor
    */
-  ~InputParser();
+  ~GridParser();
 
-  /*! Parse file.
+  /*! Parse input variables for grid section.
    *
-   * Parses all input fields.
-   *
-   * \param input_file file name with path.
+   * \param field YAML node for grid.
    * \param p_input_fields pointer to input fields object.
    */
-  void parse(const std::string input_file, GALS::INPUT_FIELDS::InputFields *p_input_fields);
+  void parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
+
+  /*! Overloaded operator to parse.
+   *
+   * \param field YAML node for grid.
+   * \param p_input_fields pointer to input fields object.
+   */
+  void operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
 };
 
 }  // namespace CPU

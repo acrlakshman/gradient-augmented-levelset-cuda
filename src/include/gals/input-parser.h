@@ -31,43 +31,38 @@
 
 #pragma once
 
-#include "./interpolation/hermite.h"
-#include "./interpolation/linear.h"
-#include "array.h"
-#include "grid.h"
-#include "mat3.h"
-#include "vec3.h"
+#include <string.h>
+
+#include <yaml-cpp/yaml.h>
+#include "./input-fields/input-fields.h"
 
 namespace GALS
 {
 namespace CPU
 {
-/*! \class Interpolate
+/*! \class InputParser
  *
- * Class to perform interpolation. Default interpolation scheme is set to GALS::INTERPOLATION::Linear<...>.
+ * Class to parse input files with yaml-cpp.
  */
-template <typename T, typename T_GRID, typename INTERPOLATION_SCHEME = GALS::INTERPOLATION::Linear<T, T_GRID>>
-class Interpolate
+class InputParser
 {
  public:
-  typedef T value_type;
-
-  /*! Default constructor
+  /*! Default constructor.
    */
-  Interpolate();
+  InputParser();
 
   /*! Destructor
    */
-  ~Interpolate();
+  ~InputParser();
 
-  /*! Compute interpolation of a scalar.
+  /*! Parse file.
    *
-   * \param x_interp interpolation points.
-   * \param alpha variable to interpolate.
-   * \param alpha_interpolated interpolated values are written to this variable.
+   * Parses all input fields.
+   *
+   * \param input_file file name with path.
+   * \param p_input_fields pointer to input fields object.
    */
-  static void compute(const Array<T_GRID, typename T_GRID::position_type> &x_interp, const Array<T_GRID, T> &alpha,
-                      Array<T_GRID, T> &alpha_interpolated);
+  void parse(const std::string input_file, GALS::INPUT_FIELDS::InputFields *p_input_fields);
 };
 
 }  // namespace CPU

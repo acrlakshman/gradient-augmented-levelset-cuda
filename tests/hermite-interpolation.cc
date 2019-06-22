@@ -29,9 +29,9 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <cpu/array.h>
-#include <cpu/interpolate.h>
-#include <cpu/utilities.h>
+#include "gals/cpu/interpolate.h"
+#include "gals/utilities/array.h"
+#include "gals/utilities/utilities.h"
 
 #include <gtest/gtest.h>
 

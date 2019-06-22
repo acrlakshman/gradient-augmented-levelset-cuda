@@ -29,7 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "gradient.h"
+#include "gals/cpu/gradient.h"
 
 template <typename T, typename T_GRID, typename GRADIENT_SCHEME>
 GALS::CPU::Gradient<T, T_GRID, GRADIENT_SCHEME>::Gradient()

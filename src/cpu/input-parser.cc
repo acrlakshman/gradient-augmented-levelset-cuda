@@ -29,10 +29,10 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "input-parser.h"
+#include "gals/input-parser.h"
 
-#include "input-parser/grid-parser.h"
-#include "input-parser/input-parser-base.h"
+#include "gals/input-parser/grid-parser.h"
+#include "gals/input-parser/input-parser-base.h"
 
 GALS::CPU::InputParser::InputParser() {}
 

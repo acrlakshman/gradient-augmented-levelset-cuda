@@ -34,7 +34,7 @@
 #include <string>
 #include <vector>
 
-#include "input-fields/grid.h"
+#include "../input-fields/grid.h"
 #include "mat3.h"
 #include "vec3.h"
 

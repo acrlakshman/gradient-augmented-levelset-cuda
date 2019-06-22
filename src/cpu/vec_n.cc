@@ -29,7 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "vec_n.h"
+#include "gals/utilities/vec_n.h"
 
 template <typename T, int SIZE>
 GALS::CPU::VecN<T, SIZE>::VecN()

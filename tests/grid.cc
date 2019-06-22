@@ -34,8 +34,8 @@
 #include <limits.h>
 #include <math.h>
 
-#include <cpu/grid.h>
-#include <cpu/mat3.h>
+#include "gals/utilities/grid.h"
+#include "gals/utilities/mat3.h"
 
 TEST(CPU, GRID_1D)
 {

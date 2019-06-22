@@ -29,11 +29,11 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <cpu/array.h>
-#include <cpu/gradient.h>
-#include <cpu/utilities.h>
-#include <cpu/vec3.h>
-#include <cpu/vec_n.h>
+#include "gals/cpu/gradient.h"
+#include "gals/utilities/array.h"
+#include "gals/utilities/utilities.h"
+#include "gals/utilities/vec3.h"
+#include "gals/utilities/vec_n.h"
 
 #include <gtest/gtest.h>
 

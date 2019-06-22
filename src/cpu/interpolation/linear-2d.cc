@@ -29,7 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "linear.h"
+#include "gals/cpu/interpolation/linear.h"
 
 // Template specialized for 2D
 template <typename T>
