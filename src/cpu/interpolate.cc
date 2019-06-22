@@ -29,7 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "interpolate.h"
+#include "gals/cpu/interpolate.h"
 
 template <typename T, typename T_GRID, typename INTERPOLATION_SCHEME>
 GALS::CPU::Interpolate<T, T_GRID, INTERPOLATION_SCHEME>::Interpolate()
@@ -51,9 +51,13 @@ void GALS::CPU::Interpolate<T, T_GRID, INTERPOLATION_SCHEME>::compute(
 
 template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 1>,
                                       GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 1>>>;
-
 template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 2>,
                                       GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 2>>>;
-
 template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 3>,
                                       GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 3>>>;
+template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 1>,
+                                      GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 1>>>;
+template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 2>,
+                                      GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 2>>>;
+template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 3>,
+                                      GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 3>>>;

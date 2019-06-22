@@ -29,67 +29,28 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "gals/utilities/vec3.h"
-#include "gals/utilities/utilities.h"
+#include "gals/cpu/interpolation/hermite.h"
 
-#include <gtest/gtest.h>
-
-#include <iostream>
-
-TEST(CPU, VEC3_INT)
+// Template specialized for 1D
+template <typename T>
+T GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 3>>::interpolate(
+    const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 3>::value_type, GALS::CPU::Grid<T, 3>::dim> &grid,
+    const typename GALS::CPU::Grid<T, 3>::position_type &x_interp,
+    const GALS::CPU::Array<GALS::CPU::Grid<T, 3>, T> &alpha)
 {
-  GALS::CPU::Vec3<int> vec3;
+  std::cout << "specialized for 3D" << std::endl;
+  T alpha_interpolated = 0;
 
-  EXPECT_TRUE(vec3.size() == 3);
-
-  vec3[0] = 9;
-  EXPECT_TRUE(vec3[0] == 9);
-
-  const int i = vec3[0];
-  EXPECT_TRUE(i == 9);
-
-  GALS::CPU::Vec3<int> vec_other;
-  vec_other[0] = 1, vec_other[1] = 2, vec_other[2] = 3;
-
-  // Assign vec_other to vec3.
-  vec3 = vec_other;
-  for (int i = 0; i < 3; ++i) EXPECT_TRUE(vec_other[i] == vec3[i]);
-
-  EXPECT_TRUE(vec3 == vec_other);
-
-  // Constructor with 3 input arguments.
-  GALS::CPU::Vec3<int> vec_3(1, 2, 3);
-  EXPECT_TRUE(GALS::is_equal(vec_3[0], 1));
-
-  // Overloaded output operator.
-  std::cout << "VEC3_DOUBLE (<<): " << vec3 << std::endl;
+  return alpha_interpolated;
 }
 
-TEST(CPU, VEC3_DOUBLE)
+template <typename T>
+void GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 3>>::compute(
+    const GALS::CPU::Array<GALS::CPU::Grid<T, 3>, typename GALS::CPU::Grid<T, 3>::position_type> &x_interp,
+    const GALS::CPU::Array<GALS::CPU::Grid<T, 3>, T> &alpha,
+    GALS::CPU::Array<GALS::CPU::Grid<T, 3>, T> &alpha_interpolated)
 {
-  GALS::CPU::Vec3<double> vec3;
-
-  EXPECT_TRUE(vec3.size() == 3);
-
-  vec3[0] = 9.;
-  EXPECT_TRUE(GALS::is_equal(vec3[0], 9.));
-
-  const double i = vec3[0];
-  EXPECT_TRUE(GALS::is_equal(i, 9.));
-
-  GALS::CPU::Vec3<double> vec_other;
-  vec_other[0] = 1.1, vec_other[1] = 2.2, vec_other[2] = 3.3;
-
-  // Assign vec_other to vec3.
-  vec3 = vec_other;
-  for (int i = 0; i < 3; ++i) EXPECT_TRUE(GALS::is_equal(vec_other[i], vec3[i]));
-
-  EXPECT_TRUE(vec3 == vec_other);
-
-  // Constructor with 3 input arguments.
-  GALS::CPU::Vec3<double> vec_3(1.1, 2.1, 3.1);
-  EXPECT_TRUE(GALS::is_equal(vec_3[0], 1.1));
-
-  // Overloaded output operator.
-  std::cout << "VEC3_DOUBLE (<<): " << vec3 << std::endl;
+  std::cout << "compute: specialized for 3D" << std::endl;
 }
+
+template class GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 3>>;

@@ -29,7 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "second-order-central.h"
+#include "gals/cpu/gradient/second-order-central.h"
 
 template <typename T, typename T_GRID>
 GALS::CPU::SecondOrderCentral<T, T_GRID>::SecondOrderCentral()

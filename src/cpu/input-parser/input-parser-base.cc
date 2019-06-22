@@ -29,8 +29,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "input-parser-base.h"
-#include "grid-parser.h"
+#include "gals/input-parser/input-parser-base.h"
+#include "gals/input-parser/grid-parser.h"
 
 template <typename FIELD>
 GALS::CPU::InputParserBase<FIELD>::InputParserBase()

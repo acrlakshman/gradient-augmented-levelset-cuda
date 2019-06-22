@@ -29,9 +29,9 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <cpu/array.h>
-#include <cpu/interpolate.h>
-#include <cpu/utilities.h>
+#include "gals/cpu/interpolate.h"
+#include "gals/utilities/array.h"
+#include "gals/utilities/utilities.h"
 
 #include <gtest/gtest.h>
 
@@ -84,8 +84,8 @@ static double test_oned(const int nx)
   GALS::CPU::Array<GALS::CPU::Grid<double, 1>, double> levelset_interpolated(grid_interp);
   GALS::CPU::Interpolate<
       double, GALS::CPU::Grid<double, 1>,
-      GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 1>>>::compute(x_interp, levelset,
-                                                                                levelset_interpolated);
+      GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 1>>>::compute(x_interp, levelset,
+                                                                                 levelset_interpolated);
 
   // Compute error.
   double l1err = 0.;
@@ -102,7 +102,7 @@ static double test_oned(const int nx)
   return l1err;
 }
 
-TEST(CPU, INTERPOLATION_LINEAR_DOUBLE_1D)
+TEST(CPU, INTERPOLATION_HERMITE_DOUBLE_1D)
 {
   std::vector<int> nx = {10, 20, 40, 80, 160};
   std::vector<double> l1err(nx.size());
@@ -126,9 +126,16 @@ TEST(CPU, INTERPOLATION_LINEAR_DOUBLE_1D)
 
   // temperary object, for code coverage.
   GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 1>> interpolate_tmp;
+
+  GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 1>,
+                         GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 1>>>
+      hermite_interpolant_1d;
+
+  GALS::INTERPOLATION::ControlPoints<double> control_points =
+      GALS::INTERPOLATION::get_control_points<double>(0, 0, 0, 0, 0, false);
 }
 
-TEST(CPU, INTERPOLATION_LINEAR_DOUBLE_2D)
+TEST(CPU, INTERPOLATION_HERMITE_DOUBLE_2D)
 {
   const int dim = 2;
   // scalar array on 1D grid.
@@ -161,11 +168,11 @@ TEST(CPU, INTERPOLATION_LINEAR_DOUBLE_2D)
 
   GALS::CPU::Interpolate<
       double, GALS::CPU::Grid<double, dim>,
-      GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, dim>>>::compute(x_interp, levelset,
-                                                                                  levelset_interpolated);
+      GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, dim>>>::compute(x_interp, levelset,
+                                                                                   levelset_interpolated);
 }
 
-TEST(CPU, INTERPOLATION_LINEAR_DOUBLE_3D)
+TEST(CPU, INTERPOLATION_HERMITE_DOUBLE_3D)
 {
   const int dim = 3;
   // scalar array on 1D grid.
@@ -198,6 +205,6 @@ TEST(CPU, INTERPOLATION_LINEAR_DOUBLE_3D)
 
   GALS::CPU::Interpolate<
       double, GALS::CPU::Grid<double, dim>,
-      GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, dim>>>::compute(x_interp, levelset,
-                                                                                  levelset_interpolated);
+      GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, dim>>>::compute(x_interp, levelset,
+                                                                                   levelset_interpolated);
 }

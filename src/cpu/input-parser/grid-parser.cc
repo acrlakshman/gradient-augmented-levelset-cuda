@@ -29,8 +29,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "grid-parser.h"
-#include "../input-fields/grid.h"
+#include "gals/input-parser/grid-parser.h"
+#include "gals/input-fields/grid.h"
 
 #include <vector>
 

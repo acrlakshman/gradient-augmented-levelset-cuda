@@ -29,8 +29,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <cpu/mat3.h>
-#include <cpu/utilities.h>
+#include "gals/utilities/mat3.h"
+#include "gals/utilities/utilities.h"
 
 #include <gtest/gtest.h>
 

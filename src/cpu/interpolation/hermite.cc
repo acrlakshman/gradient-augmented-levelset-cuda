@@ -29,67 +29,51 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "gals/utilities/vec3.h"
-#include "gals/utilities/utilities.h"
-
-#include <gtest/gtest.h>
+#include "gals/cpu/interpolation/hermite.h"
 
 #include <iostream>
 
-TEST(CPU, VEC3_INT)
+template <typename T, typename T_GRID>
+GALS::INTERPOLATION::Hermite<T, T_GRID>::Hermite()
 {
-  GALS::CPU::Vec3<int> vec3;
-
-  EXPECT_TRUE(vec3.size() == 3);
-
-  vec3[0] = 9;
-  EXPECT_TRUE(vec3[0] == 9);
-
-  const int i = vec3[0];
-  EXPECT_TRUE(i == 9);
-
-  GALS::CPU::Vec3<int> vec_other;
-  vec_other[0] = 1, vec_other[1] = 2, vec_other[2] = 3;
-
-  // Assign vec_other to vec3.
-  vec3 = vec_other;
-  for (int i = 0; i < 3; ++i) EXPECT_TRUE(vec_other[i] == vec3[i]);
-
-  EXPECT_TRUE(vec3 == vec_other);
-
-  // Constructor with 3 input arguments.
-  GALS::CPU::Vec3<int> vec_3(1, 2, 3);
-  EXPECT_TRUE(GALS::is_equal(vec_3[0], 1));
-
-  // Overloaded output operator.
-  std::cout << "VEC3_DOUBLE (<<): " << vec3 << std::endl;
 }
 
-TEST(CPU, VEC3_DOUBLE)
+template <typename T, typename T_GRID>
+GALS::INTERPOLATION::Hermite<T, T_GRID>::~Hermite()
 {
-  GALS::CPU::Vec3<double> vec3;
-
-  EXPECT_TRUE(vec3.size() == 3);
-
-  vec3[0] = 9.;
-  EXPECT_TRUE(GALS::is_equal(vec3[0], 9.));
-
-  const double i = vec3[0];
-  EXPECT_TRUE(GALS::is_equal(i, 9.));
-
-  GALS::CPU::Vec3<double> vec_other;
-  vec_other[0] = 1.1, vec_other[1] = 2.2, vec_other[2] = 3.3;
-
-  // Assign vec_other to vec3.
-  vec3 = vec_other;
-  for (int i = 0; i < 3; ++i) EXPECT_TRUE(GALS::is_equal(vec_other[i], vec3[i]));
-
-  EXPECT_TRUE(vec3 == vec_other);
-
-  // Constructor with 3 input arguments.
-  GALS::CPU::Vec3<double> vec_3(1.1, 2.1, 3.1);
-  EXPECT_TRUE(GALS::is_equal(vec_3[0], 1.1));
-
-  // Overloaded output operator.
-  std::cout << "VEC3_DOUBLE (<<): " << vec3 << std::endl;
 }
+
+template <typename T, typename T_GRID>
+T GALS::INTERPOLATION::Hermite<T, T_GRID>::interpolate(
+    const GALS::CPU::Grid<typename T_GRID::value_type, T_GRID::dim> &grid,
+    const typename T_GRID::position_type &x_interp, const GALS::CPU::Array<T_GRID, T> &alpha)
+{
+  std::cout << "generalized" << std::endl;
+  T alpha_interpolated;
+
+  const GALS::CPU::Vec3<int> base_node_id = grid.baseNodeId(x_interp);
+
+  const typename T_GRID::position_type x_base = grid(base_node_id);
+  const auto &one_over_dx = grid.oneOverDX();
+
+  GALS::CPU::Vec3<T> eta;
+  for (int d = 0; d < T_GRID::dim; ++d) eta[d] = (x_interp[d] - x_base[d]) * one_over_dx[d];
+
+  for (int d = 0; d < T_GRID::dim; ++d) {
+    // TODO (lakshman), complete this.
+  }
+
+  return alpha_interpolated;
+}
+
+template <typename T, typename T_GRID>
+void GALS::INTERPOLATION::Hermite<T, T_GRID>::compute(
+    const GALS::CPU::Array<T_GRID, typename T_GRID::position_type> &x_interp, const GALS::CPU::Array<T_GRID, T> &alpha,
+    GALS::CPU::Array<T_GRID, T> &alpha_interpolated)
+{
+  std::cout << "compute: generalized" << std::endl;
+}
+
+template class GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 1>>;
+template class GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 2>>;
+template class GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 3>>;

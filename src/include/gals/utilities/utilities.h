@@ -31,39 +31,40 @@
 
 #pragma once
 
-#include <string.h>
-
-#include <yaml-cpp/yaml.h>
-#include "input-fields/input-fields.h"
+#include <math.h>
 
 namespace GALS
 {
-namespace CPU
-{
-/*! \class InputParser
+static double VSMALL = 1e-10;
+static const double one_third = 1. / 3.;
+static const double two_thirds = 2. / 3.;
+
+/*! Check for equality within a tolerance.
  *
- * Class to parse input files with yaml-cpp.
+ * Tolerance is by default 1e-10.
+ *
+ * \param a first argument
+ * \param b second argument
+ *
+ * \return number of elements.
  */
-class InputParser
+static bool is_equal(double a, double b) { return fabs(a - b) <= VSMALL; }
+
+//! Check for equality between integers.
+static bool is_equal(int a, int b) { return a == b; }
+
+//! Compute square.
+template <typename T>
+static T sqr(T a)
 {
- public:
-  /*! Default constructor.
-   */
-  InputParser();
+  return a * a;
+}
 
-  /*! Destructor
-   */
-  ~InputParser();
+//! Compute cube.
+template <typename T>
+static T cube(T a)
+{
+  return a * a * a;
+}
 
-  /*! Parse file.
-   *
-   * Parses all input fields.
-   *
-   * \param input_file file name with path.
-   * \param p_input_fields pointer to input fields object.
-   */
-  void parse(const std::string input_file, GALS::INPUT_FIELDS::InputFields *p_input_fields);
-};
-
-}  // namespace CPU
 }  // namespace GALS

@@ -29,9 +29,9 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "vec3.h"
+#include "gals/utilities/vec3.h"
 
-#include "utilities.h"
+#include "gals/utilities/utilities.h"
 
 template <typename T>
 GALS::CPU::Vec3<T>::Vec3(const T a, const T b, const T c)

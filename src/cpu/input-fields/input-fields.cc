@@ -29,7 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "input-fields.h"
+#include "gals/input-fields/input-fields.h"
 
 GALS::INPUT_FIELDS::InputFields::InputFields() : m_grid(new GALS::INPUT_FIELDS::grid) {}
 

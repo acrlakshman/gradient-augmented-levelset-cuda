@@ -31,24 +31,43 @@
 
 #pragma once
 
-#include <math.h>
+#include "gals/input-fields/input-fields.h"
+
+#include "yaml-cpp/yaml.h"
 
 namespace GALS
 {
-static double VSMALL = 1e-10;
-
-/*! Check for equality within a tolerance.
+namespace CPU
+{
+/*! \class GridParser
  *
- * Tolerance is by default 1e-10.
- *
- * \param a first argument
- * \param b second argument
- *
- * \return number of elements.
+ * Class to parse input fields for grid.
  */
-static bool is_equal(double a, double b) { return fabs(a - b) <= VSMALL; }
+class GridParser
+{
+ public:
+  /*! Default constructor
+   */
+  GridParser();
 
-//! Check for equality between integers.
-static bool is_equal(int a, int b) { return a == b; }
+  /*! Destructor
+   */
+  ~GridParser();
 
+  /*! Parse input variables for grid section.
+   *
+   * \param field YAML node for grid.
+   * \param p_input_fields pointer to input fields object.
+   */
+  void parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
+
+  /*! Overloaded operator to parse.
+   *
+   * \param field YAML node for grid.
+   * \param p_input_fields pointer to input fields object.
+   */
+  void operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
+};
+
+}  // namespace CPU
 }  // namespace GALS
