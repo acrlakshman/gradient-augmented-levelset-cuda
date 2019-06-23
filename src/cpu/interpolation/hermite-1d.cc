@@ -34,6 +34,17 @@
 #include <math.h>
 
 template <typename T>
+GALS::CPU::InterpolatedFields<GALS::CPU::Vec3<T>> GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 1>>::interpolate(
+    const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 1>::value_type, GALS::CPU::Grid<T, 1>::dim> &grid,
+    const typename GALS::CPU::Grid<T, 1>::position_type &x_interp,
+    const GALS::CPU::Levelset<GALS::CPU::Grid<T, 1>, T> &levelset)
+{
+  GALS::CPU::InterpolatedFields<GALS::CPU::Vec3<T>> hermite_fields;
+
+  return hermite_fields;
+}
+
+template <typename T>
 T GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 1>>::interpolate(
     const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 1>::value_type, GALS::CPU::Grid<T, 1>::dim> &grid,
     const typename GALS::CPU::Grid<T, 1>::position_type &x_interp,

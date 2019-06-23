@@ -9,7 +9,7 @@
 #### Dependencies
 
 * [CMake]
-* Compiler that supports C++11
+* Compiler that supports C++14
 
 ```sh
 git clone https://github.com/acrlakshman/gradient-augmented-levelset-cuda --recursive

@@ -44,6 +44,15 @@ GALS::INTERPOLATION::Hermite<T, T_GRID>::~Hermite()
 }
 
 template <typename T, typename T_GRID>
+GALS::CPU::InterpolatedFields<GALS::CPU::Vec3<T>> GALS::INTERPOLATION::Hermite<T, T_GRID>::interpolate(
+    const T_GRID &grid, const typename T_GRID::position_type &x_interp, const GALS::CPU::Levelset<T_GRID, T> &levelset)
+{
+  GALS::CPU::InterpolatedFields<GALS::CPU::Vec3<T>> hermite_fields;
+
+  return hermite_fields;
+}
+
+template <typename T, typename T_GRID>
 T GALS::INTERPOLATION::Hermite<T, T_GRID>::interpolate(
     const GALS::CPU::Grid<typename T_GRID::value_type, T_GRID::dim> &grid,
     const typename T_GRID::position_type &x_interp, const GALS::CPU::Array<T_GRID, T> &alpha)
@@ -75,5 +84,5 @@ void GALS::INTERPOLATION::Hermite<T, T_GRID>::compute(
 }
 
 template class GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 1>>;
-template class GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 2>>;
-template class GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 3>>;
+// template class GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 2>>;
+// template class GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 3>>;

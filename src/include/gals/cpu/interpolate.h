@@ -31,12 +31,12 @@
 
 #pragma once
 
-#include "../utilities/array.h"
-#include "../utilities/grid.h"
-#include "../utilities/mat3.h"
-#include "../utilities/vec3.h"
-#include "./interpolation/hermite.h"
-#include "./interpolation/linear.h"
+#include "gals/cpu/interpolation/hermite.h"
+#include "gals/cpu/interpolation/linear.h"
+#include "gals/utilities/array.h"
+#include "gals/utilities/grid.h"
+#include "gals/utilities/mat3.h"
+#include "gals/utilities/vec3.h"
 
 namespace GALS
 {

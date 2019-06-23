@@ -75,5 +75,3 @@ void GALS::INTERPOLATION::Linear<T, T_GRID>::compute(
 }
 
 template class GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 1>>;
-template class GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 2>>;
-template class GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 3>>;

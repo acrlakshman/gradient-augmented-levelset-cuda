@@ -31,8 +31,8 @@
 
 #pragma once
 
-#include "./gradient/second-order-central.h"
-#include "./gradient/third-order.h"
+#include "gals/cpu/gradient/second-order-central.h"
+#include "gals/cpu/gradient/third-order.h"
 #include "gals/utilities/array.h"
 #include "gals/utilities/grid.h"
 #include "gals/utilities/mat3.h"

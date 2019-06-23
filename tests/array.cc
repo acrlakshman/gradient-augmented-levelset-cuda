@@ -38,6 +38,7 @@
 
 #include <math.h>
 
+// TODO (lakshman): All instances of array needs to have unit tests.
 TEST(CPU, ARRAY)
 {
   // scalar array on 1D grid.
@@ -50,6 +51,10 @@ TEST(CPU, ARRAY)
   // Test grid().
   const GALS::CPU::Grid<double, 1> &grid_2 = levelset.grid();
   EXPECT_TRUE(grid_2.size() == 12);
+
+  // 0D component array on 1D grid.
+  GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::VecN<double, 0>> twod_array_vecn0(grid);
+  EXPECT_TRUE(twod_array_vecn0.size() == 12);
 
   // 2D component array on 1D grid.
   GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::VecN<double, 2>> twod_array(grid);

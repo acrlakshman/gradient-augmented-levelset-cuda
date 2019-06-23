@@ -29,28 +29,44 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "gals/cpu/interpolation/hermite.h"
+#include "gals/cpu/levelset.h"
+#include "gals/utilities/array.h"
+#include "gals/utilities/utilities.h"
+#include "gals/utilities/vec3.h"
+#include "gals/utilities/vec_n.h"
 
-// Template specialized for 1D
-template <typename T>
-T GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 3>>::interpolate(
-    const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 3>::value_type, GALS::CPU::Grid<T, 3>::dim> &grid,
-    const typename GALS::CPU::Grid<T, 3>::position_type &x_interp,
-    const GALS::CPU::Array<GALS::CPU::Grid<T, 3>, T> &alpha)
+#include <gtest/gtest.h>
+
+#include <math.h>
+#include <iostream>
+
+/* * * * * *  TEST #1  * * * * * */
+TEST(CPU, LEVELSET_1D)
 {
-  std::cout << "specialized for 3D" << std::endl;
-  T alpha_interpolated = 0;
+  typedef GALS::CPU::Grid<double, 1> T_GRID;
 
-  return alpha_interpolated;
+  // initializing 1-D test grid.
+  GALS::CPU::Grid<double, 1> grid(10, 1, 1);
+
+  // grid generation
+  grid.generate(-1, 1, -1, 1, -1, 1);
+
+  // accessing grid details
+  const auto mask = grid.getMask();
+  const int pad = grid.getPadding();
+  const auto num_cells = grid.numCells();
+
+  // initializing 1-D scalar array
+  GALS::CPU::Levelset<T_GRID, double> levelset(grid);
+  levelset.print();
+
+  // Test getters.
+  const auto& grid_levelset = levelset.grid();
+  const auto& phi = levelset.phi();
+  const auto& psi = levelset.psi();
+  const auto& phi_mixed_derivatives = levelset.phiMixedDerivatives();
+  const auto& phi_tm1 = levelset.phiTm1();
+  const auto& psi_tm1 = levelset.psiTm1();
+  const auto& phi_interp_tm1 = levelset.phiInterpTm1();
+  const auto& psi_interp_tm1 = levelset.psiInterpTm1();
 }
-
-template <typename T>
-void GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 3>>::compute(
-    const GALS::CPU::Array<GALS::CPU::Grid<T, 3>, typename GALS::CPU::Grid<T, 3>::position_type> &x_interp,
-    const GALS::CPU::Array<GALS::CPU::Grid<T, 3>, T> &alpha,
-    GALS::CPU::Array<GALS::CPU::Grid<T, 3>, T> &alpha_interpolated)
-{
-  std::cout << "compute: specialized for 3D" << std::endl;
-}
-
-template class GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 3>>;
