@@ -67,6 +67,8 @@ T& GALS::CPU::VecN<T, SIZE>::operator[](const int idx)
 template class GALS::CPU::VecN<int, 1>;
 template class GALS::CPU::VecN<int, 2>;
 template class GALS::CPU::VecN<int, 3>;
+template class GALS::CPU::VecN<double, 0>;
 template class GALS::CPU::VecN<double, 1>;
 template class GALS::CPU::VecN<double, 2>;
 template class GALS::CPU::VecN<double, 3>;
+template class GALS::CPU::VecN<double, 4>;

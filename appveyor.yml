@@ -1,0 +1,25 @@
+# Currently build fails due to usage of C++14 features.
+clone_folder: c:\projects\gals_cuda
+
+branches:
+    only:
+        - master
+
+configuration:
+    - 14 2015
+
+platform:
+    - x64
+
+build_script:
+    - cd c:\projects\gals_cuda
+    - git submodule update --init --recursive
+    - mkdir build
+    - cd build
+    - cmake --version
+    - cmake ..
+    - cmake --build . --config Release
+
+test_script:
+    - cd c:\projects\gals_cuda\build
+    - ctest -C Release . --output-on-failure

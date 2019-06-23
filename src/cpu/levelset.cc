@@ -29,28 +29,34 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "gals/cpu/interpolation/linear.h"
+#include "gals/cpu/levelset.h"
 
-// Template specialized for 1D
-template <typename T>
-T GALS::INTERPOLATION::Linear<T, GALS::CPU::Grid<T, 3>>::linearInterpolation(
-    const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 3>::value_type, GALS::CPU::Grid<T, 3>::dim> &grid,
-    const typename GALS::CPU::Grid<T, 3>::position_type &x_interp,
-    const GALS::CPU::Array<GALS::CPU::Grid<T, 3>, T> &alpha)
+#include <iostream>
+
+template <typename T_GRID, typename T>
+GALS::CPU::Levelset<T_GRID, T>::Levelset(const T_GRID& grid)
+    : m_grid(grid),
+      m_phi(grid),
+      m_psi(grid),
+      m_phi_mixed_derivatives(grid),
+      m_phi_tm1(grid),
+      m_psi_tm1(grid),
+      m_phi_interp_tm1(grid),
+      m_psi_interp_tm1(grid)
 {
-  std::cout << "specialized for 3D" << std::endl;
-  T alpha_interpolated = 0;
-
-  return alpha_interpolated;
 }
 
-template <typename T>
-void GALS::INTERPOLATION::Linear<T, GALS::CPU::Grid<T, 3>>::compute(
-    const GALS::CPU::Array<GALS::CPU::Grid<T, 3>, typename GALS::CPU::Grid<T, 3>::position_type> &x_interp,
-    const GALS::CPU::Array<GALS::CPU::Grid<T, 3>, T> &alpha,
-    GALS::CPU::Array<GALS::CPU::Grid<T, 3>, T> &alpha_interpolated)
+template <typename T_GRID, typename T>
+GALS::CPU::Levelset<T_GRID, T>::~Levelset()
 {
-  std::cout << "compute: specialized for 3D" << std::endl;
 }
 
-template class GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 3>>;
+template <typename T_GRID, typename T>
+void GALS::CPU::Levelset<T_GRID, T>::print()
+{
+  std::cout << "inside levelset print" << std::endl;
+}
+
+template class GALS::CPU::Levelset<GALS::CPU::Grid<double, 1>, double>;
+// template class GALS::CPU::Levelset<GALS::CPU::Grid<double, 2>, double>;
+// template class GALS::CPU::Levelset<GALS::CPU::Grid<double, 3>, double>;

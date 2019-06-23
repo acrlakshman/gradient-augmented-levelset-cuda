@@ -34,7 +34,7 @@
 #include <string>
 #include <vector>
 
-#include "../input-fields/grid.h"
+#include "gals/input-fields/grid.h"
 #include "mat3.h"
 #include "vec3.h"
 
@@ -42,6 +42,23 @@ namespace GALS
 {
 namespace CPU
 {
+constexpr int num_mixed_derivatives(const int dim)
+{
+  switch (dim) {
+    case 1:
+      return 0;
+      break;
+    case 2:
+      return 1;
+      break;
+    case 3:
+      return 4;
+      break;
+    default:
+      return -1;
+  }
+}
+
 /*! \class Grid
  *
  * Class to create grid.
@@ -56,6 +73,9 @@ class Grid
 
   //! vector along x: {1, 0, 0}; y: {0, 1, 0}; z: {0, 0, 1}.
   static const Mat3<int> axis_vectors;
+
+  //! Number of mixed derivatives.
+  static const int num_mixed_derivatives = GALS::CPU::num_mixed_derivatives(DIM);
 
   /*! Constructor with arguments for number of cells across x, y, z.
    *

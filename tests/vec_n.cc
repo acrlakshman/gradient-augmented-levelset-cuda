@@ -98,6 +98,16 @@ TEST(CPU, VEC_N_INT_3)
   std::cout << "VEC_N_INT_3 (<<): " << vec_n << std::endl;
 }
 
+TEST(CPU, VEC_N_DOUBLE_0)
+{
+  GALS::CPU::VecN<double, 0> vec_n;
+
+  EXPECT_TRUE(vec_n.size() == 0);
+
+  // Overloaded output operator.
+  std::cout << "VEC_N_DOUBLE_0 (<<): " << vec_n << std::endl;
+}
+
 TEST(CPU, VEC_N_DOUBLE_1)
 {
   GALS::CPU::VecN<double, 1> vec_n;
@@ -150,4 +160,22 @@ TEST(CPU, VEC_N_DOUBLE_3)
 
   // Overloaded output operator.
   std::cout << "VEC_N_DOUBLE_3 (<<): " << vec_n << std::endl;
+}
+
+TEST(CPU, VEC_N_DOUBLE_4)
+{
+  GALS::CPU::VecN<double, 4> vec_n;
+
+  EXPECT_TRUE(vec_n.size() == 4);
+
+  vec_n[0] = 9.1;
+  EXPECT_TRUE(GALS::is_equal(vec_n[0], 9.1));
+
+  const double i = vec_n[0];
+  EXPECT_TRUE(GALS::is_equal(i, 9.1));
+
+  test_subscript_operator<double, 4>(vec_n);
+
+  // Overloaded output operator.
+  std::cout << "VEC_N_DOUBLE_4 (<<): " << vec_n << std::endl;
 }

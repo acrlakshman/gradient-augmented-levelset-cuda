@@ -34,192 +34,116 @@
 #include <string>
 #include <vector>
 
-#include "../utilities/grid.h"
+#include "gals/utilities/array.h"
+#include "gals/utilities/grid.h"
+#include "gals/utilities/vec_n.h"
 
 namespace GALS
 {
 namespace CPU
 {
+/*! \struct InterpolatedFields
+ *
+ * Struct to store field interpolated cell quantities.
+ */
+template <class T_VECTOR>
+struct InterpolatedFields {
+  typedef typename T_VECTOR::value_type T;
+  T h_phi_location;
+  T_VECTOR h_phi_gradient_location;
+
+  InterpolatedFields()
+  {
+    h_phi_location = T();
+    h_phi_gradient_location = T_VECTOR();
+  };
+
+  ~InterpolatedFields(){};
+};
+
 /*! \class Levelset
  *
  * Class to create Levelset.
  */
-template <class T_GRID>
+template <typename T_GRID, typename T = double>
 class Levelset
 {
  public:
-  /*! Constructor with arguments for number of cells across x, y, z.
+  /*! Constructor with grid.
+   *
+   * \param grid grid.
    */
-  Levelset(const Grid<typename T_GRID::value_type, T_GRID::dim>& grid);
+  Levelset(const T_GRID& grid);
 
-  /*! Constructor with arguments for number of cells across x, y.
-   *
-   * Number of cells across z-direction is defaulted to 1.
-   *
-   * \param nx No. of cells across x-direction.
-   * \param ny No. of cells across y-direction.
+  /*! Remove default constructor.
    */
-  Grid(int nx, int ny);
-
-  /*! Constructor with arguments for number of cells across x.
-   *
-   * Number of cells across y, z-directions are defaulted to 1.
-   *
-   * \param nx No. of cells across x-direction.
-   */
-  Grid(int nx);
+  Levelset() = delete;
 
   /*! Destructor
    */
-  ~Grid();
+  ~Levelset();
 
-  /*! Returns position at a given index.
+  /*! Return grid.
    *
-   * \param i zero based index along x-direction.
-   * \param j zero based index along y-direction.
-   * \param k zero based index along z-direction.
-   *
-   * \return 3D position vector.
+   * \return grid.
    */
-  Vec3<T>& x(const int i, const int j = 0, const int k = 0);
+  const T_GRID& grid() const { return m_grid; }
 
-  /*! Returns dimension of grid.
+  /*! Return phi.
    *
-   * \return dimension of grid.
+   * \return phi.
    */
-  const int dimension() const;
+  Array<T_GRID, T>& phi() { return m_phi; }
 
-  /*! Returns 1D array size of grid.
+  /*! Return psi.
    *
-   * Data of grid is stored in 1D array with some padding. This function returns 1D array size.
-   *
-   * \return 1D array size.
+   * \return psi.
    */
-  const int size() const;
+  Array<T_GRID, Vec3<T>>& psi() { return m_psi; }
 
-  /*! Returns pointer to mask.
+  /*! Return phi_mixed_derivatives.
    *
-   * For efficient computation of 3D index to 1D index a mask is used to differentiate between 1, 2, 3 dimentions.
-   * - mask = {1, 0, 0} for 1D
-   * - mask = {1, 1, 0} for 2D
-   * - mask = {1, 1, 1} for 3D
-   *
-   * \return integer pointer that points to integer array of size 3.
+   * \return phi_mixed_derivatives.
    */
-  const int* getMask() const;
+  Array<T_GRID, VecN<T, T_GRID::num_mixed_derivatives>>& phiMixedDerivatives() { return m_phi_mixed_derivatives; }
 
-  /*! Returns a vector of size 3 with number of cells along x, y, z directions.
+  /*! Return phi_tm1.
    *
-   * Vector of size 3: {nx, ny, nz}.
-   *
-   * \return vector of size 3.
+   * \return phi_tm1.
    */
-  const std::vector<int> numCells() const;
+  Array<T_GRID, T>& phiTm1() { return m_phi_tm1; }
 
-  /*! Returns total number of cells excluding ghost (padded) cells.
+  /*! Return psi_tm1.
    *
-   * \return number of cells of type size_t.
+   * \return psi_tm1.
    */
-  const size_t totalCells() const;
+  Array<T_GRID, Vec3<T>>& psiTm1() { return m_psi_tm1; }
 
-  /*! Return current padding.
+  /*! Return phi_interp_tm1.
    *
-   * \return padding.
+   * \return phi_interp_tm1.
    */
-  const int getPadding() const;
+  Array<T_GRID, T>& phiInterpTm1() { return m_phi_interp_tm1; }
 
-  /*! Returns 1D index in stored array.
+  /*! Return psi_interp_tm1.
    *
-   * 3D to 1D index mapping.
-   *
-   * \param i zero based index along x-direction.
-   * \param j zero based index along y-direction.
-   * \param k zero based index along z-direction.
-   *
-   * \return 1D index.
+   * \return psi_interp_tm1.
    */
-  const std::size_t index(const int i, const int j, const int k) const;
+  Array<T_GRID, Vec3<T>>& psiInterpTm1() { return m_psi_interp_tm1; }
 
-  /*! Given a node id, returns 1D index in stored array.
-   *
-   * \param node_id node id of type GALS::CPU::Vec3<int>.
-   *
-   * \return 1D index.
-   */
-  const std::size_t index(const Vec3<int> node_id) const;
-
-  /*! Return base node id (i, j, k) that encloses given position.
-   *
-   * \param x position.
-   *
-   * \return base node id (i, j, k).
-   */
-  const Vec3<int> baseNodeId(const Vec3<T>& x) const;
-
-  /*! Returns cell size which is a vector of size 3.
-   *
-   * \return cell size.
-   */
-  const Vec3<T>& dX() const;
-
-  /*! Returns one over cell size which is a vector of size 3.
-   *
-   * \return one over cell size.
-   */
-  const Vec3<T>& oneOverDX() const;
-
-  /*! Operator overloaded to return co-ordinate values at a given 3D index.
-   *
-   * \return position.
-   */
-  const Vec3<T>& operator()(const int i, const int j, const int k) const;
-
-  /*! Operator overloaded to return co-ordinate values at a given 3D index.
-   *
-   * \param node_id node index of type NodeId.
-   *
-   * \return position.
-   */
-  const Vec3<T>& operator()(const Vec3<int> node_id) const;
-
-  /*! Set new padding value.
-   *
-   * When used this, `generate(...)` function must be called immediately after setting new padding.
-   *
-   * \param pad new padding value.
-   */
-  void setPadding(const int pad);
-
-  /*! Generate grid using domain bounding box.
-   *
-   * \param x_min minimum x-coordinate.
-   * \param x_max maximum x-coordinate.
-   * \param y_min minimum y-coordinate.
-   * \param y_max maximum y-coordinate.
-   * \param z_min minimum z-coordinate.
-   * \param z_max maximum z-coordinate.
-   */
-  void generate(T x_min, T x_max, T y_min, T y_max, T z_min, T z_max);
-
-  /*! Write grid data to a file.
-   *
-   * \param file_name writes grid file with the prescribed name.
-   * \param dir_name writes grid in the prescribed directory.
-   * \param show_padding writes grid with or without padding cells.
-   */
-  void writeToFile(std::string file_name = "grid.dat", std::string dir_name = ".", bool show_padding = false);
+  //! Print levelset values.
+  void print();
 
  private:
-  int m_dimension, m_nx, m_ny, m_nz, m_pad;
-  size_t m_total_cells;
-  int m_mask[3];
-  Vec3<T> m_box_min, m_box_max;
-  Vec3<T> m_dx, m_one_over_dx;
-  std::vector<Vec3<T>> m_grid;
+  const T_GRID& m_grid;
+  Array<T_GRID, T> m_phi;                                                         //! levelset field.
+  Array<T_GRID, Vec3<T>> m_psi;                                                   //! gradient of levelset field.
+  Array<T_GRID, VecN<T, T_GRID::num_mixed_derivatives>> m_phi_mixed_derivatives;  //! Mixed derivatives of phi.
+  Array<T_GRID, T> m_phi_tm1;               //! levelset field at previous time step.
+  Array<T_GRID, Vec3<T>> m_psi_tm1;         //! gradient of levelset field at previous time step.
+  Array<T_GRID, T> m_phi_interp_tm1;        //! interpolated levelset field at previous time step.
+  Array<T_GRID, Vec3<T>> m_psi_interp_tm1;  //! interpolated gradient of levelset field at previous time step.
 };
-
-template <typename T, int DIM>
-const Mat3<int> Grid<T, DIM>::axis_vectors = Mat3<int>(1, 0, 0, 0, 1, 0, 0, 0, 1);
 
 }  // namespace CPU
 }  // namespace GALS

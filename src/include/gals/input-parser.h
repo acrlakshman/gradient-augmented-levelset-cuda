@@ -34,7 +34,7 @@
 #include <string.h>
 
 #include <yaml-cpp/yaml.h>
-#include "./input-fields/input-fields.h"
+#include "gals/input-fields/input-fields.h"
 
 namespace GALS
 {
