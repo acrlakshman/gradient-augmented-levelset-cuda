@@ -31,7 +31,7 @@
 
 #include "gals/input-parser.h"
 
-#include "gals/input-parser/grid-parser.h"
+#include "gals/input-parser/grid.h"
 #include "gals/input-parser/input-parser-base.h"
 
 GALS::CPU::InputParser::InputParser() {}

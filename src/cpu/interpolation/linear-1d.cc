@@ -86,4 +86,12 @@ void GALS::INTERPOLATION::Linear<T, GALS::CPU::Grid<T, 1>>::compute(
         alpha_interpolated(i, j, k) = linearInterpolation(grid, x_interp(i, j, k), alpha);
 }
 
+template <typename T>
+void GALS::INTERPOLATION::Linear<T, GALS::CPU::Grid<T, 1>>::compute(
+    const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, typename GALS::CPU::Grid<T, 1>::position_type> &x_interp,
+    GALS::CPU::Levelset<GALS::CPU::Grid<T, 1>, T> &levelset)
+{
+  GALS_FUNCTION_NOT_IMPLEMENTED("linear-1d.cc: compute(...) with levelset.")
+}
+
 template class GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 1>>;

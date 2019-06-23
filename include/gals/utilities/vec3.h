@@ -38,23 +38,33 @@ namespace GALS
 {
 namespace CPU
 {
-/*! \class VecN
+/*! \class Vec3
  *
- * Class to create varying size elements at a computational cell. For e.x. gradients, etc.
+ * Class to create 3 component elements at a computational cell. For e.x. velocity, gradients, etc.
  */
-template <typename T, int SIZE = 3>
-class VecN
+template <typename T>
+class Vec3
 {
  public:
-  typedef T value_type;
+  using value_type = T;
 
-  /*! Default constructor
+  static constexpr int SIZE = 3;
+
+  /*! Constructor with 3 input arguments.
+   *
+   * \param a
+   * \param b
+   * \param c
    */
-  VecN();
+  Vec3(const T a, const T b, const T c);
+
+  /*! Default constructor.
+   */
+  Vec3();
 
   /*! Destructor
    */
-  ~VecN();
+  ~Vec3();
 
   /*! Returns number of elements.
    *
@@ -62,7 +72,7 @@ class VecN
    */
   const int size() const;
 
-  /*! Overloaded subscript operator.
+  /*! Overloaded subscript operator that returns a const value.
    *
    * \param idx zero based index of element.
    *
@@ -78,22 +88,36 @@ class VecN
    */
   T &operator[](const int idx);
 
+  /*! Overload assignment operator.
+   *
+   * \param vec variable whose values will be assigned.
+   */
+  void operator=(const Vec3<T> &vec);
+
+  /*! Equality operator.
+   *
+   * \param vec variable to compare against.
+   *
+   * \return true if equal, false otherwise.
+   */
+  bool operator==(const Vec3<T> &vec) const;
+
   /*! Output operator overload.
    *
    * \param out output stream.
-   * \param vec VecN object to output stream.
+   * \param vec Vec3 object to output stream.
    *
    * \return reference to output stream.
    */
-  friend std::ostream &operator<<(std::ostream &out, const VecN<T, SIZE> &vec)
+  friend std::ostream &operator<<(std::ostream &out, const Vec3<T> &vec)
   {
-    for (int i = 0; i < vec.size(); ++i) out << vec[i] << "\t";
+    out << vec[0] << "\t" << vec[1] << "\t" << vec[2];
 
     return out;
   }
 
  private:
-  std::vector<T> m_data;
+  T m_data[SIZE];
 };
 
 }  // namespace CPU

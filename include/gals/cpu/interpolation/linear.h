@@ -31,6 +31,7 @@
 
 #pragma once
 
+#include "gals/cpu/levelset.h"
 #include "gals/utilities/array.h"
 #include "gals/utilities/grid.h"
 #include "gals/utilities/mat3.h"
@@ -45,49 +46,7 @@ namespace INTERPOLATION
  * Piece-wise linear interpolation.
  */
 template <typename T, typename T_GRID>
-class Linear
-{
- public:
-  typedef T value_type;
-
-  /*! Default constructor
-   */
-  Linear();
-
-  /*! Destructor
-   */
-  ~Linear();
-
-  /*! Piece-wise linear interpolation.
-   *
-   * \param grid reference to grid.
-   * \param x_interp position of a point where interpolation need to be performed.
-   * \param alpha variable to interpolate.
-   */
-  T linearInterpolation(const GALS::CPU::Grid<typename T_GRID::value_type, T_GRID::dim> &grid,
-                        const typename T_GRID::position_type &x_interp, const GALS::CPU::Array<T_GRID, T> &alpha);
-
-  /*! Interpolate scalar field.
-   *
-   * \param x_interp interpolation points.
-   * \param alpha variable to interpolate.
-   * \param alpha_interpolated interpolated values are written to this variable.
-   */
-  void compute(const GALS::CPU::Array<T_GRID, typename T_GRID::position_type> &x_interp,
-               const GALS::CPU::Array<T_GRID, T> &alpha, GALS::CPU::Array<T_GRID, T> &alpha_interpolated);
-
-  /*! Overload operator to compute linear interpolation of a scalar field.
-   *
-   * \param x_interp interpolation points.
-   * \param alpha variable to interpolate.
-   * \param alpha_interpolated interpolated values are written to this variable.
-   */
-  void operator()(const GALS::CPU::Array<T_GRID, typename T_GRID::position_type> &x_interp,
-                  const GALS::CPU::Array<T_GRID, T> &alpha, GALS::CPU::Array<T_GRID, T> &alpha_interpolated)
-  {
-    compute(x_interp, alpha, alpha_interpolated);
-  }
-};
+class Linear;
 
 /*! \class Linear
  *
@@ -98,8 +57,8 @@ template <typename T>
 class Linear<T, GALS::CPU::Grid<T, 1>>
 {
  public:
-  typedef T value_type;
-  typedef GALS::CPU::Grid<T, 1> T_GRID;
+  using value_type = T;
+  using T_GRID = GALS::CPU::Grid<T, 1>;
 
   /*! Default constructor
    */
@@ -115,8 +74,9 @@ class Linear<T, GALS::CPU::Grid<T, 1>>
    * \param x_interp position of a point where interpolation need to be performed.
    * \param alpha variable to interpolate.
    */
-  T linearInterpolation(const GALS::CPU::Grid<typename T_GRID::value_type, T_GRID::dim> &grid,
-                        const typename T_GRID::position_type &x_interp, const GALS::CPU::Array<T_GRID, T> &alpha);
+  T linearInterpolation(const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 1>::value_type, T_GRID::dim> &grid,
+                        const typename GALS::CPU::Grid<T, 1>::position_type &x_interp,
+                        const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha);
 
   /*! Interpolate scalar field.
    *
@@ -124,8 +84,9 @@ class Linear<T, GALS::CPU::Grid<T, 1>>
    * \param alpha variable to interpolate.
    * \param alpha_interpolated interpolated values are written to this variable.
    */
-  void compute(const GALS::CPU::Array<T_GRID, typename T_GRID::position_type> &x_interp,
-               const GALS::CPU::Array<T_GRID, T> &alpha, GALS::CPU::Array<T_GRID, T> &alpha_interpolated);
+  void compute(const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, typename GALS::CPU::Grid<T, 1>::position_type> &x_interp,
+               const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha,
+               GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha_interpolated);
 
   /*! Overload operator to compute linear interpolation of a scalar field.
    *
@@ -133,10 +94,32 @@ class Linear<T, GALS::CPU::Grid<T, 1>>
    * \param alpha variable to interpolate.
    * \param alpha_interpolated interpolated values are written to this variable.
    */
-  void operator()(const GALS::CPU::Array<T_GRID, typename T_GRID::position_type> &x_interp,
-                  const GALS::CPU::Array<T_GRID, T> &alpha, GALS::CPU::Array<T_GRID, T> &alpha_interpolated)
+  void operator()(
+      const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, typename GALS::CPU::Grid<T, 1>::position_type> &x_interp,
+      const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha,
+      GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha_interpolated)
   {
     compute(x_interp, alpha, alpha_interpolated);
+  }
+
+  /*! Interpolate scalar field.
+   *
+   * \param x_interp interpolation points.
+   * \param levelset levelset field to interpolate.
+   */
+  void compute(const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, typename GALS::CPU::Grid<T, 1>::position_type> &x_interp,
+               CPU::Levelset<GALS::CPU::Grid<T, 1>, T> &levelset);
+
+  /*! Overload operator to compute linear interpolation of a scalar field.
+   *
+   * \param x_interp interpolation points.
+   * \param levelset levelset field to interpolate.
+   */
+  void operator()(
+      const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, typename GALS::CPU::Grid<T, 1>::position_type> &x_interp,
+      CPU::Levelset<GALS::CPU::Grid<T, 1>, T> &levelset)
+  {
+    compute(x_interp, levelset);
   }
 };
 

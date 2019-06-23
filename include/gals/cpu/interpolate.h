@@ -29,38 +29,58 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "gals/cpu/interpolate.h"
+#pragma once
 
-template <typename T, typename T_GRID, typename INTERPOLATION_SCHEME>
-GALS::CPU::Interpolate<T, T_GRID, INTERPOLATION_SCHEME>::Interpolate()
+#include "gals/cpu/interpolation/hermite.h"
+#include "gals/cpu/interpolation/linear.h"
+#include "gals/cpu/levelset.h"
+#include "gals/utilities/array.h"
+#include "gals/utilities/grid.h"
+#include "gals/utilities/mat3.h"
+#include "gals/utilities/vec3.h"
+
+namespace GALS
 {
-}
-
-template <typename T, typename T_GRID, typename INTERPOLATION_SCHEME>
-GALS::CPU::Interpolate<T, T_GRID, INTERPOLATION_SCHEME>::~Interpolate()
+namespace CPU
 {
-}
-
-template <typename T, typename T_GRID, typename INTERPOLATION_SCHEME>
-void GALS::CPU::Interpolate<T, T_GRID, INTERPOLATION_SCHEME>::compute(
-    const Array<T_GRID, typename T_GRID::position_type> &x_interp, const Array<T_GRID, T> &alpha,
-    Array<T_GRID, T> &alpha_interpolated)
+/*! \class Interpolate
+ *
+ * Class to perform interpolation. Default interpolation scheme is set to GALS::INTERPOLATION::Linear<...>.
+ */
+template <typename T, typename T_GRID, typename INTERPOLATION_SCHEME = GALS::INTERPOLATION::Linear<T, T_GRID>>
+class Interpolate
 {
-  INTERPOLATION_SCHEME()(x_interp, alpha, alpha_interpolated);
-}
+ public:
+  using value_type = T;
 
-template <typename T, typename T_GRID, typename INTERPOLATION_SCHEME>
-void GALS::CPU::Interpolate<T, T_GRID, INTERPOLATION_SCHEME>::compute(
-    const Array<T_GRID, typename T_GRID::position_type> &x_interp, GALS::CPU::Levelset<T_GRID, double> &levelset)
-{
-  INTERPOLATION_SCHEME()(x_interp, levelset);
-}
+  /*! Default constructor
+   */
+  Interpolate();
 
-template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 1>,
-                                      GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 1>>>;
-template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 1>,
-                                      GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 1>>>;
-// template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 2>,
-// GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 2>>>;
-// template class GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 3>,
-// GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 3>>>;
+  /*! Destructor
+   */
+  ~Interpolate();
+
+  /*! Compute interpolation of a scalar.
+   *
+   * \param x_interp interpolation points.
+   * \param alpha variable to interpolate.
+   * \param alpha_interpolated interpolated values are written to this variable.
+   */
+  static void compute(const Array<T_GRID, typename T_GRID::position_type> &x_interp, const Array<T_GRID, T> &alpha,
+                      Array<T_GRID, T> &alpha_interpolated);
+
+  /*! Compute interpolation of a levelset field.
+   *
+   * Depending on the interpolation scheme, phi and/or psi will be computed and the corresponding member variables of
+   * Levelset class are updated. Variables of `_tm1` are used to updated `_interp_tm1` variables.
+   *
+   * \param x_interp interpolation points.
+   * \param levelset variable whose members will be used and udpated during interpolation.
+   */
+  static void compute(const Array<T_GRID, typename T_GRID::position_type> &x_interp,
+                      GALS::CPU::Levelset<T_GRID, double> &levelset);
+};
+
+}  // namespace CPU
+}  // namespace GALS

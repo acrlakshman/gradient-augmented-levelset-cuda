@@ -1,15 +1,17 @@
-# Currently build fails due to usage of C++14 features.
+# Currently build fails due to linking errors with YAML.
 clone_folder: c:\projects\gals_cuda
 
 branches:
     only:
         - master
 
-configuration:
-    - 14 2015
+environment:
+   matrix:
+      - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+        TOOLSET: clang
+        CXXSTD: 14
 
-platform:
-    - x64
+build: off
 
 build_script:
     - cd c:\projects\gals_cuda

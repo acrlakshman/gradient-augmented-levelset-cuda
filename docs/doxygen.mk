@@ -161,13 +161,13 @@ FULL_PATH_NAMES        = YES
 # This tag requires that the tag FULL_PATH_NAMES is set to YES.
 
 STRIP_FROM_PATH        = ${SRC_DIR} \
-								 ${SRC_DIR}/include/gals \
-								 ${SRC_DIR}/include/gals/utilities \
-								 ${SRC_DIR}/include/gals/input-parser \
-								 ${SRC_DIR}/include/gals/input-fields \
-								 ${SRC_DIR}/include/gals/cpu \
-								 ${SRC_DIR}/include/gals/cpu/gradient \
-								 ${SRC_DIR}/include/gals/cpu/interpolation \
+								 ${INCLUDE_DIR}/gals \
+								 ${INCLUDE_DIR}/gals/utilities \
+								 ${INCLUDE_DIR}/gals/input-parser \
+								 ${INCLUDE_DIR}/gals/input-fields \
+								 ${INCLUDE_DIR}/gals/cpu \
+								 ${INCLUDE_DIR}/gals/cpu/gradient \
+								 ${INCLUDE_DIR}/gals/cpu/interpolation \
                          ${SRC_DIR}/cpu \
                          ${SRC_DIR}/cpu/gradient \
                          ${SRC_DIR}/cpu/interpolation \
@@ -818,13 +818,13 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = ${DOCS_DIR}/pages \
-								 ${SRC_DIR}/include/gals \
-								 ${SRC_DIR}/include/gals/utilities \
-								 ${SRC_DIR}/include/gals/input-parser \
-								 ${SRC_DIR}/include/gals/input-fields \
-								 ${SRC_DIR}/include/gals/cpu \
-								 ${SRC_DIR}/include/gals/cpu/gradient \
-								 ${SRC_DIR}/include/gals/cpu/interpolation \
+								 ${INCLUDE_DIR}/gals \
+								 ${INCLUDE_DIR}/gals/utilities \
+								 ${INCLUDE_DIR}/gals/input-parser \
+								 ${INCLUDE_DIR}/gals/input-fields \
+								 ${INCLUDE_DIR}/gals/cpu \
+								 ${INCLUDE_DIR}/gals/cpu/gradient \
+								 ${INCLUDE_DIR}/gals/cpu/interpolation \
                          ${SRC_DIR}/cpu/interpolation \
                          ${SRC_DIR}/cpu/input-parser \
                          ${SRC_DIR}/cpu/input-fields \

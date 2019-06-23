@@ -76,6 +76,11 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_1D)
         levelset(i, j, k) = i;
       }
 
+  // Temporary object, for coverage.
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>,
+                      GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 1>>>
+      grad_tmp;
+
   // computing gradient using second order central scheme
   GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>,
                       GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 1>>>::compute(levelset,
@@ -147,6 +152,11 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_2D)
         levelset(i, j, k) = i;
       }
 
+  // Temporary object, for coverage.
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>,
+                      GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 2>>>
+      grad_tmp;
+
   // computing gradient using second order central scheme
   GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>,
                       GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 2>>>::compute(levelset,
@@ -217,6 +227,11 @@ TEST(CPU, GRADIENT_SECOND_ORDER_CENTRAL_DOUBLE_3D)
       for (int k = k_min; k < k_max; ++k) {
         levelset(i, j, k) = i;
       }
+
+  // Temporary object, for coverage.
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>,
+                      GALS::CPU::SecondOrderCentral<double, GALS::CPU::Grid<double, 3>>>
+      grad_tmp;
 
   // computing gradient using second order central scheme
   GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>,
@@ -290,6 +305,10 @@ TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_1D)
         levelset(i, j, k) = i;
       }
 
+  // Temporary object, for coverage.
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>, GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 1>>>
+      grad_tmp;
+
   // computing gradient using second order central scheme
   GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 1>,
                       GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 1>>>::compute(levelset, grad_levelset);
@@ -360,6 +379,10 @@ TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_2D)
         levelset(i, j, k) = i;
       }
 
+  // Temporary object, for coverage.
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>, GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 2>>>
+      grad_tmp;
+
   // computing gradient using second order central scheme
   GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 2>,
                       GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 2>>>::compute(levelset, grad_levelset);
@@ -429,6 +452,10 @@ TEST(CPU, GRADIENT_THIRD_ORDER_DOUBLE_3D)
       for (int k = k_min; k < k_max; ++k) {
         levelset(i, j, k) = i;
       }
+
+  // Temporary object, for coverage.
+  GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>, GALS::CPU::ThirdOrder<double, GALS::CPU::Grid<double, 3>>>
+      grad_tmp;
 
   // computing gradient using second order central scheme
   GALS::CPU::Gradient<double, GALS::CPU::Grid<double, 3>,

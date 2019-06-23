@@ -29,7 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "gals/input-parser/grid-parser.h"
+#include "gals/input-parser/grid.h"
 #include "gals/input-fields/grid.h"
 
 #include <vector>

@@ -147,72 +147,7 @@ static struct ControlPoints<T> get_control_points(const T &phi_0, const T &phi_x
  * Piece-wise hermite interpolation.
  */
 template <typename T, typename T_GRID>
-class Hermite
-{
- public:
-  typedef T value_type;
-
-  /*! Default constructor
-   */
-  Hermite();
-
-  /*! Destructor
-   */
-  ~Hermite();
-
-  /*! Piece-wise hermite interpolation.
-   *
-   * \param grid reference to grid.
-   * \param x_interp position of a point where interpolation need to be performed.
-   * \param levelset levelset field to interpolate.
-   */
-  CPU::InterpolatedFields<CPU::Vec3<T>> interpolate(const T_GRID &grid, const typename T_GRID::position_type &x_interp,
-                                                    const CPU::Levelset<T_GRID, T> &levelset);
-
-  /*! Interpolate scalar field.
-   *
-   * \param x_interp interpolation points.
-   * \param levelset levelset field to interpolate.
-   */
-  // void compute(const T_GRID &x_interp, CPU::Levelset<T_GRID, T> &levelset);
-
-  /*! Overload operator to compute hermite interpolation of a scalar field.
-   *
-   * \param x_interp interpolation points.
-   * \param levelset levelset field to interpolate.
-   */
-  // void operator()(const T_GRID &x_interp, CPU::Levelset<T_GRID, T> &levelset) { compute(x_interp, levelset); }
-
-  /*! Piece-wise hermite interpolation.
-   *
-   * \param grid reference to grid.
-   * \param x_interp position of a point where interpolation need to be performed.
-   * \param alpha variable to interpolate.
-   */
-  T interpolate(const GALS::CPU::Grid<typename T_GRID::value_type, T_GRID::dim> &grid,
-                const typename T_GRID::position_type &x_interp, const GALS::CPU::Array<T_GRID, T> &alpha);
-
-  /*! Interpolate scalar field.
-   *
-   * \param x_interp interpolation points.
-   * \param alpha variable to interpolate.
-   * \param alpha_interpolated interpolated values are written to this variable.
-   */
-  void compute(const GALS::CPU::Array<T_GRID, typename T_GRID::position_type> &x_interp,
-               const GALS::CPU::Array<T_GRID, T> &alpha, GALS::CPU::Array<T_GRID, T> &alpha_interpolated);
-
-  /*! Overload operator to compute hermite interpolation of a scalar field.
-   *
-   * \param x_interp interpolation points.
-   * \param alpha variable to interpolate.
-   * \param alpha_interpolated interpolated values are written to this variable.
-   */
-  void operator()(const GALS::CPU::Array<T_GRID, typename T_GRID::position_type> &x_interp,
-                  const GALS::CPU::Array<T_GRID, T> &alpha, GALS::CPU::Array<T_GRID, T> &alpha_interpolated)
-  {
-    compute(x_interp, alpha, alpha_interpolated);
-  }
-};
+class Hermite;
 
 /*! \class Hermite
  *
@@ -223,8 +158,8 @@ template <typename T>
 class Hermite<T, GALS::CPU::Grid<T, 1>>
 {
  public:
-  typedef T value_type;
-  typedef GALS::CPU::Grid<T, 1> T_GRID;
+  using value_type = T;
+  using T_GRID = GALS::CPU::Grid<T, 1>;
 
   /*! Default constructor
    */
@@ -241,22 +176,29 @@ class Hermite<T, GALS::CPU::Grid<T, 1>>
    * \param levelset levelset field to interpolate.
    */
   CPU::InterpolatedFields<CPU::Vec3<T>> interpolate(
-      const GALS::CPU::Grid<typename T_GRID::value_type, T_GRID::dim> &grid,
-      const typename T_GRID::position_type &x_interp, const CPU::Levelset<T_GRID, T> &levelset);
+      const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 1>::value_type, GALS::CPU::Grid<T, 1>::dim> &grid,
+      const typename GALS::CPU::Grid<T, 1>::position_type &x_interp,
+      const CPU::Levelset<GALS::CPU::Grid<T, 1>, T> &levelset);
 
   /*! Interpolate scalar field.
    *
    * \param x_interp interpolation points.
    * \param levelset levelset field to interpolate.
    */
-  // void compute(const T_GRID &x_interp, CPU::Levelset<T_GRID, T> &levelset);
+  void compute(const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, typename GALS::CPU::Grid<T, 1>::position_type> &x_interp,
+               CPU::Levelset<GALS::CPU::Grid<T, 1>, T> &levelset);
 
   /*! Overload operator to compute hermite interpolation of a scalar field.
    *
    * \param x_interp interpolation points.
    * \param levelset levelset field to interpolate.
    */
-  // void operator()(const T_GRID &x_interp, CPU::Levelset<T_GRID, T> &levelset) { compute(x_interp, levelset); }
+  void operator()(
+      const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, typename GALS::CPU::Grid<T, 1>::position_type> &x_interp,
+      CPU::Levelset<GALS::CPU::Grid<T, 1>, T> &levelset)
+  {
+    compute(x_interp, levelset);
+  }
 
   /*! Piece-wise hermite interpolation.
    *
@@ -264,8 +206,9 @@ class Hermite<T, GALS::CPU::Grid<T, 1>>
    * \param x_interp position of a point where interpolation need to be performed.
    * \param alpha variable to interpolate.
    */
-  T interpolate(const GALS::CPU::Grid<typename T_GRID::value_type, T_GRID::dim> &grid,
-                const typename T_GRID::position_type &x_interp, const GALS::CPU::Array<T_GRID, T> &alpha);
+  T interpolate(const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 1>::value_type, GALS::CPU::Grid<T, 1>::dim> &grid,
+                const typename GALS::CPU::Grid<T, 1>::position_type &x_interp,
+                const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha);
 
   /*! Interpolate scalar field.
    *
@@ -273,8 +216,9 @@ class Hermite<T, GALS::CPU::Grid<T, 1>>
    * \param alpha variable to interpolate.
    * \param alpha_interpolated interpolated values are written to this variable.
    */
-  void compute(const GALS::CPU::Array<T_GRID, typename T_GRID::position_type> &x_interp,
-               const GALS::CPU::Array<T_GRID, T> &alpha, GALS::CPU::Array<T_GRID, T> &alpha_interpolated);
+  void compute(const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, typename GALS::CPU::Grid<T, 1>::position_type> &x_interp,
+               const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha,
+               GALS::CPU::Array<T_GRID, T> &alpha_interpolated);
 
   /*! Overload operator to compute hermite interpolation of a scalar field.
    *
@@ -282,8 +226,10 @@ class Hermite<T, GALS::CPU::Grid<T, 1>>
    * \param alpha variable to interpolate.
    * \param alpha_interpolated interpolated values are written to this variable.
    */
-  void operator()(const GALS::CPU::Array<T_GRID, typename T_GRID::position_type> &x_interp,
-                  const GALS::CPU::Array<T_GRID, T> &alpha, GALS::CPU::Array<T_GRID, T> &alpha_interpolated)
+  void operator()(
+      const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, typename GALS::CPU::Grid<T, 1>::position_type> &x_interp,
+      const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha,
+      GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha_interpolated)
   {
     compute(x_interp, alpha, alpha_interpolated);
   }

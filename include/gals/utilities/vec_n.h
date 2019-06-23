@@ -29,49 +29,72 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "gals/cpu/interpolation/linear.h"
+#pragma once
 
 #include <iostream>
+#include <vector>
 
-template <typename T, typename T_GRID>
-GALS::INTERPOLATION::Linear<T, T_GRID>::Linear()
+namespace GALS
 {
-}
-
-template <typename T, typename T_GRID>
-GALS::INTERPOLATION::Linear<T, T_GRID>::~Linear()
+namespace CPU
 {
-}
-
-template <typename T, typename T_GRID>
-T GALS::INTERPOLATION::Linear<T, T_GRID>::linearInterpolation(
-    const GALS::CPU::Grid<typename T_GRID::value_type, T_GRID::dim> &grid,
-    const typename T_GRID::position_type &x_interp, const GALS::CPU::Array<T_GRID, T> &alpha)
+/*! \class VecN
+ *
+ * Class to create varying size elements at a computational cell. For e.x. gradients, etc.
+ */
+template <typename T, int SIZE = 3>
+class VecN
 {
-  std::cout << "generalized" << std::endl;
-  T alpha_interpolated;
+ public:
+  using value_type = T;
 
-  const GALS::CPU::Vec3<int> base_node_id = grid.baseNodeId(x_interp);
+  /*! Default constructor
+   */
+  VecN();
 
-  const typename T_GRID::position_type x_base = grid(base_node_id);
-  const auto &one_over_dx = grid.oneOverDX();
+  /*! Destructor
+   */
+  ~VecN();
 
-  GALS::CPU::Vec3<T> eta;
-  for (int d = 0; d < T_GRID::dim; ++d) eta[d] = (x_interp[d] - x_base[d]) * one_over_dx[d];
+  /*! Returns number of elements.
+   *
+   * \return number of elements.
+   */
+  const int size() const;
 
-  for (int d = 0; d < T_GRID::dim; ++d) {
-    // TODO (lakshman), complete this.
+  /*! Overloaded subscript operator.
+   *
+   * \param idx zero based index of element.
+   *
+   * \return element at index (idx).
+   */
+  const T operator[](const int idx) const;
+
+  /*! Overloaded subscript operator that returns a reference.
+   *
+   * \param idx zero based index of element.
+   *
+   * \return element at index (idx).
+   */
+  T &operator[](const int idx);
+
+  /*! Output operator overload.
+   *
+   * \param out output stream.
+   * \param vec VecN object to output stream.
+   *
+   * \return reference to output stream.
+   */
+  friend std::ostream &operator<<(std::ostream &out, const VecN<T, SIZE> &vec)
+  {
+    for (int i = 0; i < vec.size(); ++i) out << vec[i] << "\t";
+
+    return out;
   }
 
-  return alpha_interpolated;
-}
+ private:
+  std::vector<T> m_data;
+};
 
-template <typename T, typename T_GRID>
-void GALS::INTERPOLATION::Linear<T, T_GRID>::compute(
-    const GALS::CPU::Array<T_GRID, typename T_GRID::position_type> &x_interp, const GALS::CPU::Array<T_GRID, T> &alpha,
-    GALS::CPU::Array<T_GRID, T> &alpha_interpolated)
-{
-  std::cout << "compute: generalized" << std::endl;
-}
-
-template class GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 1>>;
+}  // namespace CPU
+}  // namespace GALS

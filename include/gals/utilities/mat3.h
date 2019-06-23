@@ -32,38 +32,44 @@
 #pragma once
 
 #include <iostream>
-#include <vector>
 
 namespace GALS
 {
 namespace CPU
 {
-/*! \class Vec3
+/*! \class Mat3
  *
- * Class to create 3 component elements at a computational cell. For e.x. velocity, gradients, etc.
+ * Class to create 9 component variable at a computational cell. For e.x. gradient of velocity.
  */
 template <typename T>
-class Vec3
+class Mat3
 {
  public:
-  typedef T value_type;
-  static const int SIZE = 3;
+  using value_type = T;
 
-  /*! Constructor with 3 input arguments.
+  static constexpr int SIZE = 9;
+
+  /*! Constructor.
    *
-   * \param a
-   * \param b
-   * \param c
+   * \param a00 row 0, col 0
+   * \param a01 row 0, col 1
+   * \param a02 row 0, col 2
+   * \param a10 row 1, col 0
+   * \param a11 row 1, col 1
+   * \param a12 row 1, col 2
+   * \param a20 row 2, col 0
+   * \param a21 row 2, col 1
+   * \param a22 row 2, col 2
    */
-  Vec3(const T a, const T b, const T c);
+  Mat3(T a00, T a01, T a02, T a10, T a11, T a12, T a20, T a21, T a22);
 
   /*! Default constructor.
    */
-  Vec3();
+  Mat3();
 
   /*! Destructor
    */
-  ~Vec3();
+  ~Mat3();
 
   /*! Returns number of elements.
    *
@@ -71,7 +77,7 @@ class Vec3
    */
   const int size() const;
 
-  /*! Overloaded subscript operator that returns a const value.
+  /*! Overloaded subscript operator that returns a reference.
    *
    * \param idx zero based index of element.
    *
@@ -87,30 +93,48 @@ class Vec3
    */
   T &operator[](const int idx);
 
+  /*! Row column based element access.
+   *
+   * \param i_row row index (zero-based).
+   * \param i_col column index (zero-based).
+   *
+   * \return element at index (i_row, i_col).
+   */
+  const T operator()(const int i_row, const int i_col) const;
+
+  /*! Row column based element access.
+   *
+   * \param i_row row index (zero-based).
+   * \param i_col column index (zero-based).
+   *
+   * \return element at index (i_row, i_col).
+   */
+  T &operator()(const int i_row, const int i_col);
+
   /*! Overload assignment operator.
    *
-   * \param vec variable whose values will be assigned.
+   * \param mat variable whose values will be assigned.
    */
-  void operator=(const Vec3<T> &vec);
+  void operator=(const Mat3<T> &mat);
 
   /*! Equality operator.
    *
-   * \param vec variable to compare against.
+   * \param mat variable to compare against.
    *
    * \return true if equal, false otherwise.
    */
-  bool operator==(const Vec3<T> &vec) const;
+  bool operator==(const Mat3<T> &mat) const;
 
   /*! Output operator overload.
    *
    * \param out output stream.
-   * \param vec Vec3 object to output stream.
+   * \param mat Mat3 object to output stream.
    *
    * \return reference to output stream.
    */
-  friend std::ostream &operator<<(std::ostream &out, const Vec3<T> &vec)
+  friend std::ostream &operator<<(std::ostream &out, const Mat3<T> &mat)
   {
-    out << vec[0] << "\t" << vec[1] << "\t" << vec[2];
+    for (int i = 0; i < mat.size(); ++i) out << mat[i] << "\t";
 
     return out;
   }

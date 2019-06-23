@@ -30,6 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "gals/cpu/interpolate.h"
+#include "gals/cpu/levelset.h"
 #include "gals/utilities/array.h"
 #include "gals/utilities/utilities.h"
 
@@ -98,6 +99,11 @@ static double test_oned(const int nx)
         l1err += fabs(levelset_interp - levelset_exact);
       }
   l1err /= grid.totalCells();
+
+  // Test compute with levelset as input.
+  GALS::CPU::Levelset<GALS::CPU::Grid<double, 1>, double> ls(grid);
+  GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 1>,
+                         GALS::INTERPOLATION::Linear<double, GALS::CPU::Grid<double, 1>>>::compute(x_interp, ls);
 
   return l1err;
 }
