@@ -48,7 +48,8 @@ namespace CPU
  */
 template <class T_VECTOR>
 struct InterpolatedFields {
-  typedef typename T_VECTOR::value_type T;
+  using T = typename T_VECTOR::value_type;
+
   T h_phi_location;
   T_VECTOR h_phi_gradient_location;
 

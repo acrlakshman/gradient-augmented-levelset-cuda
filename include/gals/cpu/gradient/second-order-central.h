@@ -48,7 +48,7 @@ template <typename T, typename T_GRID>
 class SecondOrderCentral
 {
  public:
-  typedef T value_type;
+  using value_type = T;
 
   /*! Default constructor
    */

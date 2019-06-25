@@ -29,42 +29,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "gals/utilities/utilities.h"
 
-#include <math.h>
+#include <gtest/gtest.h>
 
-namespace GALS
-{
-static double VSMALL = 1e-10;
-static const double one_third = 1. / 3.;
-static const double two_thirds = 2. / 3.;
-
-/*! Check for equality within a tolerance.
- *
- * Tolerance is by default 1e-10.
- *
- * \param a first argument
- * \param b second argument
- *
- * \return number of elements.
- */
-static bool is_equal(double a, double b) { return fabs(a - b) <= VSMALL; }
-
-//! Check for equality between integers.
-static bool is_equal(int a, int b) { return a == b; }
-
-//! Compute square.
-template <typename T>
-static T sqr(T a)
-{
-  return a * a;
-}
-
-//! Compute cube.
-template <typename T>
-static T cube(T a)
-{
-  return a * a * a;
-}
-
-}  // namespace GALS
+TEST(GALS, UTILITIES) { GALS_FUNCTION_NOT_IMPLEMENTED("not implemented"); }

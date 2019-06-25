@@ -48,8 +48,8 @@ BSD 3-Clause License. Please check the accompanying [LICENSE] file
 Acknowledgements
 ----------------
 
+* [Ryan Krattiger] for helping with cmake and guidance on the design of a C++ project.
 * [Pradeep Garigipati] for helping with cmake.
-* [Ryan Krattiger] for helping with cmake.
 * [John Van Gilder] for helping with coverage tools.
 
 [CMake]:https://github.com/Kitware/CMake

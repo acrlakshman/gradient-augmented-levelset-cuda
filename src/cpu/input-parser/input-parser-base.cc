@@ -30,7 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "gals/input-parser/input-parser-base.h"
-#include "gals/input-parser/grid-parser.h"
+#include "gals/input-parser/grid.h"
 
 template <typename FIELD>
 GALS::CPU::InputParserBase<FIELD>::InputParserBase()

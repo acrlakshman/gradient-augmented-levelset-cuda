@@ -31,44 +31,49 @@
 
 #pragma once
 
-#include "gals/cpu/interpolation/hermite.h"
-#include "gals/cpu/interpolation/linear.h"
-#include "gals/utilities/array.h"
-#include "gals/utilities/grid.h"
-#include "gals/utilities/mat3.h"
-#include "gals/utilities/vec3.h"
+#include <math.h>
+#include <string.h>
 
 namespace GALS
 {
-namespace CPU
-{
-/*! \class Interpolate
+#ifndef BUILD_COVERAGE
+#define GALS_FUNCTION_NOT_IMPLEMENTED(var) \
+  std::cout << #var << std::endl;          \
+  exit(0);
+#else
+#define GALS_FUNCTION_NOT_IMPLEMENTED(var) std::cout << #var << std::endl;
+#endif
+
+static double VSMALL = 1e-10;
+static const double one_third = 1. / 3.;
+static const double two_thirds = 2. / 3.;
+
+/*! Check for equality within a tolerance.
  *
- * Class to perform interpolation. Default interpolation scheme is set to GALS::INTERPOLATION::Linear<...>.
+ * Tolerance is by default 1e-10.
+ *
+ * \param a first argument
+ * \param b second argument
+ *
+ * \return number of elements.
  */
-template <typename T, typename T_GRID, typename INTERPOLATION_SCHEME = GALS::INTERPOLATION::Linear<T, T_GRID>>
-class Interpolate
+static bool is_equal(double a, double b) { return fabs(a - b) <= VSMALL; }
+
+//! Check for equality between integers.
+static bool is_equal(int a, int b) { return a == b; }
+
+//! Compute square.
+template <typename T>
+static T sqr(T a)
 {
- public:
-  typedef T value_type;
+  return a * a;
+}
 
-  /*! Default constructor
-   */
-  Interpolate();
+//! Compute cube.
+template <typename T>
+static T cube(T a)
+{
+  return a * a * a;
+}
 
-  /*! Destructor
-   */
-  ~Interpolate();
-
-  /*! Compute interpolation of a scalar.
-   *
-   * \param x_interp interpolation points.
-   * \param alpha variable to interpolate.
-   * \param alpha_interpolated interpolated values are written to this variable.
-   */
-  static void compute(const Array<T_GRID, typename T_GRID::position_type> &x_interp, const Array<T_GRID, T> &alpha,
-                      Array<T_GRID, T> &alpha_interpolated);
-};
-
-}  // namespace CPU
 }  // namespace GALS

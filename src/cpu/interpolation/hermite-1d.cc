@@ -45,11 +45,19 @@ GALS::CPU::InterpolatedFields<GALS::CPU::Vec3<T>> GALS::INTERPOLATION::Hermite<T
 }
 
 template <typename T>
+void GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 1>>::compute(
+    const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, typename GALS::CPU::Grid<T, 1>::position_type> &x_interp,
+    GALS::CPU::Levelset<GALS::CPU::Grid<T, 1>, T> &levelset)
+{
+}
+
+template <typename T>
 T GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 1>>::interpolate(
     const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 1>::value_type, GALS::CPU::Grid<T, 1>::dim> &grid,
     const typename GALS::CPU::Grid<T, 1>::position_type &x_interp,
     const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha)
 {
+  GALS_FUNCTION_NOT_IMPLEMENTED("hermite-1d.cc: interpolate(...) with alpha as input.")
   typedef GALS::CPU::Grid<T, 1> T_GRID;
 
   const int dim = T_GRID::dim;
@@ -96,17 +104,7 @@ void GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 1>>::compute(
     const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha,
     GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha_interpolated)
 {
-  typedef GALS::CPU::Grid<T, 1> T_GRID;
-
-  const GALS::CPU::Vec3<int> num_cells = alpha.numCells();
-  const T_GRID &grid = alpha.grid();
-  const GALS::CPU::Vec3<typename T_GRID::value_type> dx = grid.dX();
-  const auto &axis_vectors = GALS::CPU::Grid<typename T_GRID::value_type, T_GRID::dim>::axis_vectors;
-
-  for (int i = 0; i < x_interp.grid().numCells()[0]; ++i)
-    for (int j = 0; j < x_interp.grid().numCells()[1]; ++j)
-      for (int k = 0; k < x_interp.grid().numCells()[2]; ++k)
-        alpha_interpolated(i, j, k) = interpolate(grid, x_interp(i, j, k), alpha);
+  GALS_FUNCTION_NOT_IMPLEMENTED("hermite-1d.cc: compute(...) with alpha as input.")
 }
 
 template class GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 1>>;

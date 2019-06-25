@@ -48,7 +48,7 @@ template <typename T_GRID, typename T_ARRAY>
 class Array
 {
  public:
-  typedef T_ARRAY value_type;
+  using value_type = T_ARRAY;
 
   /*! Constructor called using grid.
    *

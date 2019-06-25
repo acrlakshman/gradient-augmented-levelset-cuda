@@ -40,6 +40,9 @@
 #include <math.h>
 #include <iostream>
 
+/* * * * * *  TEST #0  * * * * * */
+TEST(CPU, INTERPOLATED_FIELDS) { GALS::CPU::InterpolatedFields<GALS::CPU::Vec3<int>> interpolated_fields; }
+
 /* * * * * *  TEST #1  * * * * * */
 TEST(CPU, LEVELSET_1D)
 {
