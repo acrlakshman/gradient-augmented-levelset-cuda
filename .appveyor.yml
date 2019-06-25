@@ -8,8 +8,9 @@ branches:
 environment:
    matrix:
       - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-        TOOLSET: clang
-        CXXSTD: 14
+        TOOLSET: msvc-14.1
+        ADDRMD: 64
+        CXXSTD: 14,17
 
 build: off
 
