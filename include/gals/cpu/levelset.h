@@ -50,13 +50,13 @@ template <class T_VECTOR>
 struct InterpolatedFields {
   using T = typename T_VECTOR::value_type;
 
-  T h_phi_location;
-  T_VECTOR h_phi_gradient_location;
+  T phi_interpolated;
+  T_VECTOR psi_interpolated;
 
   InterpolatedFields()
   {
-    h_phi_location = T();
-    h_phi_gradient_location = T_VECTOR();
+    phi_interpolated = T();
+    psi_interpolated = T_VECTOR();
   };
 
   ~InterpolatedFields(){};
@@ -96,11 +96,23 @@ class Levelset
    */
   Array<T_GRID, T>& phi() { return m_phi; }
 
+  /*! Return phi.
+   *
+   * \return phi.
+   */
+  const Array<T_GRID, T>& phi() const { return m_phi; }
+
   /*! Return psi.
    *
    * \return psi.
    */
   Array<T_GRID, Vec3<T>>& psi() { return m_psi; }
+
+  /*! Return psi.
+   *
+   * \return psi.
+   */
+  const Array<T_GRID, Vec3<T>>& psi() const { return m_psi; }
 
   /*! Return phi_mixed_derivatives.
    *
@@ -108,11 +120,26 @@ class Levelset
    */
   Array<T_GRID, VecN<T, T_GRID::num_mixed_derivatives>>& phiMixedDerivatives() { return m_phi_mixed_derivatives; }
 
+  /*! Return phi_mixed_derivatives.
+   *
+   * \return phi_mixed_derivatives.
+   */
+  const Array<T_GRID, VecN<T, T_GRID::num_mixed_derivatives>>& phiMixedDerivatives() const
+  {
+    return m_phi_mixed_derivatives;
+  }
+
   /*! Return phi_tm1.
    *
    * \return phi_tm1.
    */
   Array<T_GRID, T>& phiTm1() { return m_phi_tm1; }
+
+  /*! Return phi_tm1.
+   *
+   * \return phi_tm1.
+   */
+  const Array<T_GRID, T>& phiTm1() const { return m_phi_tm1; }
 
   /*! Return psi_tm1.
    *
@@ -120,17 +147,35 @@ class Levelset
    */
   Array<T_GRID, Vec3<T>>& psiTm1() { return m_psi_tm1; }
 
+  /*! Return psi_tm1.
+   *
+   * \return psi_tm1.
+   */
+  const Array<T_GRID, Vec3<T>>& psiTm1() const { return m_psi_tm1; }
+
   /*! Return phi_interp_tm1.
    *
    * \return phi_interp_tm1.
    */
   Array<T_GRID, T>& phiInterpTm1() { return m_phi_interp_tm1; }
 
+  /*! Return phi_interp_tm1.
+   *
+   * \return phi_interp_tm1.
+   */
+  const Array<T_GRID, T>& phiInterpTm1() const { return m_phi_interp_tm1; }
+
   /*! Return psi_interp_tm1.
    *
    * \return psi_interp_tm1.
    */
   Array<T_GRID, Vec3<T>>& psiInterpTm1() { return m_psi_interp_tm1; }
+
+  /*! Return psi_interp_tm1.
+   *
+   * \return psi_interp_tm1.
+   */
+  const Array<T_GRID, Vec3<T>>& psiInterpTm1() const { return m_psi_interp_tm1; }
 
   //! Print levelset values.
   void print();
