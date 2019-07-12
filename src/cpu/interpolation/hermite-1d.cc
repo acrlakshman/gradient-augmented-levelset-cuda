@@ -41,6 +41,43 @@ GALS::CPU::InterpolatedFields<GALS::CPU::Vec3<T>> GALS::INTERPOLATION::Hermite<T
 {
   GALS::CPU::InterpolatedFields<GALS::CPU::Vec3<T>> hermite_fields;
 
+  using T_GRID = GALS::CPU::Grid<T, 1>;
+  const int dim = T_GRID::dim;
+  const int axis = 0;
+  const auto &axis_vectors = GALS::CPU::Grid<typename T_GRID::value_type, T_GRID::dim>::axis_vectors;
+  const GALS::CPU::Vec3<int> base_node_id = grid.baseNodeId(x_interp);
+  const GALS::CPU::Vec3<int> base_node_id_p1 = GALS::CPU::Vec3<int>(base_node_id[0] + axis_vectors(0, 0), 0, 0);
+
+  const typename T_GRID::position_type x_base = grid(base_node_id);
+  const auto &dx = grid.dX();
+  const auto &one_over_dx = grid.oneOverDX();
+
+  T eta = (x_interp[0] - x_base[0]) * one_over_dx[0];
+
+  const ControlPoints<T> &control_points = GALS::INTERPOLATION::get_control_points(
+      levelset.phiTm1()(base_node_id), levelset.psiTm1()(base_node_id)[axis], levelset.phiTm1()(base_node_id_p1),
+      levelset.psiTm1()(base_node_id_p1)[axis], dx[axis]);
+
+  hermite_fields.phi_interpolated = control_points.c_30 * B0(eta) + control_points.c_21 * B1(eta) +
+                                    control_points.c_12 * B2(eta) + control_points.c_03 * B3(eta);
+  hermite_fields.psi_interpolated[axis] = (control_points.c_30 * B0_Prime(eta) + control_points.c_21 * B1_Prime(eta) +
+                                           control_points.c_12 * B2_Prime(eta) + control_points.c_03 * B3_Prime(eta)) *
+                                          one_over_dx[axis];
+
+  // Debug
+  // std::cout << std::scientific;
+  // std::cout << "eta = " << eta << "; xi = " << x_interp[0] << std::endl
+  //<< "\t; phi_b = " << levelset.phiTm1()(base_node_id)
+  //<< "\t; phi_bp1 = " << levelset.phiTm1()(base_node_id_p1) << std::endl
+  //<< "\t; psi_b = " << levelset.psiTm1()(base_node_id)
+  //<< "\t; psi_bp1 = " << levelset.psiTm1()(base_node_id_p1) << std::endl
+  //<< "\t; phi_i = " << hermite_fields.phi_interpolated
+  //<< "\t; psi_i = " << hermite_fields.psi_interpolated[axis] << std::endl;
+  // std::cout << "\tfirst: c30 = " << control_points.c_30 << "; B0(eta) = " << B0(eta) << std::endl;
+  // std::cout << "\tsecond: c21 = " << control_points.c_21 << "; B1(eta) = " << B1(eta) << std::endl;
+  // std::cout << "\tthird: c12 = " << control_points.c_12 << "; B2(eta) = " << B2(eta) << std::endl;
+  // std::cout << "\tfourth: c03 = " << control_points.c_03 << "; B3(eta) = " << B3(eta) << std::endl;
+
   return hermite_fields;
 }
 
@@ -49,6 +86,21 @@ void GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 1>>::compute(
     const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, typename GALS::CPU::Grid<T, 1>::position_type> &x_interp,
     GALS::CPU::Levelset<GALS::CPU::Grid<T, 1>, T> &levelset)
 {
+  typedef GALS::CPU::Grid<T, 1> T_GRID;
+
+  const GALS::CPU::Vec3<int> num_cells_interp = x_interp.numCells();
+  const T_GRID &grid = levelset.grid();
+  const GALS::CPU::Vec3<typename T_GRID::value_type> dx = grid.dX();
+  const auto &axis_vectors = GALS::CPU::Grid<typename T_GRID::value_type, T_GRID::dim>::axis_vectors;
+
+  for (int i = 0; i < num_cells_interp[0]; ++i)
+    for (int j = 0; j < num_cells_interp[1]; ++j)
+      for (int k = 0; k < num_cells_interp[2]; ++k) {
+        const auto &hermite_fields = this->interpolate(grid, x_interp(i, j, k), levelset);
+
+        levelset.phiInterpTm1()(i, j, k) = hermite_fields.phi_interpolated;
+        levelset.psiInterpTm1()(i, j, k) = hermite_fields.psi_interpolated;
+      }
 }
 
 template <typename T>
