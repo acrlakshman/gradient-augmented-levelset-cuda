@@ -36,7 +36,7 @@
 
 namespace GALS
 {
-#ifndef BUILD_COVERAGE
+#ifndef BUILD_TESTS
 #define GALS_FUNCTION_NOT_IMPLEMENTED(var) \
   std::cout << #var << std::endl;          \
   exit(0);

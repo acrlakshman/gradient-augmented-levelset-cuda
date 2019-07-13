@@ -81,5 +81,23 @@ bool GALS::CPU::Vec3<T>::operator==(const Vec3<T>& vec) const
   return (GALS::is_equal(m_data[0], vec[0]) && GALS::is_equal(m_data[1], vec[1]) && GALS::is_equal(m_data[2], vec[2]));
 }
 
+template <typename T>
+const GALS::CPU::Vec3<T> GALS::CPU::Vec3<T>::operator-(const Vec3<T>& vec) const
+{
+  return Vec3<T>(m_data[0] - vec[0], m_data[1] - vec[1], m_data[2] - vec[2]);
+}
+
+template <typename T>
+const GALS::CPU::Vec3<T> GALS::CPU::Vec3<T>::operator*(const Vec3<T>& vec) const
+{
+  return Vec3<T>(m_data[0] * vec[0], m_data[1] * vec[1], m_data[2] * vec[2]);
+}
+
+template <typename T>
+const GALS::CPU::Vec3<T> GALS::CPU::Vec3<T>::operator/(const Vec3<T>& vec) const
+{
+  return Vec3<T>(m_data[0] / vec[0], m_data[1] / vec[1], m_data[2] / vec[2]);
+}
+
 template class GALS::CPU::Vec3<int>;
 template class GALS::CPU::Vec3<double>;
