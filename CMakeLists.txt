@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.1)
 
 PROJECT(gals_cuda)
 
@@ -13,7 +13,7 @@ OPTION(USE_RELATIVE_TEST_DIR "Use relative paths for the test data directory(For
 
 # TODO (lakshman): Move googletest to ext/
 IF ((NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/googletest") OR
-  (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ext/yaml-cpp"))
+  (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ext/yaml-cpp") OR (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ext/spdlog"))
 
   MESSAGE(WARNING "third party libraries are missing.")
   MESSAGE("Did you miss the --recursive option when cloning?")
@@ -75,11 +75,11 @@ INCLUDE_DIRECTORIES(${GALS_INCLUDE})
 ADD_LIBRARY(gals_cpu SHARED ${GALS_CPU_SRC})
 
 IF (APPLE)
-  TARGET_LINK_LIBRARIES(gals_cpu PRIVATE yaml-cpp)
+  TARGET_LINK_LIBRARIES(gals_cpu PRIVATE yaml-cpp spdlog)
 ENDIF()
 
 ADD_EXECUTABLE(gals_cuda src/main.cc)
 TARGET_INCLUDE_DIRECTORIES(gals_cuda PUBLIC src/cpu)
-TARGET_LINK_LIBRARIES(gals_cuda PUBLIC gals_cpu PRIVATE yaml-cpp)
+TARGET_LINK_LIBRARIES(gals_cuda PUBLIC gals_cpu PRIVATE yaml-cpp spdlog)
 
 INSTALL(TARGETS gals_cuda DESTINATION .)
