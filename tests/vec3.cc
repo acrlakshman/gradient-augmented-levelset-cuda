@@ -58,11 +58,25 @@ TEST(CPU, VEC3_INT)
   EXPECT_TRUE(vec3 == vec_other);
 
   // Constructor with 3 input arguments.
-  GALS::CPU::Vec3<int> vec_3(1, 2, 3);
+  GALS::CPU::Vec3<int> vec_3(1, 1, 4);
   EXPECT_TRUE(GALS::is_equal(vec_3[0], 1));
 
+  // Overloaded `-` operator.
+  GALS::CPU::Vec3<int> vec3_1 = vec_3 - vec3;
+  EXPECT_TRUE(GALS::is_equal(vec3_1[0], 0) && GALS::is_equal(vec3_1[1], -1) && GALS::is_equal(vec3_1[2], 1));
+
+  // Overloaded `*` operator.
+  GALS::CPU::Vec3<int> vec3_mult = vec_3 * vec3;
+  EXPECT_TRUE(GALS::is_equal(vec3_mult[0], 1 * 1) && GALS::is_equal(vec3_mult[1], 1 * 2) &&
+              GALS::is_equal(vec3_mult[2], 4 * 3));
+
+  // Overloaded `/` operator.
+  GALS::CPU::Vec3<int> vec3_div = vec_3 / vec3;
+  EXPECT_TRUE(GALS::is_equal(vec3_div[0], 1 / 1) && GALS::is_equal(vec3_div[1], 1 / 2) &&
+              GALS::is_equal(vec3_div[2], 4 / 3));
+
   // Overloaded output operator.
-  std::cout << "VEC3_DOUBLE (<<): " << vec3 << std::endl;
+  std::cout << "VEC3_INT (<<): " << vec3 << std::endl;
 }
 
 TEST(CPU, VEC3_DOUBLE)
@@ -89,6 +103,21 @@ TEST(CPU, VEC3_DOUBLE)
   // Constructor with 3 input arguments.
   GALS::CPU::Vec3<double> vec_3(1.1, 2.1, 3.1);
   EXPECT_TRUE(GALS::is_equal(vec_3[0], 1.1));
+
+  // Overloaded `-` operator.
+  GALS::CPU::Vec3<double> vec3_1 = vec_3 - vec3;
+  EXPECT_TRUE(GALS::is_equal(vec3_1[0], 0.) && GALS::is_equal(vec3_1[1], -0.1) && GALS::is_equal(vec3_1[2], -0.2));
+
+  // Overloaded `*` operator.
+  GALS::CPU::Vec3<double> vec3_mult = vec_3 * vec3;
+  EXPECT_TRUE(GALS::is_equal(vec3_mult[0], 1.1 * 1.1) && GALS::is_equal(vec3_mult[1], 2.1 * 2.2) &&
+              GALS::is_equal(vec3_mult[2], 3.1 * 3.3));
+
+  // Overloaded output operator.
+  // Overloaded `/` operator.
+  GALS::CPU::Vec3<double> vec3_div = vec_3 / vec3;
+  EXPECT_TRUE(GALS::is_equal(vec3_div[0], 1.1 / 1.1) && GALS::is_equal(vec3_div[1], 2.1 / 2.2) &&
+              GALS::is_equal(vec3_div[2], 3.1 / 3.3));
 
   // Overloaded output operator.
   std::cout << "VEC3_DOUBLE (<<): " << vec3 << std::endl;

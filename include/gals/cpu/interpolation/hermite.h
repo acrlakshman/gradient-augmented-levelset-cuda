@@ -108,7 +108,7 @@ T B3_Prime(T eta)
  * \param phi_1
  * \param phi_x_1
  * \param dx
- * \param use_gradient_limiting
+ * \param use_gradient_limiting Implementation of gradient limiting algorithm by Bockmann et al. JCP 258(2014)
  *
  * \return ControlPoints<T>
  */
@@ -174,11 +174,12 @@ class Hermite<T, GALS::CPU::Grid<T, 1>>
    * \param grid reference to grid.
    * \param x_interp position of a point where interpolation need to be performed.
    * \param levelset levelset field to interpolate.
+   * \param use_gradient_limiting true/false
    */
   CPU::InterpolatedFields<CPU::Vec3<T>> interpolate(
       const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 1>::value_type, GALS::CPU::Grid<T, 1>::dim> &grid,
       const typename GALS::CPU::Grid<T, 1>::position_type &x_interp,
-      const CPU::Levelset<GALS::CPU::Grid<T, 1>, T> &levelset);
+      const CPU::Levelset<GALS::CPU::Grid<T, 1>, T> &levelset, const bool use_gradient_limiting = false);
 
   /*! Interpolate scalar field.
    *
@@ -200,27 +201,9 @@ class Hermite<T, GALS::CPU::Grid<T, 1>>
     compute(x_interp, levelset);
   }
 
-  /*! Piece-wise hermite interpolation.
-   *
-   * \param grid reference to grid.
-   * \param x_interp position of a point where interpolation need to be performed.
-   * \param alpha variable to interpolate.
-   */
-  T interpolate(const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 1>::value_type, GALS::CPU::Grid<T, 1>::dim> &grid,
-                const typename GALS::CPU::Grid<T, 1>::position_type &x_interp,
-                const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha);
-
-  /*! Interpolate scalar field.
-   *
-   * \param x_interp interpolation points.
-   * \param alpha variable to interpolate.
-   * \param alpha_interpolated interpolated values are written to this variable.
-   */
-  void compute(const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, typename GALS::CPU::Grid<T, 1>::position_type> &x_interp,
-               const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha,
-               GALS::CPU::Array<T_GRID, T> &alpha_interpolated);
-
   /*! Overload operator to compute hermite interpolation of a scalar field.
+   *
+   * This is a placeholder function to avoid compilation error.
    *
    * \param x_interp interpolation points.
    * \param alpha variable to interpolate.
@@ -231,8 +214,78 @@ class Hermite<T, GALS::CPU::Grid<T, 1>>
       const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha,
       GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha_interpolated)
   {
-    compute(x_interp, alpha, alpha_interpolated);
+    GALS_FUNCTION_NOT_IMPLEMENTED();
   }
 };
+
+/*! \class Hermite
+ *
+ * Piece-wise hermite interpolation for 2D.
+ */
+// Template specialized for 2D
+template <typename T>
+class Hermite<T, GALS::CPU::Grid<T, 2>>
+{
+ public:
+  using value_type = T;
+  using T_GRID = GALS::CPU::Grid<T, 2>;
+
+  /*! Default constructor
+   */
+  Hermite(){};
+
+  /*! Destructor
+   */
+  ~Hermite(){};
+
+  /*! Piece-wise hermite interpolation.
+   *
+   * \param grid reference to grid.
+   * \param x_interp position of a point where interpolation need to be performed.
+   * \param levelset levelset field to interpolate.
+   * \param use_gradient_limiting true/false
+   */
+  CPU::InterpolatedFields<CPU::Vec3<T>> interpolate(
+      const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 2>::value_type, GALS::CPU::Grid<T, 2>::dim> &grid,
+      const typename GALS::CPU::Grid<T, 2>::position_type &x_interp,
+      const CPU::Levelset<GALS::CPU::Grid<T, 2>, T> &levelset, const bool use_gradient_limiting = false);
+
+  /*! Interpolate scalar field.
+   *
+   * \param x_interp interpolation points.
+   * \param levelset levelset field to interpolate.
+   */
+  void compute(const GALS::CPU::Array<GALS::CPU::Grid<T, 2>, typename GALS::CPU::Grid<T, 2>::position_type> &x_interp,
+               CPU::Levelset<GALS::CPU::Grid<T, 2>, T> &levelset);
+
+  /*! Overload operator to compute hermite interpolation of a scalar field.
+   *
+   * \param x_interp interpolation points.
+   * \param levelset levelset field to interpolate.
+   */
+  void operator()(
+      const GALS::CPU::Array<GALS::CPU::Grid<T, 2>, typename GALS::CPU::Grid<T, 2>::position_type> &x_interp,
+      CPU::Levelset<GALS::CPU::Grid<T, 2>, T> &levelset)
+  {
+    compute(x_interp, levelset);
+  }
+
+  /*! Overload operator to compute hermite interpolation of a scalar field.
+   *
+   * This is a placeholder function to avoid compilation error.
+   *
+   * \param x_interp interpolation points.
+   * \param alpha variable to interpolate.
+   * \param alpha_interpolated interpolated values are written to this variable.
+   */
+  void operator()(
+      const GALS::CPU::Array<GALS::CPU::Grid<T, 2>, typename GALS::CPU::Grid<T, 2>::position_type> &x_interp,
+      const GALS::CPU::Array<GALS::CPU::Grid<T, 2>, T> &alpha,
+      GALS::CPU::Array<GALS::CPU::Grid<T, 2>, T> &alpha_interpolated)
+  {
+    GALS_FUNCTION_NOT_IMPLEMENTED();
+  }
+};
+
 }  // namespace INTERPOLATION
 }  // namespace GALS

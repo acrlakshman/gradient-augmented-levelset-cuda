@@ -153,6 +153,24 @@ class Levelset
    */
   const Array<T_GRID, Vec3<T>>& psiTm1() const { return m_psi_tm1; }
 
+  /*! Return phi_mixed_derivatives_tm1.
+   *
+   * \return phi_mixed_derivatives_tm1.
+   */
+  Array<T_GRID, VecN<T, T_GRID::num_mixed_derivatives>>& phiMixedDerivativesTm1()
+  {
+    return m_phi_mixed_derivatives_tm1;
+  }
+
+  /*! Return phi_mixed_derivatives_tm1.
+   *
+   * \return phi_mixed_derivatives_tm1.
+   */
+  const Array<T_GRID, VecN<T, T_GRID::num_mixed_derivatives>>& phiMixedDerivativesTm1() const
+  {
+    return m_phi_mixed_derivatives_tm1;
+  }
+
   /*! Return phi_interp_tm1.
    *
    * \return phi_interp_tm1.
@@ -185,8 +203,10 @@ class Levelset
   Array<T_GRID, T> m_phi;                                                         //! levelset field.
   Array<T_GRID, Vec3<T>> m_psi;                                                   //! gradient of levelset field.
   Array<T_GRID, VecN<T, T_GRID::num_mixed_derivatives>> m_phi_mixed_derivatives;  //! Mixed derivatives of phi.
-  Array<T_GRID, T> m_phi_tm1;               //! levelset field at previous time step.
-  Array<T_GRID, Vec3<T>> m_psi_tm1;         //! gradient of levelset field at previous time step.
+  Array<T_GRID, T> m_phi_tm1;        //! levelset field at previous time step.
+  Array<T_GRID, Vec3<T>> m_psi_tm1;  //! gradient of levelset field at previous time step.
+  Array<T_GRID, VecN<T, T_GRID::num_mixed_derivatives>>
+      m_phi_mixed_derivatives_tm1;          //! Mixed derivatives of phi at previous time step.
   Array<T_GRID, T> m_phi_interp_tm1;        //! interpolated levelset field at previous time step.
   Array<T_GRID, Vec3<T>> m_psi_interp_tm1;  //! interpolated gradient of levelset field at previous time step.
 };

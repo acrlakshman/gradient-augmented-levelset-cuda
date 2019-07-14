@@ -37,7 +37,7 @@ template <typename T>
 GALS::CPU::InterpolatedFields<GALS::CPU::Vec3<T>> GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 1>>::interpolate(
     const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 1>::value_type, GALS::CPU::Grid<T, 1>::dim> &grid,
     const typename GALS::CPU::Grid<T, 1>::position_type &x_interp,
-    const GALS::CPU::Levelset<GALS::CPU::Grid<T, 1>, T> &levelset)
+    const GALS::CPU::Levelset<GALS::CPU::Grid<T, 1>, T> &levelset, const bool use_gradient_limiting)
 {
   GALS::CPU::InterpolatedFields<GALS::CPU::Vec3<T>> hermite_fields;
 
@@ -56,7 +56,7 @@ GALS::CPU::InterpolatedFields<GALS::CPU::Vec3<T>> GALS::INTERPOLATION::Hermite<T
 
   const ControlPoints<T> &control_points = GALS::INTERPOLATION::get_control_points(
       levelset.phiTm1()(base_node_id), levelset.psiTm1()(base_node_id)[axis], levelset.phiTm1()(base_node_id_p1),
-      levelset.psiTm1()(base_node_id_p1)[axis], dx[axis]);
+      levelset.psiTm1()(base_node_id_p1)[axis], dx[axis], use_gradient_limiting);
 
   hermite_fields.phi_interpolated = control_points.c_30 * B0(eta) + control_points.c_21 * B1(eta) +
                                     control_points.c_12 * B2(eta) + control_points.c_03 * B3(eta);
@@ -101,62 +101,6 @@ void GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 1>>::compute(
         levelset.phiInterpTm1()(i, j, k) = hermite_fields.phi_interpolated;
         levelset.psiInterpTm1()(i, j, k) = hermite_fields.psi_interpolated;
       }
-}
-
-template <typename T>
-T GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 1>>::interpolate(
-    const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 1>::value_type, GALS::CPU::Grid<T, 1>::dim> &grid,
-    const typename GALS::CPU::Grid<T, 1>::position_type &x_interp,
-    const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha)
-{
-  GALS_FUNCTION_NOT_IMPLEMENTED("hermite-1d.cc: interpolate(...) with alpha as input.")
-  typedef GALS::CPU::Grid<T, 1> T_GRID;
-
-  const int dim = T_GRID::dim;
-  const auto &axis_vectors = GALS::CPU::Grid<typename T_GRID::value_type, T_GRID::dim>::axis_vectors;
-  const GALS::CPU::Vec3<int> base_node_id = grid.baseNodeId(x_interp);
-  const GALS::CPU::Vec3<int> base_node_id_p1 = GALS::CPU::Vec3<int>(base_node_id[0] + axis_vectors(0, 0), 0, 0);
-
-  // TODO (lakshman): Update
-  const typename T_GRID::position_type x_base = grid(base_node_id);
-  const auto &one_over_dx = grid.oneOverDX();
-
-  /////
-  // const int axis = 0;
-  // T eta = (x_interp[axis] - x_base[axis]) * one_over_dx[axis];
-  // const struct ControlPoints<T> &control_points = get_control_points(
-  // alpha(base_node_id), phi_gradient_ghost(reference_index)(axis),
-  // phi_ghost(reference_index + T_INDEX::Axis_Vector(axis)),
-  // phi_gradient_ghost(reference_index + T_INDEX::Axis_Vector(axis))(axis), axis, use_gradient_limiting);
-
-  // hermite_fields.h_phi_location = control_points.c_30 * B0(eta) + control_points.c_21 * B1(eta) +
-  // control_points.c_12 * B2(eta) + control_points.c_03 * B3(eta);
-  // hermite_fields.h_phi_gradient_location(axis) =
-  //(control_points.c_30 * B0_Prime(eta) + control_points.c_21 * B1_Prime(eta) + control_points.c_12 * B2_Prime(eta) +
-  // control_points.c_03 * B3_Prime(eta)) *
-  // grid.One_Over_DX()(axis);
-  //...
-  T eta = (x_interp[0] - x_base[0]) * one_over_dx[0];
-
-  T alpha_interpolated = (1. - eta) * alpha(base_node_id) + eta * alpha(base_node_id_p1);
-
-  // TODO (lakshman): DELETE
-  // std::cout << "base_node_id = " << base_node_id << "; eta = " << eta
-  //<< "; alpha_interpolation = " << alpha_interpolated << std::endl;
-  // T xo = 0., ro = 0.5;
-  // T alpha_exact = (x_interp[0] - xo) * (x_interp[0] - xo) - ro * ro;
-  // std::cout << "error = " << fabs(alpha_interpolated - alpha_exact) << std::endl;
-
-  return alpha_interpolated;
-}
-
-template <typename T>
-void GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 1>>::compute(
-    const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, typename GALS::CPU::Grid<T, 1>::position_type> &x_interp,
-    const GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha,
-    GALS::CPU::Array<GALS::CPU::Grid<T, 1>, T> &alpha_interpolated)
-{
-  GALS_FUNCTION_NOT_IMPLEMENTED("hermite-1d.cc: compute(...) with alpha as input.")
 }
 
 template class GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 1>>;

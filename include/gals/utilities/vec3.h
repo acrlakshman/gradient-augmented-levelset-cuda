@@ -102,6 +102,34 @@ class Vec3
    */
   bool operator==(const Vec3<T> &vec) const;
 
+  /*! Subtraction operator.
+   *
+   * \param vec variable to be subtracted.
+   *
+   * \return (this - vec).
+   */
+  const Vec3<T> operator-(const Vec3<T> &vec) const;
+
+  /*! Multiplication operator.
+   *
+   * Component wise multiplication.
+   *
+   * \param vec variable to multiply.
+   *
+   * \return (this * vec).
+   */
+  const Vec3<T> operator*(const Vec3<T> &vec) const;
+
+  /*! Division operator.
+   *
+   * Component wise division.
+   *
+   * \param vec variable under division.
+   *
+   * \return (this / vec).
+   */
+  const Vec3<T> operator/(const Vec3<T> &vec) const;
+
   /*! Output operator overload.
    *
    * \param out output stream.

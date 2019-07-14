@@ -70,6 +70,7 @@ TEST(CPU, LEVELSET_1D)
   const auto& phi_mixed_derivatives = levelset.phiMixedDerivatives();
   const auto& phi_tm1 = levelset.phiTm1();
   const auto& psi_tm1 = levelset.psiTm1();
+  const auto& phi_mixed_derivatives_tm1 = levelset.phiMixedDerivativesTm1();
   const auto& phi_interp_tm1 = levelset.phiInterpTm1();
   const auto& psi_interp_tm1 = levelset.psiInterpTm1();
   auto& phi_1 = levelset.phi();
@@ -77,6 +78,47 @@ TEST(CPU, LEVELSET_1D)
   auto& phi_mixed_derivatives_1 = levelset.phiMixedDerivatives();
   auto& phi_tm1_1 = levelset.phiTm1();
   auto& psi_tm1_1 = levelset.psiTm1();
+  auto& phi_mixed_derivatives_tm1_1 = levelset.phiMixedDerivativesTm1();
+  auto& phi_interp_tm1_1 = levelset.phiInterpTm1();
+  auto& psi_interp_tm1_1 = levelset.psiInterpTm1();
+}
+
+/* * * * * *  TEST #2  * * * * * */
+TEST(CPU, LEVELSET_2D)
+{
+  typedef GALS::CPU::Grid<double, 2> T_GRID;
+
+  // initializing 1-D test grid.
+  GALS::CPU::Grid<double, 2> grid(10, 10, 1);
+
+  // grid generation
+  grid.generate(-1, 1, -1, 1, -1, 1);
+
+  // accessing grid details
+  const auto mask = grid.getMask();
+  const int pad = grid.getPadding();
+  const auto num_cells = grid.numCells();
+
+  // initializing 1-D scalar array
+  GALS::CPU::Levelset<T_GRID, double> levelset(grid);
+  levelset.print();
+
+  // Test getters.
+  const auto& grid_levelset = levelset.grid();
+  const auto& phi = levelset.phi();
+  const auto& psi = levelset.psi();
+  const auto& phi_mixed_derivatives = levelset.phiMixedDerivatives();
+  const auto& phi_tm1 = levelset.phiTm1();
+  const auto& psi_tm1 = levelset.psiTm1();
+  const auto& phi_mixed_derivatives_tm1 = levelset.phiMixedDerivativesTm1();
+  const auto& phi_interp_tm1 = levelset.phiInterpTm1();
+  const auto& psi_interp_tm1 = levelset.psiInterpTm1();
+  auto& phi_1 = levelset.phi();
+  auto& psi_1 = levelset.psi();
+  auto& phi_mixed_derivatives_1 = levelset.phiMixedDerivatives();
+  auto& phi_tm1_1 = levelset.phiTm1();
+  auto& psi_tm1_1 = levelset.psiTm1();
+  auto& phi_mixed_derivatives_tm1_1 = levelset.phiMixedDerivativesTm1();
   auto& phi_interp_tm1_1 = levelset.phiInterpTm1();
   auto& psi_interp_tm1_1 = levelset.psiInterpTm1();
 }

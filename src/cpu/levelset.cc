@@ -41,6 +41,7 @@ GALS::CPU::Levelset<T_GRID, T>::Levelset(const T_GRID& grid)
       m_phi_mixed_derivatives(grid),
       m_phi_tm1(grid),
       m_psi_tm1(grid),
+      m_phi_mixed_derivatives_tm1(grid),
       m_phi_interp_tm1(grid),
       m_psi_interp_tm1(grid)
 {
@@ -58,5 +59,5 @@ void GALS::CPU::Levelset<T_GRID, T>::print()
 }
 
 template class GALS::CPU::Levelset<GALS::CPU::Grid<double, 1>, double>;
-// template class GALS::CPU::Levelset<GALS::CPU::Grid<double, 2>, double>;
+template class GALS::CPU::Levelset<GALS::CPU::Grid<double, 2>, double>;
 // template class GALS::CPU::Levelset<GALS::CPU::Grid<double, 3>, double>;
