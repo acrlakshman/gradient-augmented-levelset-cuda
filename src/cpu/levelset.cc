@@ -60,4 +60,4 @@ void GALS::CPU::Levelset<T_GRID, T>::print()
 
 template class GALS::CPU::Levelset<GALS::CPU::Grid<double, 1>, double>;
 template class GALS::CPU::Levelset<GALS::CPU::Grid<double, 2>, double>;
-// template class GALS::CPU::Levelset<GALS::CPU::Grid<double, 3>, double>;
+template class GALS::CPU::Levelset<GALS::CPU::Grid<double, 3>, double>;

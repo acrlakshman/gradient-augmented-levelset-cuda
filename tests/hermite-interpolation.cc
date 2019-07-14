@@ -313,3 +313,191 @@ TEST(CPU, INTERPOLATION_HERMITE_DOUBLE_2D)
   // for (int i = 0; i < nx.size(); ++i) std::cout << "\tl1_psix[" << i << "]: " << l1_psix[i] << std::endl;
   // for (int i = 0; i < nx.size(); ++i) std::cout << "\tl1_psiy[" << i << "]: " << l1_psiy[i] << std::endl;
 }
+
+/********************* Testing 3D ***********************/
+
+static Errors test_threed(const int nx, const int ny, const int nz)
+{
+  auto threed_exp_circle = [](double x, double y, double z, double xo, double yo, double zo, double ro) {
+    return exp((x - xo) * (x - xo) + (y - yo) * (y - yo) + (z - zo) * (z - zo) - ro * ro);
+  };
+  auto threed_exp_circle_grad_x = [](double x, double y, double z, double xo, double yo, double zo, double ro) {
+    return 2 * (x - xo) * exp((x - xo) * (x - xo) + (y - yo) * (y - yo) + (z - zo) * (z - zo) - ro * ro);
+  };
+  auto threed_exp_circle_grad_y = [](double x, double y, double z, double xo, double yo, double zo, double ro) {
+    return 2 * (y - yo) * exp((x - xo) * (x - xo) + (y - yo) * (y - yo) + (z - zo) * (z - zo) - ro * ro);
+  };
+  auto threed_exp_circle_grad_z = [](double x, double y, double z, double xo, double yo, double zo, double ro) {
+    return 2 * (z - zo) * exp((x - xo) * (x - xo) + (y - yo) * (y - yo) + (z - zo) * (z - zo) - ro * ro);
+  };
+  auto threed_exp_circle_grad_xy = [](double x, double y, double z, double xo, double yo, double zo, double ro) {
+    return 4 * (x - xo) * (y - yo) * exp((x - xo) * (x - xo) + (y - yo) * (y - yo) + (z - zo) * (z - zo) - ro * ro);
+  };
+  auto threed_exp_circle_grad_yz = [](double x, double y, double z, double xo, double yo, double zo, double ro) {
+    return 4 * (y - yo) * (z - zo) * exp((x - xo) * (x - xo) + (y - yo) * (y - yo) + (z - zo) * (z - zo) - ro * ro);
+  };
+  auto threed_exp_circle_grad_zx = [](double x, double y, double z, double xo, double yo, double zo, double ro) {
+    return 4 * (x - xo) * (z - zo) * exp((x - xo) * (x - xo) + (y - yo) * (y - yo) + (z - zo) * (z - zo) - ro * ro);
+  };
+  auto threed_exp_circle_grad_xyz = [](double x, double y, double z, double xo, double yo, double zo, double ro) {
+    return 8 * (x - xo) * (y - yo) * (z - zo) *
+           exp((x - xo) * (x - xo) + (y - yo) * (y - yo) + (z - zo) * (z - zo) - ro * ro);
+  };
+
+  // scalar array on 2D grid.
+  GALS::CPU::Grid<double, 3> grid(nx, ny, nz);
+  grid.generate(-1, 1, -1, 1, -1, 1);
+  GALS::CPU::Levelset<GALS::CPU::Grid<double, 3>, double> levelset(grid);
+
+  const auto mask = grid.getMask();
+  const int pad = grid.getPadding();
+  const auto num_cells = grid.numCells();
+
+  int i_min = -pad * mask[0];
+  int j_min = -pad * mask[1];
+  int k_min = -pad * mask[2];
+  int i_max = num_cells[0] + pad * mask[0];
+  int j_max = num_cells[1] + pad * mask[1];
+  int k_max = num_cells[2] + pad * mask[2];
+
+  double xo = 0., yo = 0., zo = 0., ro = 0.5;
+  for (int i = i_min; i < i_max; ++i)
+    for (int j = j_min; j < j_max; ++j)
+      for (int k = k_min; k < k_max; ++k) {
+        levelset.phiTm1()(i, j, k) =
+            threed_exp_circle(grid(i, j, k)[0], grid(i, j, k)[1], grid(i, j, k)[2], xo, yo, zo, ro);
+        levelset.phi()(i, j, k) = levelset.phiTm1()(i, j, k);
+
+        levelset.psiTm1()(i, j, k)[0] =
+            threed_exp_circle_grad_x(grid(i, j, k)[0], grid(i, j, k)[1], grid(i, j, k)[2], xo, yo, zo, ro);
+        levelset.psi()(i, j, k)[0] = levelset.psiTm1()(i, j, k)[0];
+
+        levelset.psiTm1()(i, j, k)[1] =
+            threed_exp_circle_grad_y(grid(i, j, k)[0], grid(i, j, k)[1], grid(i, j, k)[2], xo, yo, zo, ro);
+        levelset.psi()(i, j, k)[1] = levelset.psiTm1()(i, j, k)[1];
+
+        levelset.psiTm1()(i, j, k)[2] =
+            threed_exp_circle_grad_z(grid(i, j, k)[0], grid(i, j, k)[1], grid(i, j, k)[2], xo, yo, zo, ro);
+        levelset.psi()(i, j, k)[2] = levelset.psiTm1()(i, j, k)[2];
+
+        levelset.phiMixedDerivativesTm1()(i, j, k)[0] =
+            threed_exp_circle_grad_xy(grid(i, j, k)[0], grid(i, j, k)[1], grid(i, j, k)[2], xo, yo, zo, ro);
+        levelset.phiMixedDerivatives()(i, j, k)[0] = levelset.phiMixedDerivativesTm1()(i, j, k)[0];
+
+        levelset.phiMixedDerivativesTm1()(i, j, k)[1] =
+            threed_exp_circle_grad_yz(grid(i, j, k)[0], grid(i, j, k)[1], grid(i, j, k)[2], xo, yo, zo, ro);
+        levelset.phiMixedDerivatives()(i, j, k)[1] = levelset.phiMixedDerivativesTm1()(i, j, k)[1];
+
+        levelset.phiMixedDerivativesTm1()(i, j, k)[2] =
+            threed_exp_circle_grad_zx(grid(i, j, k)[0], grid(i, j, k)[1], grid(i, j, k)[2], xo, yo, zo, ro);
+        levelset.phiMixedDerivatives()(i, j, k)[2] = levelset.phiMixedDerivativesTm1()(i, j, k)[2];
+
+        levelset.phiMixedDerivativesTm1()(i, j, k)[3] =
+            threed_exp_circle_grad_xyz(grid(i, j, k)[0], grid(i, j, k)[1], grid(i, j, k)[2], xo, yo, zo, ro);
+        levelset.phiMixedDerivatives()(i, j, k)[3] = levelset.phiMixedDerivativesTm1()(i, j, k)[3];
+
+        // std::cout << "grid(" << i << ", " << j << ", " << k << ") = " << grid(i, j, k) << "; levelset.phiTm1()(" << i
+        //<< ", " << j << ", " << k << ") = " << levelset.phiTm1()(i, j, k) << std::endl;
+      }
+
+  // Create interpolating points.
+  GALS::CPU::Grid<double, 3> grid_interp(11, 11, 11);
+  grid_interp.generate(-0.9, 0.9, -0.9, 0.9, -0.9, 0.9);
+  GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::Vec3<double>> x_interp(grid_interp);
+  for (int i = 0; i < grid_interp.numCells()[0]; ++i)
+    for (int j = 0; j < grid_interp.numCells()[1]; ++j)
+      for (int k = 0; k < grid_interp.numCells()[2]; ++k) {
+        x_interp(i, j, k)[0] = grid_interp(i, j, k)[0];
+        x_interp(i, j, k)[1] = grid_interp(i, j, k)[1];
+        x_interp(i, j, k)[2] = grid_interp(i, j, k)[2];
+        // std::cout << "x_interp(" << i << ", " << j << ", " << k << ") = " << x_interp(i, j, k) << std::endl;
+      }
+
+  GALS::CPU::Interpolate<double, GALS::CPU::Grid<double, 3>,
+                         GALS::INTERPOLATION::Hermite<double, GALS::CPU::Grid<double, 3>>>::compute(x_interp, levelset);
+
+  // Compute error.
+  Errors errs;
+
+  for (int i = 0; i < x_interp.grid().numCells()[0]; ++i)
+    for (int j = 0; j < x_interp.grid().numCells()[1]; ++j)
+      for (int k = 0; k < x_interp.grid().numCells()[2]; ++k) {
+        auto levelset_interp = levelset.phiInterpTm1()(i, j, k);
+        auto levelset_exact =
+            threed_exp_circle(x_interp(i, j, k)[0], x_interp(i, j, k)[1], x_interp(i, j, k)[2], xo, yo, zo, ro);
+
+        errs.l1_phi += fabs(levelset_interp - levelset_exact);
+
+        auto psix_interp = levelset.psiInterpTm1()(i, j, k)[0];
+        auto psix_exact =
+            threed_exp_circle_grad_x(x_interp(i, j, k)[0], x_interp(i, j, k)[1], x_interp(i, j, k)[2], xo, yo, zo, ro);
+
+        auto psiy_interp = levelset.psiInterpTm1()(i, j, k)[1];
+        auto psiy_exact =
+            threed_exp_circle_grad_y(x_interp(i, j, k)[0], x_interp(i, j, k)[1], x_interp(i, j, k)[2], xo, yo, zo, ro);
+
+        auto psiz_interp = levelset.psiInterpTm1()(i, j, k)[2];
+        auto psiz_exact =
+            threed_exp_circle_grad_z(x_interp(i, j, k)[0], x_interp(i, j, k)[1], x_interp(i, j, k)[2], xo, yo, zo, ro);
+
+        errs.l1_psi[0] += fabs(psix_interp - psix_exact);
+        errs.l1_psi[1] += fabs(psiy_interp - psiy_exact);
+        errs.l1_psi[2] += fabs(psiz_interp - psiz_exact);
+
+        // std::cout << "x_interp(" << i << ", " << j << ", " << k << ") = " << x_interp(i, j, k) << std::endl
+        //<< "\tlevelset.phiInterpTm1()(" << i << ", " << j << ", " << k
+        //<< ") = " << levelset.phiInterpTm1()(i, j, k) << "; levelset_exact"
+        //<< " = " << levelset_exact << std::endl
+        //<< "\tlevelset.psiInterpTm1()(" << i << ", " << j << ", " << k
+        //<< ") = " << levelset.psiInterpTm1()(i, j, k) << std::endl
+        //<< "\tpsi_exact"
+        //<< " = " << psix_exact << ", " << psiy_exact << std::endl;
+      }
+
+  errs.l1_phi /= x_interp.grid().totalCells();
+  errs.l1_psi[0] /= x_interp.grid().totalCells();
+  errs.l1_psi[1] /= x_interp.grid().totalCells();
+  errs.l1_psi[2] /= x_interp.grid().totalCells();
+
+  return errs;
+}
+
+TEST(CPU, INTERPOLATION_HERMITE_DOUBLE_3D)
+{
+  std::vector<int> nx = {11, 21, 41, 81, 161};
+  std::vector<int> ny = {11, 21, 41, 81, 161};
+  std::vector<int> nz = {11, 21, 41, 81, 161};
+
+  // These reference values are obtained from matlab.
+  // TODO (obtain reference values from matlab).
+  // std::vector<double> l1_phi_ref = {193.196907657978e-006, 11.2808113414184e-006, 708.076798341652e-009,
+  // 38.9989844917323e-009, 2.66600931322065e-009};
+  // std::vector<double> l1_psix_ref = {715.246551139715e-006, 176.408187501144e-006, 28.8739250246707e-006,
+  // 3.37235914274825e-006, 479.180656372292e-009};
+  // std::vector<double> l1_psiy_ref = {715.246551140005e-006, 176.408187502064e-006, 28.8739250235467e-006,
+  // 3.37235914080582e-006, 479.180654183501e-009};
+
+  std::vector<double> l1_phi(nx.size());
+  std::vector<double> l1_psix(nx.size());
+  std::vector<double> l1_psiy(nx.size());
+  std::vector<double> l1_psiz(nx.size());
+
+  for (int i = 0; i < nx.size(); ++i) {
+    auto errs = test_threed(nx[i], ny[i], nz[i]);
+    l1_phi[i] = errs.l1_phi;
+    l1_psix[i] = errs.l1_psi[0];
+    l1_psiy[i] = errs.l1_psi[1];
+    l1_psiz[i] = errs.l1_psi[2];
+
+    // EXPECT_TRUE(fabs(l1_phi[i] - l1_phi_ref[i]) < 1e-12);
+    // EXPECT_TRUE(fabs(l1_psix[i] - l1_psix_ref[i]) < 1e-12);
+    // EXPECT_TRUE(fabs(l1_psiy[i] - l1_psiy_ref[i]) < 1e-12);
+  }
+
+  // Debug
+  std::cout << "Hermite interpolation 3D unit test" << std::endl;
+  for (int i = 0; i < nx.size(); ++i) std::cout << "\tl1_phi[" << i << "]: " << l1_phi[i] << std::endl;
+  for (int i = 0; i < nx.size(); ++i) std::cout << "\tl1_psix[" << i << "]: " << l1_psix[i] << std::endl;
+  for (int i = 0; i < nx.size(); ++i) std::cout << "\tl1_psiy[" << i << "]: " << l1_psiy[i] << std::endl;
+  for (int i = 0; i < nx.size(); ++i) std::cout << "\tl1_psiz[" << i << "]: " << l1_psiz[i] << std::endl;
+}

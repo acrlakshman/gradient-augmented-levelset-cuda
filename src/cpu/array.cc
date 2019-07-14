@@ -123,7 +123,7 @@ template class GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::VecN<doub
 template class GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::VecN<double, 1>>;
 template class GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::VecN<double, 2>>;
 template class GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::VecN<double, 2>>;
-// template class GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::VecN<double, 4>>;
+template class GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::VecN<double, 4>>;
 template class GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::Mat3<double>>;
 template class GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::Mat3<double>>;
 template class GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::Mat3<double>>;
