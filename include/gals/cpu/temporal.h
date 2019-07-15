@@ -31,6 +31,7 @@
 
 #pragma once
 
+#include "gals/cpu/levelset.h"
 #include "gals/cpu/temporal-schemes/euler.h"
 #include "gals/utilities/array.h"
 #include "gals/utilities/grid.h"
@@ -39,9 +40,9 @@ namespace GALS
 {
 namespace CPU
 {
-/*! \class Interpolate
+/*! \class Temporal
  *
- * Class to perform interpolation. Default interpolation scheme is set to GALS::TEMPORAL_SCHEMES::Euler<...>.
+ * Class to perform temporal update. Default temporal scheme is set to GALS::TEMPORAL_SCHEMES::Euler<...>.
  */
 template <typename T, typename T_GRID, typename TEMPORAL_SCHEME = GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>>
 class Temporal
@@ -62,12 +63,10 @@ class Temporal
    * NOTE: Ghost cells are not updated during this step.
    *
    * \param dt time step.
-   * \param alpha variable to advect in time.
    * \param convection convection term.
-   * \param alpha_new values after advection.
+   * \param levelset levelset function that needs to be advected.
    */
-  static void compute(const T dt, const Array<T_GRID, T> &alpha, const Array<T_GRID, T> &convection,
-                      Array<T_GRID, T> &alpha_new);
+  static void compute(const T dt, const Array<T_GRID, T> &convection, GALS::CPU::Levelset<T_GRID, T> &levelset);
 };
 
 }  // namespace CPU

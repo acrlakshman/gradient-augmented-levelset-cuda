@@ -44,16 +44,17 @@ GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>::~Euler()
 }
 
 template <typename T, typename T_GRID>
-void GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>::compute(const T dt, const GALS::CPU::Array<T_GRID, T> &alpha,
-                                                       const GALS::CPU::Array<T_GRID, T> &convection,
-                                                       GALS::CPU::Array<T_GRID, T> &alpha_new)
+void GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>::compute(const T dt, const GALS::CPU::Array<T_GRID, T> &convection,
+                                                       GALS::CPU::Levelset<T_GRID, T> &levelset)
 {
-  const GALS::CPU::Vec3<int> num_cells = alpha.numCells();
+  const auto &phi_tm1 = levelset.phiTm1();
+  auto &phi = levelset.phi();
+  const GALS::CPU::Vec3<int> num_cells = phi.numCells();
 
   for (int i = 0; i < num_cells[0]; ++i)
     for (int j = 0; j < num_cells[1]; ++j)
       for (int k = 0; k < num_cells[2]; ++k) {
-        alpha_new(i, j, k) = alpha(i, j, k) - dt * convection(i, j, k);
+        phi(i, j, k) = phi_tm1(i, j, k) - dt * convection(i, j, k);
       }
 }
 

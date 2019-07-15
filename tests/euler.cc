@@ -50,9 +50,13 @@ TEST(CPU, TEMPORAL_SCHEME_EULER)
   GALS::CPU::Array<T_GRID, T> alpha(grid);
   GALS::CPU::Array<T_GRID, T> convection(grid);
   GALS::CPU::Array<T_GRID, T> alpha_new(grid);
+  GALS::CPU::Levelset<T_GRID, T> levelset(grid);
+
+  levelset.phi() = alpha_new;
+  levelset.phiTm1() = alpha;
 
   // TODO: Complete test case.
-  GALS::CPU::Temporal<T, T_GRID, GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>>::compute(dt, alpha, convection, alpha_new);
+  GALS::CPU::Temporal<T, T_GRID, GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>>::compute(dt, convection, levelset);
 
   // For test converage.
   GALS::CPU::Temporal<T, T_GRID> temporal_scheme;
