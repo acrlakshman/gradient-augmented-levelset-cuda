@@ -31,6 +31,7 @@
 
 #pragma once
 
+#include "gals/cpu/levelset.h"
 #include "gals/utilities/array.h"
 #include "gals/utilities/grid.h"
 
@@ -58,31 +59,27 @@ class Euler
 
   /*! Advect in time.
    *
-   * \frac{\alpha^{n+1} - \alpha^n}{dt} + convection = 0.
+   * \f$\frac{\phi^{n+1} - \phi^n}{dt} + convection = 0.\f$
    * Ghost cells are not updated during this step.
    *
    * \param dt time step.
-   * \param alpha variable to advect in time.
    * \param convection convection term.
-   * \param alpha_new values after advection.
+   * \param levelset levelset function that needs to be advected.
    */
-  void compute(const T dt, const CPU::Array<T_GRID, T> &alpha, const CPU::Array<T_GRID, T> &convection,
-               CPU::Array<T_GRID, T> &alpha_new);
+  void compute(const T dt, const CPU::Array<T_GRID, T> &convection, GALS::CPU::Levelset<T_GRID, T> &levelset);
 
   /*! Advect in time.
    *
-   * \frac{\alpha^{n+1} - \alpha^n}{dt} + convection = 0.
+   * \f$\frac{\phi^{n+1} - \phi^n}{dt} + convection = 0.\f$
    * Ghost cells are not updated during this step.
    *
    * \param dt time step.
-   * \param alpha variable to advect in time.
    * \param convection convection term.
-   * \param alpha_new values after advection.
+   * \param levelset levelset function that needs to be advected.
    */
-  void operator()(const T dt, const CPU::Array<T_GRID, T> &alpha, const CPU::Array<T_GRID, T> &convection,
-                  CPU::Array<T_GRID, T> &alpha_new)
+  void operator()(const T dt, const CPU::Array<T_GRID, T> &convection, GALS::CPU::Levelset<T_GRID, T> &levelset)
   {
-    this->compute(dt, alpha, convection, alpha_new);
+    this->compute(dt, convection, levelset);
   }
 };
 

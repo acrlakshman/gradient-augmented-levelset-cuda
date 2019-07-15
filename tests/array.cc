@@ -94,4 +94,9 @@ TEST(CPU, ARRAY)
 
   levelset(GALS::CPU::Vec3<int>(1, 0, 0)) = -2.2;
   paranthesis_access(levelset);
+
+  const auto &data_levelset = levelset.data();
+  GALS::CPU::Array<GALS::CPU::Grid<double, 1>, double> levelset_2(grid);
+  levelset_2 = levelset;
+  paranthesis_access(levelset_2);
 }

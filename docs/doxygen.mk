@@ -169,9 +169,11 @@ STRIP_FROM_PATH        = ${SRC_DIR} \
 								 ${INCLUDE_DIR}/gals/cpu \
 								 ${INCLUDE_DIR}/gals/cpu/gradient \
 								 ${INCLUDE_DIR}/gals/cpu/interpolation \
+								 ${INCLUDE_DIR}/gals/cpu/temporal-schemes \
                          ${SRC_DIR}/cpu \
                          ${SRC_DIR}/cpu/gradient \
                          ${SRC_DIR}/cpu/interpolation \
+                         ${SRC_DIR}/cpu/temporal-schemes \
                          ${SRC_DIR}/cpu/input-parser \
                          ${SRC_DIR}/cpu/input-fields \
                          ${SRC_DIR}/cpu/analytical-fields
@@ -828,7 +830,9 @@ INPUT                  = ${DOCS_DIR}/pages \
 								 ${INCLUDE_DIR}/gals/cpu \
 								 ${INCLUDE_DIR}/gals/cpu/gradient \
 								 ${INCLUDE_DIR}/gals/cpu/interpolation \
+								 ${INCLUDE_DIR}/gals/cpu/temporal-schemes \
                          ${SRC_DIR}/cpu/interpolation \
+                         ${SRC_DIR}/cpu/temporal-schemes \
                          ${SRC_DIR}/cpu/input-parser \
                          ${SRC_DIR}/cpu/input-fields \
                          ${SRC_DIR}/cpu/analytical-fields \
