@@ -464,9 +464,10 @@ static Errors test_threed(const int nx, const int ny, const int nz)
 
 TEST(CPU, INTERPOLATION_HERMITE_DOUBLE_3D)
 {
-  std::vector<int> nx = {11, 21, 41, 81, 161};
-  std::vector<int> ny = {11, 21, 41, 81, 161};
-  std::vector<int> nz = {11, 21, 41, 81, 161};
+  // Initially this test was conducted for 81^3, 161^3 grids too, however removed to reduce test suite run time.
+  std::vector<int> nx = {11, 21, 41};
+  std::vector<int> ny = {11, 21, 41};
+  std::vector<int> nz = {11, 21, 41};
 
   // These reference values are obtained from matlab.
   // TODO (obtain reference values from matlab).

@@ -31,49 +31,60 @@
 
 #pragma once
 
-#include <math.h>
-#include <string.h>
+#include "gals/utilities/array.h"
+#include "gals/utilities/grid.h"
 
 namespace GALS
 {
-#ifndef BUILD_TESTS
-#define GALS_FUNCTION_NOT_IMPLEMENTED(var)                        \
-  std::cout << "FUNCTION_NOT_IMPLEMENTED: " << #var << std::endl; \
-  exit(0);
-#else
-#define GALS_FUNCTION_NOT_IMPLEMENTED(var) std::cout << "FUNCTION_NOT_IMPLEMENTED: " << #var << std::endl;
-#endif
-
-static double VSMALL = 1e-10;
-static const double one_third = 1. / 3.;
-static const double two_thirds = 2. / 3.;
-
-/*! Check for equality within a tolerance.
+namespace TEMPORAL_SCHEMES
+{
+/*! \class Euler
  *
- * Tolerance is by default 1e-10.
- *
- * \param a first argument
- * \param b second argument
- *
- * \return number of elements.
+ * Euler scheme for temporal update.
  */
-static bool is_equal(double a, double b) { return fabs(a - b) <= VSMALL; }
-
-//! Check for equality between integers.
-static bool is_equal(int a, int b) { return a == b; }
-
-//! Compute square.
-template <typename T>
-static T sqr(T a)
+template <typename T, typename T_GRID>
+class Euler
 {
-  return a * a;
-}
+ public:
+  using value_type = T;
 
-//! Compute cube.
-template <typename T>
-static T cube(T a)
-{
-  return a * a * a;
-}
+  /*! Default constructor
+   */
+  Euler();
 
+  /*! Destructor
+   */
+  ~Euler();
+
+  /*! Advect in time.
+   *
+   * \frac{\alpha^{n+1} - \alpha^n}{dt} + convection = 0.
+   * Ghost cells are not updated during this step.
+   *
+   * \param dt time step.
+   * \param alpha variable to advect in time.
+   * \param convection convection term.
+   * \param alpha_new values after advection.
+   */
+  void compute(const T dt, const CPU::Array<T_GRID, T> &alpha, const CPU::Array<T_GRID, T> &convection,
+               CPU::Array<T_GRID, T> &alpha_new);
+
+  /*! Advect in time.
+   *
+   * \frac{\alpha^{n+1} - \alpha^n}{dt} + convection = 0.
+   * Ghost cells are not updated during this step.
+   *
+   * \param dt time step.
+   * \param alpha variable to advect in time.
+   * \param convection convection term.
+   * \param alpha_new values after advection.
+   */
+  void operator()(const T dt, const CPU::Array<T_GRID, T> &alpha, const CPU::Array<T_GRID, T> &convection,
+                  CPU::Array<T_GRID, T> &alpha_new)
+  {
+    this->compute(dt, alpha, convection, alpha_new);
+  }
+};
+
+}  // namespace TEMPORAL_SCHEMES
 }  // namespace GALS

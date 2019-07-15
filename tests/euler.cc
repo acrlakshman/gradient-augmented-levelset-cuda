@@ -29,51 +29,31 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "gals/cpu/temporal.h"
+#include "gals/utilities/array.h"
+#include "gals/utilities/utilities.h"
+
+#include <gtest/gtest.h>
 
 #include <math.h>
-#include <string.h>
+#include <iostream>
 
-namespace GALS
+TEST(CPU, TEMPORAL_SCHEME_EULER)
 {
-#ifndef BUILD_TESTS
-#define GALS_FUNCTION_NOT_IMPLEMENTED(var)                        \
-  std::cout << "FUNCTION_NOT_IMPLEMENTED: " << #var << std::endl; \
-  exit(0);
-#else
-#define GALS_FUNCTION_NOT_IMPLEMENTED(var) std::cout << "FUNCTION_NOT_IMPLEMENTED: " << #var << std::endl;
-#endif
+  using T = double;
+  using T_GRID = GALS::CPU::Grid<T, 1>;
+  // scalar array on 1D grid.
+  T_GRID grid(10, 1, 1);
+  grid.generate(-1, 1, -1, 1, -1, 1);
 
-static double VSMALL = 1e-10;
-static const double one_third = 1. / 3.;
-static const double two_thirds = 2. / 3.;
+  const T dt = 1.;
+  GALS::CPU::Array<T_GRID, T> alpha(grid);
+  GALS::CPU::Array<T_GRID, T> convection(grid);
+  GALS::CPU::Array<T_GRID, T> alpha_new(grid);
 
-/*! Check for equality within a tolerance.
- *
- * Tolerance is by default 1e-10.
- *
- * \param a first argument
- * \param b second argument
- *
- * \return number of elements.
- */
-static bool is_equal(double a, double b) { return fabs(a - b) <= VSMALL; }
+  // TODO: Complete test case.
+  GALS::CPU::Temporal<T, T_GRID, GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>>::compute(dt, alpha, convection, alpha_new);
 
-//! Check for equality between integers.
-static bool is_equal(int a, int b) { return a == b; }
-
-//! Compute square.
-template <typename T>
-static T sqr(T a)
-{
-  return a * a;
+  // For test converage.
+  GALS::CPU::Temporal<T, T_GRID> temporal_scheme;
 }
-
-//! Compute cube.
-template <typename T>
-static T cube(T a)
-{
-  return a * a * a;
-}
-
-}  // namespace GALS

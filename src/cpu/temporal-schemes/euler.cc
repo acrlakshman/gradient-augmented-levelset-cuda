@@ -29,51 +29,32 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "gals/cpu/temporal-schemes/euler.h"
 
 #include <math.h>
-#include <string.h>
 
-namespace GALS
+template <typename T, typename T_GRID>
+GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>::Euler()
 {
-#ifndef BUILD_TESTS
-#define GALS_FUNCTION_NOT_IMPLEMENTED(var)                        \
-  std::cout << "FUNCTION_NOT_IMPLEMENTED: " << #var << std::endl; \
-  exit(0);
-#else
-#define GALS_FUNCTION_NOT_IMPLEMENTED(var) std::cout << "FUNCTION_NOT_IMPLEMENTED: " << #var << std::endl;
-#endif
-
-static double VSMALL = 1e-10;
-static const double one_third = 1. / 3.;
-static const double two_thirds = 2. / 3.;
-
-/*! Check for equality within a tolerance.
- *
- * Tolerance is by default 1e-10.
- *
- * \param a first argument
- * \param b second argument
- *
- * \return number of elements.
- */
-static bool is_equal(double a, double b) { return fabs(a - b) <= VSMALL; }
-
-//! Check for equality between integers.
-static bool is_equal(int a, int b) { return a == b; }
-
-//! Compute square.
-template <typename T>
-static T sqr(T a)
-{
-  return a * a;
 }
 
-//! Compute cube.
-template <typename T>
-static T cube(T a)
+template <typename T, typename T_GRID>
+GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>::~Euler()
 {
-  return a * a * a;
 }
 
-}  // namespace GALS
+template <typename T, typename T_GRID>
+void GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>::compute(const T dt, const GALS::CPU::Array<T_GRID, T> &alpha,
+                                                       const GALS::CPU::Array<T_GRID, T> &convection,
+                                                       GALS::CPU::Array<T_GRID, T> &alpha_new)
+{
+  const GALS::CPU::Vec3<int> num_cells = alpha.numCells();
+
+  for (int i = 0; i < num_cells[0]; ++i)
+    for (int j = 0; j < num_cells[1]; ++j)
+      for (int k = 0; k < num_cells[2]; ++k) {
+        alpha_new(i, j, k) = alpha(i, j, k) - dt * convection(i, j, k);
+      }
+}
+
+template class GALS::TEMPORAL_SCHEMES::Euler<double, GALS::CPU::Grid<double, 1>>;

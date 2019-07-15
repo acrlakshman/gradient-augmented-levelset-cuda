@@ -29,51 +29,25 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "gals/cpu/temporal.h"
 
-#include <math.h>
-#include <string.h>
-
-namespace GALS
+template <typename T, typename T_GRID, typename TEMPORAL_SCHEME>
+GALS::CPU::Temporal<T, T_GRID, TEMPORAL_SCHEME>::Temporal()
 {
-#ifndef BUILD_TESTS
-#define GALS_FUNCTION_NOT_IMPLEMENTED(var)                        \
-  std::cout << "FUNCTION_NOT_IMPLEMENTED: " << #var << std::endl; \
-  exit(0);
-#else
-#define GALS_FUNCTION_NOT_IMPLEMENTED(var) std::cout << "FUNCTION_NOT_IMPLEMENTED: " << #var << std::endl;
-#endif
-
-static double VSMALL = 1e-10;
-static const double one_third = 1. / 3.;
-static const double two_thirds = 2. / 3.;
-
-/*! Check for equality within a tolerance.
- *
- * Tolerance is by default 1e-10.
- *
- * \param a first argument
- * \param b second argument
- *
- * \return number of elements.
- */
-static bool is_equal(double a, double b) { return fabs(a - b) <= VSMALL; }
-
-//! Check for equality between integers.
-static bool is_equal(int a, int b) { return a == b; }
-
-//! Compute square.
-template <typename T>
-static T sqr(T a)
-{
-  return a * a;
 }
 
-//! Compute cube.
-template <typename T>
-static T cube(T a)
+template <typename T, typename T_GRID, typename TEMPORAL_SCHEME>
+GALS::CPU::Temporal<T, T_GRID, TEMPORAL_SCHEME>::~Temporal()
 {
-  return a * a * a;
 }
 
-}  // namespace GALS
+template <typename T, typename T_GRID, typename TEMPORAL_SCHEME>
+void GALS::CPU::Temporal<T, T_GRID, TEMPORAL_SCHEME>::compute(const T dt, const GALS::CPU::Array<T_GRID, T> &alpha,
+                                                              const GALS::CPU::Array<T_GRID, T> &convection,
+                                                              GALS::CPU::Array<T_GRID, T> &alpha_new)
+{
+  TEMPORAL_SCHEME()(dt, alpha, convection, alpha_new);
+}
+
+template class GALS::CPU::Temporal<double, GALS::CPU::Grid<double, 1>,
+                                   GALS::TEMPORAL_SCHEMES::Euler<double, GALS::CPU::Grid<double, 1>>>;
