@@ -31,49 +31,44 @@
 
 #pragma once
 
-#include <math.h>
-#include <string.h>
+#include "gals/cpu/temporal-schemes/euler.h"
+#include "gals/utilities/array.h"
+#include "gals/utilities/grid.h"
 
 namespace GALS
 {
-#ifndef BUILD_TESTS
-#define GALS_FUNCTION_NOT_IMPLEMENTED(var)                        \
-  std::cout << "FUNCTION_NOT_IMPLEMENTED: " << #var << std::endl; \
-  exit(0);
-#else
-#define GALS_FUNCTION_NOT_IMPLEMENTED(var) std::cout << "FUNCTION_NOT_IMPLEMENTED: " << #var << std::endl;
-#endif
-
-static double VSMALL = 1e-10;
-static const double one_third = 1. / 3.;
-static const double two_thirds = 2. / 3.;
-
-/*! Check for equality within a tolerance.
+namespace CPU
+{
+/*! \class Interpolate
  *
- * Tolerance is by default 1e-10.
- *
- * \param a first argument
- * \param b second argument
- *
- * \return number of elements.
+ * Class to perform interpolation. Default interpolation scheme is set to GALS::TEMPORAL_SCHEMES::Euler<...>.
  */
-static bool is_equal(double a, double b) { return fabs(a - b) <= VSMALL; }
-
-//! Check for equality between integers.
-static bool is_equal(int a, int b) { return a == b; }
-
-//! Compute square.
-template <typename T>
-static T sqr(T a)
+template <typename T, typename T_GRID, typename TEMPORAL_SCHEME = GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>>
+class Temporal
 {
-  return a * a;
-}
+ public:
+  using value_type = T;
 
-//! Compute cube.
-template <typename T>
-static T cube(T a)
-{
-  return a * a * a;
-}
+  /*! Default constructor
+   */
+  Temporal();
 
+  /*! Destructor
+   */
+  ~Temporal();
+
+  /*! Advect in time.
+   *
+   * NOTE: Ghost cells are not updated during this step.
+   *
+   * \param dt time step.
+   * \param alpha variable to advect in time.
+   * \param convection convection term.
+   * \param alpha_new values after advection.
+   */
+  static void compute(const T dt, const Array<T_GRID, T> &alpha, const Array<T_GRID, T> &convection,
+                      Array<T_GRID, T> &alpha_new);
+};
+
+}  // namespace CPU
 }  // namespace GALS
