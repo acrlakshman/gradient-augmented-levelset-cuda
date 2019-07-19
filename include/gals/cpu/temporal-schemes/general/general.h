@@ -32,6 +32,8 @@
 #pragma once
 
 #include "gals/cpu/levelset.h"
+#include "gals/cpu/temporal-schemes/general/euler.h"
+#include "gals/cpu/temporal.h"
 #include "gals/utilities/array.h"
 #include "gals/utilities/grid.h"
 
@@ -39,23 +41,24 @@ namespace GALS
 {
 namespace TEMPORAL_SCHEMES
 {
-/*! \class Euler
+/*! \class General
  *
- * Euler scheme for temporal update.
+ * General scheme for temporal update.
  */
-template <typename T, typename T_GRID>
-class Euler
+template <typename TEMPORAL_SCHEME>
+class General : GALS::CPU::Temporal<General<TEMPORAL_SCHEME>>
 {
  public:
-  using value_type = T;
+  using value_type = typename TEMPORAL_SCHEME::value_type;
+  using grid_type = typename TEMPORAL_SCHEME::grid_type;
 
   /*! Default constructor
    */
-  Euler();
+  General() {}
 
   /*! Destructor
    */
-  ~Euler();
+  ~General() {}
 
   /*! Advect in time.
    *
@@ -66,7 +69,8 @@ class Euler
    * \param convection convection term.
    * \param levelset levelset function that needs to be advected.
    */
-  void compute(const T dt, const CPU::Array<T_GRID, T> &convection, GALS::CPU::Levelset<T_GRID, T> &levelset);
+  void compute(const value_type dt, const CPU::Array<grid_type, CPU::Vec3<value_type>> &velocity,
+               GALS::CPU::Levelset<grid_type, value_type> &levelset);
 
   /*! Advect in time.
    *
@@ -77,9 +81,10 @@ class Euler
    * \param convection convection term.
    * \param levelset levelset function that needs to be advected.
    */
-  void operator()(const T dt, const CPU::Array<T_GRID, T> &convection, GALS::CPU::Levelset<T_GRID, T> &levelset)
+  void operator()(const value_type dt, const CPU::Array<grid_type, CPU::Vec3<value_type>> &velocity,
+                  GALS::CPU::Levelset<grid_type, value_type> &levelset)
   {
-    this->compute(dt, convection, levelset);
+    this->compute(dt, velocity, levelset);
   }
 };
 

@@ -29,23 +29,23 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "gals/cpu/temporal-schemes/euler.h"
+#include "gals/cpu/temporal-schemes/general/euler.h"
 
 #include <math.h>
 
-template <typename T, typename T_GRID>
-GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>::Euler()
-{
-}
+// template <typename T, typename T_GRID>
+// GALS::TEMPORAL_SCHEMES::GENERAL::Euler<T, T_GRID>::Euler()
+//{
+//}
+
+// template <typename T, typename T_GRID>
+// GALS::TEMPORAL_SCHEMES::GENERAL::Euler<T, T_GRID>::~Euler()
+//{
+//}
 
 template <typename T, typename T_GRID>
-GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>::~Euler()
-{
-}
-
-template <typename T, typename T_GRID>
-void GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>::compute(const T dt, const GALS::CPU::Array<T_GRID, T> &convection,
-                                                       GALS::CPU::Levelset<T_GRID, T> &levelset)
+void GALS::TEMPORAL_SCHEMES::GENERAL::Euler<T, T_GRID>::compute(
+    const T dt, const GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>> &velocity, GALS::CPU::Levelset<T_GRID, T> &levelset)
 {
   const auto &phi_tm1 = levelset.phiTm1();
   auto &phi = levelset.phi();
@@ -54,8 +54,8 @@ void GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>::compute(const T dt, const GALS::C
   for (int i = 0; i < num_cells[0]; ++i)
     for (int j = 0; j < num_cells[1]; ++j)
       for (int k = 0; k < num_cells[2]; ++k) {
-        phi(i, j, k) = phi_tm1(i, j, k) - dt * convection(i, j, k);
+        phi(i, j, k) = phi_tm1(i, j, k) - dt * velocity(i, j, k)[0];  // FIXME
       }
 }
 
-template class GALS::TEMPORAL_SCHEMES::Euler<double, GALS::CPU::Grid<double, 1>>;
+template class GALS::TEMPORAL_SCHEMES::GENERAL::Euler<double, GALS::CPU::Grid<double, 1>>;

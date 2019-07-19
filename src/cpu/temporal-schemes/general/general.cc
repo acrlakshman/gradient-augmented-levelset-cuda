@@ -29,47 +29,30 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "gals/cpu/temporal-schemes/general/general.h"
 
-#include "gals/cpu/levelset.h"
-#include "gals/utilities/array.h"
-#include "gals/utilities/grid.h"
+// template <typename T, typename T_GRID>
+// GALS::TEMPORAL_SCHEMES::General<T, T_GRID>::General()
+//{
+//}
 
-namespace GALS
-{
-namespace CPU
-{
-/*! \class Temporal
- *
- * Class to perform temporal update. Default temporal scheme is set to GALS::TEMPORAL_SCHEMES::Euler<...>.
- */
-// template <typename T, typename T_GRID, typename TEMPORAL_SCHEME = GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>>
+// template <typename T, typename T_GRID>
+// GALS::TEMPORAL_SCHEMES::General<T, T_GRID>::~General()
+//{
+//}
+
 template <typename TEMPORAL_SCHEME>
-class Temporal
+// void GALS::TEMPORAL_SCHEMES::General<TEMPORAL_SCHEME>::compute(
+// const typename TEMPORAL_SCHEME::value_type dt,
+// const GALS::CPU::Array<typename TEMPORAL_SCHEME::grid_type, GALS::CPU::Vec3<typename TEMPORAL_SCHEME::value_type>>
+// &velocity, GALS::CPU::Levelset<typename TEMPORAL_SCHEME::grid_type, typename TEMPORAL_SCHEME::value_type> &levelset)
+void GALS::TEMPORAL_SCHEMES::General<TEMPORAL_SCHEME>::compute(
+    const value_type dt, const CPU::Array<grid_type, CPU::Vec3<value_type>> &velocity,
+    GALS::CPU::Levelset<grid_type, value_type> &levelset)
 {
- public:
-  using value_type = typename TEMPORAL_SCHEME::value_type;
-  using grid_type = typename TEMPORAL_SCHEME::grid_type;
+  TEMPORAL_SCHEME()(dt, velocity, levelset);
+}
 
-  /*! Default constructor
-   */
-  Temporal() {}
-
-  /*! Destructor
-   */
-  ~Temporal() {}
-
-  /*! Advect in time.
-   *
-   * NOTE: Ghost cells are not updated during this step.
-   *
-   * \param dt time step.
-   * \param convection convection term.
-   * \param levelset levelset function that needs to be advected.
-   */
-  static void compute(const value_type dt, const Array<grid_type, GALS::CPU::Vec3<value_type>> &velocity,
-                      GALS::CPU::Levelset<grid_type, value_type> &levelset);
-};
-
-}  // namespace CPU
-}  // namespace GALS
+// template class GALS::TEMPORAL_SCHEMES::General<double, GALS::CPU::Grid<double, 1>>;
+template class GALS::TEMPORAL_SCHEMES::General<
+    GALS::TEMPORAL_SCHEMES::GENERAL::Euler<double, GALS::CPU::Grid<double, 1>>>;

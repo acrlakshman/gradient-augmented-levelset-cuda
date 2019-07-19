@@ -30,23 +30,33 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "gals/cpu/temporal.h"
+#include "gals/cpu/temporal-schemes/general/general.h"
 
-template <typename T, typename T_GRID, typename TEMPORAL_SCHEME>
-GALS::CPU::Temporal<T, T_GRID, TEMPORAL_SCHEME>::Temporal()
+// template <typename T, typename T_GRID, typename TEMPORAL_SCHEME>
+// GALS::CPU::Temporal<T, T_GRID, TEMPORAL_SCHEME>::Temporal()
+//{
+//}
+
+// template <typename T, typename T_GRID, typename TEMPORAL_SCHEME>
+// GALS::CPU::Temporal<T, T_GRID, TEMPORAL_SCHEME>::~Temporal()
+//{
+//}
+
+// template <typename T, typename T_GRID, typename TEMPORAL_SCHEME>
+// void GALS::CPU::Temporal<T, T_GRID, TEMPORAL_SCHEME>::compute(const T dt, const GALS::CPU::Array<T_GRID, T>
+// &convection, GALS::CPU::Levelset<T_GRID, T> &levelset)
+template <typename TEMPORAL_SCHEME>
+static void compute(
+    const typename TEMPORAL_SCHEME::value_type dt,
+    const GALS::CPU::Array<typename TEMPORAL_SCHEME::grid_type, GALS::CPU::Vec3<typename TEMPORAL_SCHEME::value_type>>
+        &velocity,
+    GALS::CPU::Levelset<typename TEMPORAL_SCHEME::grid_type, typename TEMPORAL_SCHEME::value_type> &levelset)
 {
+  TEMPORAL_SCHEME()(dt, velocity, levelset);
+  // TEMPORAL_SCHEME()(dt, convection, levelset);
 }
 
-template <typename T, typename T_GRID, typename TEMPORAL_SCHEME>
-GALS::CPU::Temporal<T, T_GRID, TEMPORAL_SCHEME>::~Temporal()
-{
-}
-
-template <typename T, typename T_GRID, typename TEMPORAL_SCHEME>
-void GALS::CPU::Temporal<T, T_GRID, TEMPORAL_SCHEME>::compute(const T dt, const GALS::CPU::Array<T_GRID, T> &convection,
-                                                              GALS::CPU::Levelset<T_GRID, T> &levelset)
-{
-  TEMPORAL_SCHEME()(dt, convection, levelset);
-}
-
-template class GALS::CPU::Temporal<double, GALS::CPU::Grid<double, 1>,
-                                   GALS::TEMPORAL_SCHEMES::Euler<double, GALS::CPU::Grid<double, 1>>>;
+// template class GALS::CPU::Temporal<double, GALS::CPU::Grid<double, 1>,
+// GALS::TEMPORAL_SCHEMES::Euler<double, GALS::CPU::Grid<double, 1>>>;
+template class GALS::CPU::Temporal<
+    GALS::TEMPORAL_SCHEMES::General<GALS::TEMPORAL_SCHEMES::GENERAL::Euler<double, GALS::CPU::Grid<double, 1>>>>;

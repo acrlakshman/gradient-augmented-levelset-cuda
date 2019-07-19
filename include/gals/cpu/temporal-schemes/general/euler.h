@@ -37,39 +37,56 @@
 
 namespace GALS
 {
-namespace CPU
+namespace TEMPORAL_SCHEMES
 {
-/*! \class Temporal
+namespace GENERAL
+{
+/*! \class Euler
  *
- * Class to perform temporal update. Default temporal scheme is set to GALS::TEMPORAL_SCHEMES::Euler<...>.
+ * Euler scheme for temporal update.
  */
-// template <typename T, typename T_GRID, typename TEMPORAL_SCHEME = GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>>
-template <typename TEMPORAL_SCHEME>
-class Temporal
+template <typename T, typename T_GRID>
+class Euler
 {
  public:
-  using value_type = typename TEMPORAL_SCHEME::value_type;
-  using grid_type = typename TEMPORAL_SCHEME::grid_type;
+  using value_type = T;
+  using grid_type = T_GRID;
 
   /*! Default constructor
    */
-  Temporal() {}
+  Euler() {}
 
   /*! Destructor
    */
-  ~Temporal() {}
+  ~Euler() {}
 
   /*! Advect in time.
    *
-   * NOTE: Ghost cells are not updated during this step.
+   * \f$\frac{\phi^{n+1} - \phi^n}{dt} + U\cdot\nabla\phi = 0.\f$
+   * Ghost cells are not updated during this step.
    *
    * \param dt time step.
-   * \param convection convection term.
+   * \param velocity velocity term.
    * \param levelset levelset function that needs to be advected.
    */
-  static void compute(const value_type dt, const Array<grid_type, GALS::CPU::Vec3<value_type>> &velocity,
-                      GALS::CPU::Levelset<grid_type, value_type> &levelset);
+  void compute(const T dt, const CPU::Array<T_GRID, CPU::Vec3<T>> &velocity, GALS::CPU::Levelset<T_GRID, T> &levelset);
+
+  /*! Advect in time.
+   *
+   * \f$\frac{\phi^{n+1} - \phi^n}{dt} + U\cdot\nable\phi = 0.\f$
+   * Ghost cells are not updated during this step.
+   *
+   * \param dt time step.
+   * \param velocity velocity term.
+   * \param levelset levelset function that needs to be advected.
+   */
+  void operator()(const T dt, const CPU::Array<T_GRID, CPU::Vec3<T>> &velocity,
+                  GALS::CPU::Levelset<T_GRID, T> &levelset)
+  {
+    this->compute(dt, velocity, levelset);
+  }
 };
 
-}  // namespace CPU
+}  // namespace GENERAL
+}  // namespace TEMPORAL_SCHEMES
 }  // namespace GALS
