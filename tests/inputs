@@ -7,6 +7,10 @@ grid:
       z_min: -1.0                      # z_min
       z_max: 1.0                       # z_max
    cells: [10, 10, 10]                 # [n_x, n_y, n_z]
+velocity:
+   name: CIRCULAR                      # CIRCULAR
+   vector: [1., 0, 0]                  # [v_x, v_y, v_z] - uniform velocity field, for few velocity types.
+   center: [0, 0.5, 0]                 # Center of velocity field for few velocity types.
 levelset:
    gradient:
       scheme:        CENTRAL           # Available schemes: CENTRAL

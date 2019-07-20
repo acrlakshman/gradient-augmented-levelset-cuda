@@ -31,6 +31,13 @@
 
 #include "gals/input-fields/input-fields.h"
 
-GALS::INPUT_FIELDS::InputFields::InputFields() : m_grid(new GALS::INPUT_FIELDS::grid) {}
+GALS::INPUT_FIELDS::InputFields::InputFields()
+    : m_grid(new GALS::INPUT_FIELDS::Grid), m_velocity(new GALS::INPUT_FIELDS::Velocity)
+{
+}
 
-GALS::INPUT_FIELDS::InputFields::~InputFields() { delete m_grid; }
+GALS::INPUT_FIELDS::InputFields::~InputFields()
+{
+  delete m_grid;
+  delete m_velocity;
+}

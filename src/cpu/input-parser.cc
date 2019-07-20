@@ -33,14 +33,18 @@
 
 #include "gals/input-parser/grid.h"
 #include "gals/input-parser/input-parser-base.h"
+#include "gals/input-parser/velocity.h"
 
-GALS::CPU::InputParser::InputParser() {}
+GALS::INPUT_PARSER::InputParser::InputParser() {}
 
-GALS::CPU::InputParser::~InputParser() {}
+GALS::INPUT_PARSER::InputParser::~InputParser() {}
 
-void GALS::CPU::InputParser::parse(const std::string input_file, GALS::INPUT_FIELDS::InputFields *p_input_fields)
+void GALS::INPUT_PARSER::InputParser::parse(const std::string input_file,
+                                            GALS::INPUT_FIELDS::InputFields *p_input_fields)
 {
   YAML::Node inputs = YAML::LoadFile(input_file);
 
-  if (inputs["grid"]) GALS::CPU::InputParserBase<GALS::CPU::GridParser>()(inputs["grid"], p_input_fields);
+  if (inputs["grid"]) GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Grid>()(inputs["grid"], p_input_fields);
+  if (inputs["velocity"])
+    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Velocity>()(inputs["velocity"], p_input_fields);
 }

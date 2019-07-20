@@ -32,6 +32,7 @@
 #pragma once
 
 #include "grid.h"
+#include "velocity.h"
 
 namespace GALS
 {
@@ -52,7 +53,8 @@ class InputFields
    */
   ~InputFields();
 
-  GALS::INPUT_FIELDS::grid *m_grid;
+  GALS::INPUT_FIELDS::Grid *m_grid;
+  GALS::INPUT_FIELDS::Velocity *m_velocity;
 };
 
 }  // namespace INPUT_FIELDS

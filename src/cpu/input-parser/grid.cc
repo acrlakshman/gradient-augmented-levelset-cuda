@@ -34,11 +34,11 @@
 
 #include <vector>
 
-GALS::CPU::GridParser::GridParser() {}
+GALS::INPUT_PARSER::Grid::Grid() {}
 
-GALS::CPU::GridParser::~GridParser() {}
+GALS::INPUT_PARSER::Grid::~Grid() {}
 
-void GALS::CPU::GridParser::parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
+void GALS::INPUT_PARSER::Grid::parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
 {
   auto &input_fields = *p_input_fields;
 
@@ -56,7 +56,7 @@ void GALS::CPU::GridParser::parse(const YAML::Node &field, GALS::INPUT_FIELDS::I
   input_fields.m_grid->nz = field["cells"].as<std::vector<int>>()[2];
 }
 
-void GALS::CPU::GridParser::operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
+void GALS::INPUT_PARSER::Grid::operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
 {
   this->parse(field, p_input_fields);
 }

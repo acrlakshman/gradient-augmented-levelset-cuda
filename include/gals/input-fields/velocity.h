@@ -31,43 +31,18 @@
 
 #pragma once
 
-#include "gals/input-fields/input-fields.h"
-
-#include "yaml-cpp/yaml.h"
+#include <string>
+#include <vector>
 
 namespace GALS
 {
-namespace INPUT_PARSER
+namespace INPUT_FIELDS
 {
-/*! \class Grid
- *
- * Class to parse input fields for grid.
- */
-class Grid
-{
- public:
-  /*! Default constructor
-   */
-  Grid();
-
-  /*! Destructor
-   */
-  ~Grid();
-
-  /*! Parse input variables for grid section.
-   *
-   * \param field YAML node for grid.
-   * \param p_input_fields pointer to input fields object.
-   */
-  void parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
-
-  /*! Overloaded operator to parse.
-   *
-   * \param field YAML node for grid.
-   * \param p_input_fields pointer to input fields object.
-   */
-  void operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
+struct Velocity {
+  std::string name;            //! Name of velocity field.
+  std::vector<double> vector;  //! Uniform velocity magnitudes of all components.
+  std::vector<double> center;  //! Center of velocity field for few velocity types.
 };
 
-}  // namespace CPU
+}  // namespace INPUT_FIELDS
 }  // namespace GALS

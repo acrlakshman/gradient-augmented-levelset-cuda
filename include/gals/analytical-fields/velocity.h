@@ -31,43 +31,67 @@
 
 #pragma once
 
-#include "gals/input-fields/input-fields.h"
+#include <map>
+#include <string>
+#include <vector>
 
-#include "yaml-cpp/yaml.h"
+#include "gals/input-fields/velocity.h"
+#include "gals/utilities/array.h"
+#include "gals/utilities/grid.h"
+#include "gals/utilities/vec_n.h"
 
 namespace GALS
 {
-namespace INPUT_PARSER
+namespace ANALYTICAL_FIELDS
 {
-/*! \class Grid
- *
- * Class to parse input fields for grid.
+/*! enums for velocity fields.
  */
-class Grid
+enum class VelocityFieldNames { NOT_DEFINED, CIRCULAR };
+
+/*! enum maps for velocity fields.
+ */
+static std::map<std::string, VelocityFieldNames> velocity_name_map{{"CIRCULAR", VelocityFieldNames::CIRCULAR}};
+
+/*! \class Velocity
+ *
+ * Class to create analytical velocity fields.
+ */
+template <typename T_GRID, typename T = double>
+class Velocity
 {
  public:
-  /*! Default constructor
+  /*! Constructor with grid.
+   *
+   * \param grid grid.
    */
-  Grid();
+  Velocity(const T_GRID& grid, const GALS::INPUT_FIELDS::Velocity& inputs);
+
+  /*! Remove default constructor.
+   */
+  Velocity() = delete;
 
   /*! Destructor
    */
-  ~Grid();
+  ~Velocity();
 
-  /*! Parse input variables for grid section.
+  /*! Return grid.
    *
-   * \param field YAML node for grid.
-   * \param p_input_fields pointer to input fields object.
+   * \return grid.
    */
-  void parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
+  const T_GRID& grid() const { return m_grid; }
 
-  /*! Overloaded operator to parse.
+  /*! Compute velocity field.
    *
-   * \param field YAML node for grid.
-   * \param p_input_fields pointer to input fields object.
+   * \param positions array of positions where velocity needs to be computed.
+   * \param velocity velocity field which will be updated by this function.
    */
-  void operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
+  void compute(const GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>>& positions,
+               GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>>& velocity);
+
+ private:
+  const T_GRID& m_grid;
+  const GALS::INPUT_FIELDS::Velocity& m_inputs;
 };
 
-}  // namespace CPU
+}  // namespace ANALYTICAL_FIELDS
 }  // namespace GALS

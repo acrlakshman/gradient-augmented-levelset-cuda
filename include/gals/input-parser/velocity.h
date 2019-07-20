@@ -39,20 +39,20 @@ namespace GALS
 {
 namespace INPUT_PARSER
 {
-/*! \class Grid
+/*! \class Velocity
  *
  * Class to parse input fields for grid.
  */
-class Grid
+class Velocity
 {
  public:
   /*! Default constructor
    */
-  Grid();
+  Velocity();
 
   /*! Destructor
    */
-  ~Grid();
+  ~Velocity();
 
   /*! Parse input variables for grid section.
    *
@@ -69,5 +69,5 @@ class Grid
   void operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
 };
 
-}  // namespace CPU
+}  // namespace INPUT_PARSER
 }  // namespace GALS
