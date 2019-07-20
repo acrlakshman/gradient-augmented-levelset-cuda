@@ -31,8 +31,10 @@
 
 #pragma once
 
+#include "gals/cpu/levelset-velocity.h"
 #include "gals/cpu/levelset.h"
 #include "gals/cpu/temporal-schemes/euler.h"
+#include "gals/cpu/temporal-schemes/semi-lagrangian/euler.h"
 #include "gals/utilities/array.h"
 #include "gals/utilities/grid.h"
 
@@ -63,10 +65,11 @@ class Temporal
    * NOTE: Ghost cells are not updated during this step.
    *
    * \param dt time step.
-   * \param convection convection term.
+   * \param levelset_velocity velocity term.
    * \param levelset levelset function that needs to be advected.
    */
-  static void compute(const T dt, const Array<T_GRID, T> &convection, GALS::CPU::Levelset<T_GRID, T> &levelset);
+  static void compute(const T dt, const LevelsetVelocity<T_GRID, T> &levelset_velocity,
+                      GALS::CPU::Levelset<T_GRID, T> &levelset);
 };
 
 }  // namespace CPU

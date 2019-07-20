@@ -29,62 +29,37 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include "gals/cpu/levelset-velocity.h"
-#include "gals/cpu/levelset.h"
+#include "gals/cpu/temporal.h"
 #include "gals/utilities/array.h"
-#include "gals/utilities/grid.h"
+#include "gals/utilities/utilities.h"
 
-namespace GALS
+#include <gtest/gtest.h>
+
+#include <math.h>
+#include <iostream>
+
+TEST(CPU, TEMPORAL_SCHEME_SEMILAGRANGIAN_EULER)
 {
-namespace TEMPORAL_SCHEMES
-{
-/*! \class Euler
- *
- * Euler scheme for temporal update.
- */
-template <typename T, typename T_GRID>
-class Euler
-{
- public:
-  using value_type = T;
+  using T = double;
+  using T_GRID = GALS::CPU::Grid<T, 1>;
+  // scalar array on 1D grid.
+  T_GRID grid(10, 1, 1);
+  grid.generate(-1, 1, -1, 1, -1, 1);
 
-  /*! Default constructor
-   */
-  Euler();
+  const T dt = 1.;
+  GALS::CPU::Array<T_GRID, T> alpha(grid);
+  GALS::CPU::LevelsetVelocity<T_GRID, T> levelset_velocity(grid);
+  GALS::CPU::Array<T_GRID, T> alpha_new(grid);
+  GALS::CPU::Levelset<T_GRID, T> levelset(grid);
 
-  /*! Destructor
-   */
-  ~Euler();
+  levelset.phi() = alpha_new;
+  levelset.phiTm1() = alpha;
 
-  /*! Advect in time.
-   *
-   * \f$\frac{\phi^{n+1} - \phi^n}{dt} + velocity = 0.\f$
-   * Ghost cells are not updated during this step.
-   *
-   * \param dt time step.
-   * \param levelset_velocity velocity term.
-   * \param levelset levelset function that needs to be advected.
-   */
-  void compute(const T dt, const GALS::CPU::LevelsetVelocity<T_GRID, T> &levelset_velocity,
-               GALS::CPU::Levelset<T_GRID, T> &levelset);
+  // TODO: Complete test case.
+  GALS::CPU::Temporal<T, T_GRID, GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<T, T_GRID>>::compute(
+      dt, levelset_velocity, levelset);
 
-  /*! Advect in time.
-   *
-   * \f$\frac{\phi^{n+1} - \phi^n}{dt} + velocity = 0.\f$
-   * Ghost cells are not updated during this step.
-   *
-   * \param dt time step.
-   * \param levelset_velocity velocity term.
-   * \param levelset levelset function that needs to be advected.
-   */
-  void operator()(const T dt, const CPU::LevelsetVelocity<T_GRID, T> &levelset_velocity,
-                  GALS::CPU::Levelset<T_GRID, T> &levelset)
-  {
-    this->compute(dt, levelset_velocity, levelset);
-  }
-};
-
-}  // namespace TEMPORAL_SCHEMES
-}  // namespace GALS
+  // For test converage.
+  GALS::CPU::Temporal<T, T_GRID> temporal_scheme;
+}

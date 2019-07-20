@@ -70,6 +70,10 @@ TEST(CPU, VEC3_INT)
   EXPECT_TRUE(GALS::is_equal(vec3_mult[0], 1 * 1) && GALS::is_equal(vec3_mult[1], 1 * 2) &&
               GALS::is_equal(vec3_mult[2], 4 * 3));
 
+  vec3_mult = vec_3 * 2;
+  EXPECT_TRUE(GALS::is_equal(vec3_mult[0], 1 * 2) && GALS::is_equal(vec3_mult[1], 1 * 2) &&
+              GALS::is_equal(vec3_mult[2], 4 * 2));
+
   // Overloaded `/` operator.
   GALS::CPU::Vec3<int> vec3_div = vec_3 / vec3;
   EXPECT_TRUE(GALS::is_equal(vec3_div[0], 1 / 1) && GALS::is_equal(vec3_div[1], 1 / 2) &&
@@ -112,6 +116,10 @@ TEST(CPU, VEC3_DOUBLE)
   GALS::CPU::Vec3<double> vec3_mult = vec_3 * vec3;
   EXPECT_TRUE(GALS::is_equal(vec3_mult[0], 1.1 * 1.1) && GALS::is_equal(vec3_mult[1], 2.1 * 2.2) &&
               GALS::is_equal(vec3_mult[2], 3.1 * 3.3));
+
+  vec3_mult = vec_3 * 2.;
+  EXPECT_TRUE(GALS::is_equal(vec3_mult[0], 1.1 * 2) && GALS::is_equal(vec3_mult[1], 2.1 * 2) &&
+              GALS::is_equal(vec3_mult[2], 3.1 * 2));
 
   // Overloaded output operator.
   // Overloaded `/` operator.

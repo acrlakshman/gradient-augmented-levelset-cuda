@@ -31,60 +31,73 @@
 
 #pragma once
 
-#include "gals/cpu/levelset-velocity.h"
-#include "gals/cpu/levelset.h"
+#include <string>
+#include <vector>
+
 #include "gals/utilities/array.h"
 #include "gals/utilities/grid.h"
 
 namespace GALS
 {
-namespace TEMPORAL_SCHEMES
+namespace CPU
 {
-/*! \class Euler
+/*! \class LevelsetVelocity
  *
- * Euler scheme for temporal update.
+ * Class to create LevelsetVelocity.
  */
-template <typename T, typename T_GRID>
-class Euler
+template <typename T_GRID, typename T = double>
+class LevelsetVelocity
 {
  public:
-  using value_type = T;
-
-  /*! Default constructor
+  /*! Constructor with grid.
+   *
+   * \param grid grid.
    */
-  Euler();
+  LevelsetVelocity(const T_GRID& grid);
+
+  /*! Remove default constructor.
+   */
+  LevelsetVelocity() = delete;
 
   /*! Destructor
    */
-  ~Euler();
+  ~LevelsetVelocity();
 
-  /*! Advect in time.
+  /*! Return grid.
    *
-   * \f$\frac{\phi^{n+1} - \phi^n}{dt} + velocity = 0.\f$
-   * Ghost cells are not updated during this step.
-   *
-   * \param dt time step.
-   * \param levelset_velocity velocity term.
-   * \param levelset levelset function that needs to be advected.
+   * \return grid.
    */
-  void compute(const T dt, const GALS::CPU::LevelsetVelocity<T_GRID, T> &levelset_velocity,
-               GALS::CPU::Levelset<T_GRID, T> &levelset);
+  const T_GRID& grid() const { return m_grid; }
 
-  /*! Advect in time.
+  /*! Return velocity field.
    *
-   * \f$\frac{\phi^{n+1} - \phi^n}{dt} + velocity = 0.\f$
-   * Ghost cells are not updated during this step.
-   *
-   * \param dt time step.
-   * \param levelset_velocity velocity term.
-   * \param levelset levelset function that needs to be advected.
+   * \return velocity field.
    */
-  void operator()(const T dt, const CPU::LevelsetVelocity<T_GRID, T> &levelset_velocity,
-                  GALS::CPU::Levelset<T_GRID, T> &levelset)
-  {
-    this->compute(dt, levelset_velocity, levelset);
-  }
+  Array<T_GRID, Vec3<T>>& velocity() { return m_velocity; }
+
+  /*! Return velocity field.
+   *
+   * \return velocity field.
+   */
+  const Array<T_GRID, Vec3<T>>& velocity() const { return m_velocity; }
+
+  /*! Return gradient of velocity field.
+   *
+   * \return gradient of velocity field.
+   */
+  Array<T_GRID, Mat3<T>>& velocityGradient() { return m_velocity_grad; }
+
+  /*! Return gradient of velocity field.
+   *
+   * \return gradient of velocity field.
+   */
+  const Array<T_GRID, Mat3<T>>& velocityGradient() const { return m_velocity_grad; }
+
+ private:
+  const T_GRID& m_grid;
+  Array<T_GRID, Vec3<T>> m_velocity;       //! Velocity field.
+  Array<T_GRID, Mat3<T>> m_velocity_grad;  //! Gradient of velocity field.
 };
 
-}  // namespace TEMPORAL_SCHEMES
+}  // namespace CPU
 }  // namespace GALS

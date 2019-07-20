@@ -59,6 +59,8 @@ TEST(CPU, MAT3_INT)
   GALS::CPU::Mat3<int> mat_other;
   mat_other[0] = 1, mat_other[1] = 2, mat_other[2] = 3;
 
+  // TODO (mat3 dot vec3).
+
   // Assign mat_other to mat3.
   mat3 = mat_other;
   for (int i = 0; i < 9; ++i) EXPECT_TRUE(mat_other[i] == mat3[i]);
@@ -75,6 +77,16 @@ TEST(CPU, MAT3_INT)
 
   test_subscript_operator<int>(mat3);
 
+  // Test subtraction with Mat3.
+  const auto mat3_subtract_mat = mat3 * 2 - mat3;
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j) EXPECT_TRUE(mat3_subtract_mat(i, j) == (mat3(i, j) * 2 - mat3(i, j)));
+
+  // Test multiplication with scalar.
+  const auto mat3_mult_scalar = mat3 * 2;
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j) EXPECT_TRUE(mat3_mult_scalar(i, j) == mat3(i, j) * 2);
+
   // Overloaded output operator.
   std::cout << "MAT3_INT (<<): " << mat3 << std::endl;
 }
@@ -86,6 +98,8 @@ TEST(CPU, MAT3_DOUBLE)
   GALS::CPU::Mat3<double> mat3;
 
   EXPECT_TRUE(mat3.size() == 9);
+
+  // TODO (mat3 dot vec3).
 
   mat3[0] = 9.;
   EXPECT_TRUE(GALS::is_equal(mat3[0], 9.));
@@ -111,6 +125,16 @@ TEST(CPU, MAT3_DOUBLE)
   EXPECT_TRUE(GALS::is_equal(j, mat3(0, 2)));
 
   test_subscript_operator<double>(mat3);
+
+  // Test subtraction with Mat3.
+  const auto mat3_subtract_mat = mat3 * 2.21 - mat3;
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j) EXPECT_TRUE(GALS::is_equal(mat3_subtract_mat(i, j), (mat3(i, j) * 2.21 - mat3(i, j))));
+
+  // Test multiplication with scalar.
+  const auto mat3_mult_scalar = mat3 * 2.21;
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j) EXPECT_TRUE(GALS::is_equal(mat3_mult_scalar(i, j), mat3(i, j) * 2.21));
 
   // Overloaded output operator.
   std::cout << "MAT3_DOUBLE (<<): " << mat3 << std::endl;

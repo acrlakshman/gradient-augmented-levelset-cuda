@@ -33,6 +33,8 @@
 
 #include <iostream>
 
+#include "gals/utilities/vec3.h"
+
 namespace GALS
 {
 namespace CPU
@@ -77,6 +79,14 @@ class Mat3
    */
   const int size() const;
 
+  /*! Compute dot product with Vec3.
+   *
+   * \param vec Vec3 input.
+   *
+   * \return Vec3.
+   */
+  const Vec3<T> dot(const Vec3<T> vec) const;
+
   /*! Overloaded subscript operator that returns a reference.
    *
    * \param idx zero based index of element.
@@ -116,6 +126,22 @@ class Mat3
    * \param mat variable whose values will be assigned.
    */
   void operator=(const Mat3<T> &mat);
+
+  /*! Overload subtraction operator.
+   *
+   * \param mat variable whose values will be subtracted from this.
+   *
+   * \return (this - mat).
+   */
+  const Mat3<T> operator-(const Mat3<T> &mat) const;
+
+  /*! Overload multiplication operator.
+   *
+   * \param var scalar variable.
+   *
+   * \return scaled mat.
+   */
+  const Mat3<T> operator*(const T var) const;
 
   /*! Equality operator.
    *

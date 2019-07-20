@@ -120,6 +120,16 @@ class Vec3
    */
   const Vec3<T> operator*(const Vec3<T> &vec) const;
 
+  /*! Multiplication operator.
+   *
+   * Component wise multiplication with a scalar.
+   *
+   * \param var variable to multiply.
+   *
+   * \return (this * var).
+   */
+  const Vec3<T> operator*(const T var) const;
+
   /*! Division operator.
    *
    * Component wise division.

@@ -43,6 +43,11 @@ TEST(CPU, GRID_1D)
   const GALS::CPU::Mat3<int> axis_vectors_ref(1, 0, 0, 0, 1, 0, 0, 0, 1);
   EXPECT_TRUE((axis_vectors_ref == GALS::CPU::Grid<double, 1>::axis_vectors));
 
+  // Test identity matrix.
+  const GALS::CPU::Mat3<double> identity_mat_ref(1, 0, 0, 0, 1, 0, 0, 0, 1);
+  for (int i = 0; i < 9; ++i)
+    EXPECT_TRUE((GALS::is_equal(identity_mat_ref[i], GALS::CPU::Grid<double, 1>::identity_mat[i])));
+
   int num_cells = 10;
   GALS::CPU::Grid<double, 1> grid_1(num_cells, 1, 1);
   GALS::CPU::Grid<double, 1> grid_2(num_cells, 1);

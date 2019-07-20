@@ -66,6 +66,17 @@ const int GALS::CPU::Mat3<T>::size() const
 }
 
 template <typename T>
+const GALS::CPU::Vec3<T> GALS::CPU::Mat3<T>::dot(GALS::CPU::Vec3<T> vec) const
+{
+  GALS::CPU::Vec3<T> res;
+
+  for (int i = 0; i < 3; ++i)
+    for (int j = 0; j < 3; ++j) res[i] += m_data[j * 3 + i] * vec[j];
+
+  return res;
+}
+
+template <typename T>
 const T GALS::CPU::Mat3<T>::operator[](const int idx) const
 {
   return m_data[idx];
@@ -93,6 +104,24 @@ template <typename T>
 void GALS::CPU::Mat3<T>::operator=(const Mat3<T>& mat)
 {
   for (int i = 0; i < SIZE; ++i) m_data[i] = mat[i];
+}
+
+template <typename T>
+const GALS::CPU::Mat3<T> GALS::CPU::Mat3<T>::operator-(const Mat3<T>& mat) const
+{
+  Mat3<T> res;
+  for (int i = 0; i < SIZE; ++i) res[i] = m_data[i] - mat[i];
+
+  return res;
+}
+
+template <typename T>
+const GALS::CPU::Mat3<T> GALS::CPU::Mat3<T>::operator*(const T var) const
+{
+  Mat3<T> res;
+  for (int i = 0; i < SIZE; ++i) res[i] = m_data[i] * var;
+
+  return res;
 }
 
 template <typename T>

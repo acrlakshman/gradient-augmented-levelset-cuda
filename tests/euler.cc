@@ -29,6 +29,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
+#include "gals/cpu/levelset-velocity.h"
 #include "gals/cpu/temporal.h"
 #include "gals/utilities/array.h"
 #include "gals/utilities/utilities.h"
@@ -47,16 +48,11 @@ TEST(CPU, TEMPORAL_SCHEME_EULER)
   grid.generate(-1, 1, -1, 1, -1, 1);
 
   const T dt = 1.;
-  GALS::CPU::Array<T_GRID, T> alpha(grid);
-  GALS::CPU::Array<T_GRID, T> convection(grid);
-  GALS::CPU::Array<T_GRID, T> alpha_new(grid);
+  GALS::CPU::LevelsetVelocity<T_GRID, T> levelset_velocity(grid);
   GALS::CPU::Levelset<T_GRID, T> levelset(grid);
 
-  levelset.phi() = alpha_new;
-  levelset.phiTm1() = alpha;
-
   // TODO: Complete test case.
-  GALS::CPU::Temporal<T, T_GRID, GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>>::compute(dt, convection, levelset);
+  GALS::CPU::Temporal<T, T_GRID, GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>>::compute(dt, levelset_velocity, levelset);
 
   // For test converage.
   GALS::CPU::Temporal<T, T_GRID> temporal_scheme;

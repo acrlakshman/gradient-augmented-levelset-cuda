@@ -96,9 +96,9 @@ const int* GALS::CPU::Grid<T, DIM>::getMask() const
 }
 
 template <typename T, int DIM>
-const std::vector<int> GALS::CPU::Grid<T, DIM>::numCells() const
+const GALS::CPU::Vec3<int> GALS::CPU::Grid<T, DIM>::numCells() const
 {
-  return std::vector<int>{m_nx, m_ny, m_nz};
+  return Vec3<int>(m_nx, m_ny, m_nz);
 }
 
 template <typename T, int DIM>

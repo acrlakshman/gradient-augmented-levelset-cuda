@@ -88,7 +88,7 @@ TEST(CPU, LEVELSET_2D)
 {
   typedef GALS::CPU::Grid<double, 2> T_GRID;
 
-  // initializing 1-D test grid.
+  // initializing 2-D test grid.
   GALS::CPU::Grid<double, 2> grid(10, 10, 1);
 
   // grid generation
@@ -99,7 +99,7 @@ TEST(CPU, LEVELSET_2D)
   const int pad = grid.getPadding();
   const auto num_cells = grid.numCells();
 
-  // initializing 1-D scalar array
+  // initializing 2-D scalar array
   GALS::CPU::Levelset<T_GRID, double> levelset(grid);
   levelset.print();
 
