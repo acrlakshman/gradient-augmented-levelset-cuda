@@ -56,6 +56,8 @@ TARGET_LINK_LIBRARIES(${TEST_NAME}
   PUBLIC
     gals_cpu
     yaml-cpp
+    spdlog
+    filesystem
   PRIVATE
     gtest
     gtest_main
