@@ -64,7 +64,7 @@ void GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<T, T_GRID>::compute(
     for (int j = 0; j < num_cells[1]; ++j)
       for (int k = 0; k < num_cells[2]; ++k) x_root(i, j, k) = grid(i, j, k) - velocity(i, j, k) * dt;
 
-  // Compute phi_interp_tm1, psi_interp_tm1 at x_root.
+  // Compute phi_interp_prev, psi_interp_prev at x_root.
   GALS::CPU::Interpolate<T, T_GRID, GALS::INTERPOLATION::Hermite<T, T_GRID>>::compute(x_root, levelset);
 
   // Compute x_root_grad.
@@ -76,15 +76,15 @@ void GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<T, T_GRID>::compute(
     for (int j = 0; j < num_cells[1]; ++j)
       for (int k = 0; k < num_cells[2]; ++k) x_root_grad(i, j, k) = identity_mat - velocity_grad(i, j, k) * dt;
 
-  const auto &phi_interp_tm1 = levelset.phiInterpTm1();
-  const auto &psi_interp_tm1 = levelset.psiInterpTm1();
+  const auto &phi_interp_prev = levelset.phiInterpPrev();
+  const auto &psi_interp_prev = levelset.psiInterpPrev();
 
   // Update phi and psi.
   for (int i = 0; i < num_cells[0]; ++i)
     for (int j = 0; j < num_cells[1]; ++j)
       for (int k = 0; k < num_cells[2]; ++k) {
-        phi(i, j, k) = phi_interp_tm1(i, j, k);
-        psi(i, j, k) = x_root_grad(i, j, k).dot(psi_interp_tm1(i, j, k));
+        phi(i, j, k) = phi_interp_prev(i, j, k);
+        psi(i, j, k) = x_root_grad(i, j, k).dot(psi_interp_prev(i, j, k));
       }
 }
 

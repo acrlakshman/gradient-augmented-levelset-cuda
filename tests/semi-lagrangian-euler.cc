@@ -54,7 +54,7 @@ TEST(CPU, TEMPORAL_SCHEME_SEMILAGRANGIAN_EULER)
   GALS::CPU::Levelset<T_GRID, T> levelset(grid);
 
   levelset.phi() = alpha_new;
-  levelset.phiTm1() = alpha;
+  levelset.phiPrev() = alpha;
 
   // TODO: Complete test case.
   GALS::CPU::Temporal<T, T_GRID, GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<T, T_GRID>>::compute(

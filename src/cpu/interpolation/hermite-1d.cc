@@ -55,8 +55,8 @@ GALS::CPU::InterpolatedFields<GALS::CPU::Vec3<T>> GALS::INTERPOLATION::Hermite<T
   T eta = (x_interp[0] - x_base[0]) * one_over_dx[0];
 
   const ControlPoints<T> &control_points = GALS::INTERPOLATION::get_control_points(
-      levelset.phiTm1()(base_node_id), levelset.psiTm1()(base_node_id)[axis], levelset.phiTm1()(base_node_id_p1),
-      levelset.psiTm1()(base_node_id_p1)[axis], dx[axis], use_gradient_limiting);
+      levelset.phiPrev()(base_node_id), levelset.psiPrev()(base_node_id)[axis], levelset.phiPrev()(base_node_id_p1),
+      levelset.psiPrev()(base_node_id_p1)[axis], dx[axis], use_gradient_limiting);
 
   hermite_fields.phi_interpolated = control_points.c_30 * B0(eta) + control_points.c_21 * B1(eta) +
                                     control_points.c_12 * B2(eta) + control_points.c_03 * B3(eta);
@@ -67,10 +67,10 @@ GALS::CPU::InterpolatedFields<GALS::CPU::Vec3<T>> GALS::INTERPOLATION::Hermite<T
   // Debug
   // std::cout << std::scientific;
   // std::cout << "eta = " << eta << "; xi = " << x_interp[0] << std::endl
-  //<< "\t; phi_b = " << levelset.phiTm1()(base_node_id)
-  //<< "\t; phi_bp1 = " << levelset.phiTm1()(base_node_id_p1) << std::endl
-  //<< "\t; psi_b = " << levelset.psiTm1()(base_node_id)
-  //<< "\t; psi_bp1 = " << levelset.psiTm1()(base_node_id_p1) << std::endl
+  //<< "\t; phi_b = " << levelset.phiPrev()(base_node_id)
+  //<< "\t; phi_bp1 = " << levelset.phiPrev()(base_node_id_p1) << std::endl
+  //<< "\t; psi_b = " << levelset.psiPrev()(base_node_id)
+  //<< "\t; psi_bp1 = " << levelset.psiPrev()(base_node_id_p1) << std::endl
   //<< "\t; phi_i = " << hermite_fields.phi_interpolated
   //<< "\t; psi_i = " << hermite_fields.psi_interpolated[axis] << std::endl;
   // std::cout << "\tfirst: c30 = " << control_points.c_30 << "; B0(eta) = " << B0(eta) << std::endl;
@@ -98,8 +98,8 @@ void GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 1>>::compute(
       for (int k = 0; k < num_cells_interp[2]; ++k) {
         const auto &hermite_fields = this->interpolate(grid, x_interp(i, j, k), levelset);
 
-        levelset.phiInterpTm1()(i, j, k) = hermite_fields.phi_interpolated;
-        levelset.psiInterpTm1()(i, j, k) = hermite_fields.psi_interpolated;
+        levelset.phiInterpPrev()(i, j, k) = hermite_fields.phi_interpolated;
+        levelset.psiInterpPrev()(i, j, k) = hermite_fields.psi_interpolated;
       }
 }
 

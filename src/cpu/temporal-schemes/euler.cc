@@ -48,7 +48,7 @@ void GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>::compute(const T dt,
                                                        const GALS::CPU::LevelsetVelocity<T_GRID, T> &levelset_velocity,
                                                        GALS::CPU::Levelset<T_GRID, T> &levelset)
 {
-  const auto &phi_tm1 = levelset.phiTm1();
+  const auto &phi_prev = levelset.phiPrev();
   auto &phi = levelset.phi();
   const GALS::CPU::Vec3<int> num_cells = phi.numCells();
   const auto &velocity = levelset_velocity.velocity();
@@ -56,7 +56,7 @@ void GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>::compute(const T dt,
   for (int i = 0; i < num_cells[0]; ++i)
     for (int j = 0; j < num_cells[1]; ++j)
       for (int k = 0; k < num_cells[2]; ++k) {
-        phi(i, j, k) = phi_tm1(i, j, k) - dt * velocity(i, j, k)[0];  // FIXME
+        phi(i, j, k) = phi_prev(i, j, k) - dt * velocity(i, j, k)[0];  // FIXME
       }
 }
 

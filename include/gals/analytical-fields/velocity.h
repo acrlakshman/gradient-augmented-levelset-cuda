@@ -63,6 +63,7 @@ class Velocity
   /*! Constructor with grid.
    *
    * \param grid grid.
+   * \param inputs velocity input fields of type GALS::INPUT_FIELDS::Velocity
    */
   Velocity(const T_GRID& grid, const GALS::INPUT_FIELDS::Velocity& inputs);
 

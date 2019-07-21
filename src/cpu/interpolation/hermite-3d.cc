@@ -68,124 +68,127 @@ GALS::CPU::InterpolatedFields<GALS::CPU::Vec3<T>> GALS::INTERPOLATION::Hermite<T
   GALS::CPU::Vec3<T> eta = (x_interp - x_base) * one_over_dx;
 
   const ControlPoints<T>& control_points_x = GALS::INTERPOLATION::get_control_points(
-      levelset.phiTm1()(base_i_j_k), levelset.psiTm1()(base_i_j_k)[axis_x], levelset.phiTm1()(base_ip1_j_k),
-      levelset.psiTm1()(base_ip1_j_k)[axis_x], dx[axis_x], use_gradient_limiting);
+      levelset.phiPrev()(base_i_j_k), levelset.psiPrev()(base_i_j_k)[axis_x], levelset.phiPrev()(base_ip1_j_k),
+      levelset.psiPrev()(base_ip1_j_k)[axis_x], dx[axis_x], use_gradient_limiting);
   const ControlPoints<T>& control_points_y = GALS::INTERPOLATION::get_control_points(
-      levelset.phiTm1()(base_i_j_k), levelset.psiTm1()(base_i_j_k)[axis_y], levelset.phiTm1()(base_i_jp1_k),
-      levelset.psiTm1()(base_i_jp1_k)[axis_y], dx[axis_y], use_gradient_limiting);
+      levelset.phiPrev()(base_i_j_k), levelset.psiPrev()(base_i_j_k)[axis_y], levelset.phiPrev()(base_i_jp1_k),
+      levelset.psiPrev()(base_i_jp1_k)[axis_y], dx[axis_y], use_gradient_limiting);
   const ControlPoints<T>& control_points_z = GALS::INTERPOLATION::get_control_points(
-      levelset.phiTm1()(base_i_j_k), levelset.psiTm1()(base_i_j_k)[axis_z], levelset.phiTm1()(base_i_j_kp1),
-      levelset.psiTm1()(base_i_j_kp1)[axis_z], dx[axis_z], use_gradient_limiting);
+      levelset.phiPrev()(base_i_j_k), levelset.psiPrev()(base_i_j_k)[axis_z], levelset.phiPrev()(base_i_j_kp1),
+      levelset.psiPrev()(base_i_j_kp1)[axis_z], dx[axis_z], use_gradient_limiting);
   const ControlPoints<T>& control_points_xy = GALS::INTERPOLATION::get_control_points(
-      levelset.phiTm1()(base_ip1_j_k), levelset.psiTm1()(base_ip1_j_k)[axis_y], levelset.phiTm1()(base_ip1_jp1_k),
-      levelset.psiTm1()(base_ip1_jp1_k)[axis_y], dx[axis_y], use_gradient_limiting);
+      levelset.phiPrev()(base_ip1_j_k), levelset.psiPrev()(base_ip1_j_k)[axis_y], levelset.phiPrev()(base_ip1_jp1_k),
+      levelset.psiPrev()(base_ip1_jp1_k)[axis_y], dx[axis_y], use_gradient_limiting);
   const ControlPoints<T>& control_points_yx = GALS::INTERPOLATION::get_control_points(
-      levelset.phiTm1()(base_i_jp1_k), levelset.psiTm1()(base_i_jp1_k)[axis_x], levelset.phiTm1()(base_ip1_jp1_k),
-      levelset.psiTm1()(base_ip1_jp1_k)[axis_x], dx[axis_x], use_gradient_limiting);
+      levelset.phiPrev()(base_i_jp1_k), levelset.psiPrev()(base_i_jp1_k)[axis_x], levelset.phiPrev()(base_ip1_jp1_k),
+      levelset.psiPrev()(base_ip1_jp1_k)[axis_x], dx[axis_x], use_gradient_limiting);
   const ControlPoints<T>& control_points_xz = GALS::INTERPOLATION::get_control_points(
-      levelset.phiTm1()(base_ip1_j_k), levelset.psiTm1()(base_ip1_j_k)[axis_z], levelset.phiTm1()(base_ip1_j_kp1),
-      levelset.psiTm1()(base_ip1_j_kp1)[axis_z], dx[axis_z], use_gradient_limiting);
+      levelset.phiPrev()(base_ip1_j_k), levelset.psiPrev()(base_ip1_j_k)[axis_z], levelset.phiPrev()(base_ip1_j_kp1),
+      levelset.psiPrev()(base_ip1_j_kp1)[axis_z], dx[axis_z], use_gradient_limiting);
   const ControlPoints<T>& control_points_zxy = GALS::INTERPOLATION::get_control_points(
-      levelset.phiTm1()(base_ip1_j_kp1), levelset.psiTm1()(base_ip1_j_kp1)[axis_y], levelset.phiTm1()(base_ip1_jp1_kp1),
-      levelset.psiTm1()(base_ip1_jp1_kp1)[axis_y], dx[axis_y], use_gradient_limiting);
+      levelset.phiPrev()(base_ip1_j_kp1), levelset.psiPrev()(base_ip1_j_kp1)[axis_y],
+      levelset.phiPrev()(base_ip1_jp1_kp1), levelset.psiPrev()(base_ip1_jp1_kp1)[axis_y], dx[axis_y],
+      use_gradient_limiting);
   const ControlPoints<T>& control_points_xyz = GALS::INTERPOLATION::get_control_points(
-      levelset.phiTm1()(base_ip1_jp1_k), levelset.psiTm1()(base_ip1_jp1_k)[axis_z], levelset.phiTm1()(base_ip1_jp1_kp1),
-      levelset.psiTm1()(base_ip1_jp1_kp1)[axis_z], dx[axis_z], use_gradient_limiting);
+      levelset.phiPrev()(base_ip1_jp1_k), levelset.psiPrev()(base_ip1_jp1_k)[axis_z],
+      levelset.phiPrev()(base_ip1_jp1_kp1), levelset.psiPrev()(base_ip1_jp1_kp1)[axis_z], dx[axis_z],
+      use_gradient_limiting);
   const ControlPoints<T>& control_points_zx = GALS::INTERPOLATION::get_control_points(
-      levelset.phiTm1()(base_i_j_kp1), levelset.psiTm1()(base_i_j_kp1)[axis_x], levelset.phiTm1()(base_ip1_j_kp1),
-      levelset.psiTm1()(base_ip1_j_kp1)[axis_x], dx[axis_x], use_gradient_limiting);
+      levelset.phiPrev()(base_i_j_kp1), levelset.psiPrev()(base_i_j_kp1)[axis_x], levelset.phiPrev()(base_ip1_j_kp1),
+      levelset.psiPrev()(base_ip1_j_kp1)[axis_x], dx[axis_x], use_gradient_limiting);
   const ControlPoints<T>& control_points_zy = GALS::INTERPOLATION::get_control_points(
-      levelset.phiTm1()(base_i_j_kp1), levelset.psiTm1()(base_i_j_kp1)[axis_y], levelset.phiTm1()(base_i_jp1_kp1),
-      levelset.psiTm1()(base_i_jp1_kp1)[axis_y], dx[axis_y], use_gradient_limiting);
+      levelset.phiPrev()(base_i_j_kp1), levelset.psiPrev()(base_i_j_kp1)[axis_y], levelset.phiPrev()(base_i_jp1_kp1),
+      levelset.psiPrev()(base_i_jp1_kp1)[axis_y], dx[axis_y], use_gradient_limiting);
   const ControlPoints<T>& control_points_yzx = GALS::INTERPOLATION::get_control_points(
-      levelset.phiTm1()(base_i_jp1_kp1), levelset.psiTm1()(base_i_jp1_kp1)[axis_x], levelset.phiTm1()(base_ip1_jp1_kp1),
-      levelset.psiTm1()(base_ip1_jp1_kp1)[axis_x], dx[axis_x], use_gradient_limiting);
+      levelset.phiPrev()(base_i_jp1_kp1), levelset.psiPrev()(base_i_jp1_kp1)[axis_x],
+      levelset.phiPrev()(base_ip1_jp1_kp1), levelset.psiPrev()(base_ip1_jp1_kp1)[axis_x], dx[axis_x],
+      use_gradient_limiting);
   const ControlPoints<T>& control_points_yz = GALS::INTERPOLATION::get_control_points(
-      levelset.phiTm1()(base_i_jp1_k), levelset.psiTm1()(base_i_jp1_k)[axis_z], levelset.phiTm1()(base_i_jp1_kp1),
-      levelset.psiTm1()(base_i_jp1_kp1)[axis_z], dx[axis_z], use_gradient_limiting);
+      levelset.phiPrev()(base_i_jp1_k), levelset.psiPrev()(base_i_jp1_k)[axis_z], levelset.phiPrev()(base_i_jp1_kp1),
+      levelset.psiPrev()(base_i_jp1_kp1)[axis_z], dx[axis_z], use_gradient_limiting);
   const ControlPoints<T>& control_points_y_z = GALS::INTERPOLATION::get_control_points(
-      levelset.psiTm1()(base_i_j_k)[axis_z], levelset.phiMixedDerivatives()(base_i_j_k)[1],
-      levelset.psiTm1()(base_i_jp1_k)[axis_z], levelset.phiMixedDerivatives()(base_i_jp1_k)[1], dx[axis_y],
+      levelset.psiPrev()(base_i_j_k)[axis_z], levelset.phiMixedDerivatives()(base_i_j_k)[1],
+      levelset.psiPrev()(base_i_jp1_k)[axis_z], levelset.phiMixedDerivatives()(base_i_jp1_k)[1], dx[axis_y],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_zy_z = GALS::INTERPOLATION::get_control_points(
-      levelset.psiTm1()(base_i_j_kp1)[axis_z], levelset.phiMixedDerivatives()(base_i_j_kp1)[1],
-      levelset.psiTm1()(base_i_jp1_kp1)[axis_z], levelset.phiMixedDerivatives()(base_i_jp1_kp1)[1], dx[axis_y],
+      levelset.psiPrev()(base_i_j_kp1)[axis_z], levelset.phiMixedDerivatives()(base_i_j_kp1)[1],
+      levelset.psiPrev()(base_i_jp1_kp1)[axis_z], levelset.phiMixedDerivatives()(base_i_jp1_kp1)[1], dx[axis_y],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_z_x = GALS::INTERPOLATION::get_control_points(
-      levelset.psiTm1()(base_i_j_k)[axis_x], levelset.phiMixedDerivatives()(base_i_j_k)[2],
-      levelset.psiTm1()(base_i_j_kp1)[axis_x], levelset.phiMixedDerivatives()(base_i_j_kp1)[2], dx[axis_z],
+      levelset.psiPrev()(base_i_j_k)[axis_x], levelset.phiMixedDerivatives()(base_i_j_k)[2],
+      levelset.psiPrev()(base_i_j_kp1)[axis_x], levelset.phiMixedDerivatives()(base_i_j_kp1)[2], dx[axis_z],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_x_y = GALS::INTERPOLATION::get_control_points(
-      levelset.psiTm1()(base_i_j_k)[axis_y], levelset.phiMixedDerivatives()(base_i_j_k)[0],
-      levelset.psiTm1()(base_ip1_j_k)[axis_y], levelset.phiMixedDerivatives()(base_ip1_j_k)[0], dx[axis_x],
+      levelset.psiPrev()(base_i_j_k)[axis_y], levelset.phiMixedDerivatives()(base_i_j_k)[0],
+      levelset.psiPrev()(base_ip1_j_k)[axis_y], levelset.phiMixedDerivatives()(base_ip1_j_k)[0], dx[axis_x],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_z_xy = GALS::INTERPOLATION::get_control_points(
       levelset.phiMixedDerivatives()(base_i_j_k)[0], levelset.phiMixedDerivatives()(base_i_j_k)[3],
       levelset.phiMixedDerivatives()(base_i_j_kp1)[0], levelset.phiMixedDerivatives()(base_i_j_kp1)[3], dx[axis_z],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_z_y = GALS::INTERPOLATION::get_control_points(
-      levelset.psiTm1()(base_i_j_k)[axis_y], levelset.phiMixedDerivatives()(base_i_j_k)[1],
-      levelset.psiTm1()(base_i_j_kp1)[axis_y], levelset.phiMixedDerivatives()(base_i_j_kp1)[1], dx[axis_z],
+      levelset.psiPrev()(base_i_j_k)[axis_y], levelset.phiMixedDerivatives()(base_i_j_k)[1],
+      levelset.psiPrev()(base_i_j_kp1)[axis_y], levelset.phiMixedDerivatives()(base_i_j_kp1)[1], dx[axis_z],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_x_z = GALS::INTERPOLATION::get_control_points(
-      levelset.psiTm1()(base_i_j_k)[axis_z], levelset.phiMixedDerivatives()(base_i_j_k)[2],
-      levelset.psiTm1()(base_ip1_j_k)[axis_z], levelset.phiMixedDerivatives()(base_ip1_j_k)[2], dx[axis_x],
+      levelset.psiPrev()(base_i_j_k)[axis_z], levelset.phiMixedDerivatives()(base_i_j_k)[2],
+      levelset.psiPrev()(base_ip1_j_k)[axis_z], levelset.phiMixedDerivatives()(base_ip1_j_k)[2], dx[axis_x],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_zx_z = GALS::INTERPOLATION::get_control_points(
-      levelset.psiTm1()(base_i_j_kp1)[axis_z], levelset.phiMixedDerivatives()(base_i_j_kp1)[2],
-      levelset.psiTm1()(base_ip1_j_kp1)[axis_z], levelset.phiMixedDerivatives()(base_ip1_j_kp1)[2], dx[axis_x],
+      levelset.psiPrev()(base_i_j_kp1)[axis_z], levelset.phiMixedDerivatives()(base_i_j_kp1)[2],
+      levelset.psiPrev()(base_ip1_j_kp1)[axis_z], levelset.phiMixedDerivatives()(base_ip1_j_kp1)[2], dx[axis_x],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_zx_y = GALS::INTERPOLATION::get_control_points(
-      levelset.psiTm1()(base_i_j_kp1)[axis_y], levelset.phiMixedDerivatives()(base_i_j_kp1)[0],
-      levelset.psiTm1()(base_ip1_j_kp1)[axis_y], levelset.phiMixedDerivatives()(base_ip1_j_kp1)[0], dx[axis_x],
+      levelset.psiPrev()(base_i_j_kp1)[axis_y], levelset.phiMixedDerivatives()(base_i_j_kp1)[0],
+      levelset.psiPrev()(base_ip1_j_kp1)[axis_y], levelset.phiMixedDerivatives()(base_ip1_j_kp1)[0], dx[axis_x],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_yx_y = GALS::INTERPOLATION::get_control_points(
-      levelset.psiTm1()(base_i_jp1_k)[axis_y], levelset.phiMixedDerivatives()(base_i_jp1_k)[0],
-      levelset.psiTm1()(base_ip1_jp1_k)[axis_y], levelset.phiMixedDerivatives()(base_ip1_jp1_k)[0], dx[axis_x],
+      levelset.psiPrev()(base_i_jp1_k)[axis_y], levelset.phiMixedDerivatives()(base_i_jp1_k)[0],
+      levelset.psiPrev()(base_ip1_jp1_k)[axis_y], levelset.phiMixedDerivatives()(base_ip1_jp1_k)[0], dx[axis_x],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_yz_xy = GALS::INTERPOLATION::get_control_points(
       levelset.phiMixedDerivatives()(base_i_jp1_k)[0], levelset.phiMixedDerivatives()(base_i_jp1_k)[3],
       levelset.phiMixedDerivatives()(base_i_jp1_kp1)[0], levelset.phiMixedDerivatives()(base_i_jp1_kp1)[3], dx[axis_z],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_yz_y = GALS::INTERPOLATION::get_control_points(
-      levelset.psiTm1()(base_i_jp1_k)[axis_y], levelset.phiMixedDerivatives()(base_i_jp1_k)[1],
-      levelset.psiTm1()(base_i_jp1_kp1)[axis_y], levelset.phiMixedDerivatives()(base_i_jp1_kp1)[1], dx[axis_z],
+      levelset.psiPrev()(base_i_jp1_k)[axis_y], levelset.phiMixedDerivatives()(base_i_jp1_k)[1],
+      levelset.psiPrev()(base_i_jp1_kp1)[axis_y], levelset.phiMixedDerivatives()(base_i_jp1_kp1)[1], dx[axis_z],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_yx_z = GALS::INTERPOLATION::get_control_points(
-      levelset.psiTm1()(base_i_jp1_k)[axis_z], levelset.phiMixedDerivatives()(base_i_jp1_k)[2],
-      levelset.psiTm1()(base_ip1_jp1_k)[axis_z], levelset.phiMixedDerivatives()(base_ip1_jp1_k)[2], dx[axis_x],
+      levelset.psiPrev()(base_i_jp1_k)[axis_z], levelset.phiMixedDerivatives()(base_i_jp1_k)[2],
+      levelset.psiPrev()(base_ip1_jp1_k)[axis_z], levelset.phiMixedDerivatives()(base_ip1_jp1_k)[2], dx[axis_x],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_yzx_y = GALS::INTERPOLATION::get_control_points(
-      levelset.psiTm1()(base_i_jp1_kp1)[axis_y], levelset.phiMixedDerivatives()(base_i_jp1_kp1)[0],
-      levelset.psiTm1()(base_ip1_jp1_kp1)[axis_y], levelset.phiMixedDerivatives()(base_ip1_jp1_kp1)[0], dx[axis_x],
+      levelset.psiPrev()(base_i_jp1_kp1)[axis_y], levelset.phiMixedDerivatives()(base_i_jp1_kp1)[0],
+      levelset.psiPrev()(base_ip1_jp1_kp1)[axis_y], levelset.phiMixedDerivatives()(base_ip1_jp1_kp1)[0], dx[axis_x],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_yzx_z = GALS::INTERPOLATION::get_control_points(
-      levelset.psiTm1()(base_i_jp1_kp1)[axis_z], levelset.phiMixedDerivatives()(base_i_jp1_kp1)[2],
-      levelset.psiTm1()(base_ip1_jp1_kp1)[axis_z], levelset.phiMixedDerivatives()(base_ip1_jp1_kp1)[2], dx[axis_x],
+      levelset.psiPrev()(base_i_jp1_kp1)[axis_z], levelset.phiMixedDerivatives()(base_i_jp1_kp1)[2],
+      levelset.psiPrev()(base_ip1_jp1_kp1)[axis_z], levelset.phiMixedDerivatives()(base_ip1_jp1_kp1)[2], dx[axis_x],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_xz_xy = GALS::INTERPOLATION::get_control_points(
       levelset.phiMixedDerivatives()(base_ip1_j_k)[0], levelset.phiMixedDerivatives()(base_ip1_j_k)[3],
       levelset.phiMixedDerivatives()(base_ip1_j_kp1)[0], levelset.phiMixedDerivatives()(base_ip1_j_kp1)[3], dx[axis_z],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_xz_y = GALS::INTERPOLATION::get_control_points(
-      levelset.psiTm1()(base_ip1_j_k)[axis_y], levelset.phiMixedDerivatives()(base_ip1_j_k)[1],
-      levelset.psiTm1()(base_ip1_j_kp1)[axis_y], levelset.phiMixedDerivatives()(base_ip1_j_kp1)[1], dx[axis_z],
+      levelset.psiPrev()(base_ip1_j_k)[axis_y], levelset.phiMixedDerivatives()(base_ip1_j_k)[1],
+      levelset.psiPrev()(base_ip1_j_kp1)[axis_y], levelset.phiMixedDerivatives()(base_ip1_j_kp1)[1], dx[axis_z],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_xyz_xy = GALS::INTERPOLATION::get_control_points(
       levelset.phiMixedDerivatives()(base_ip1_jp1_k)[0], levelset.phiMixedDerivatives()(base_ip1_jp1_k)[3],
       levelset.phiMixedDerivatives()(base_ip1_jp1_kp1)[0], levelset.phiMixedDerivatives()(base_ip1_jp1_kp1)[3],
       dx[axis_z], use_gradient_limiting);
   const ControlPoints<T>& control_points_xyz_y = GALS::INTERPOLATION::get_control_points(
-      levelset.psiTm1()(base_ip1_jp1_k)[axis_y], levelset.phiMixedDerivatives()(base_ip1_jp1_k)[1],
-      levelset.psiTm1()(base_ip1_jp1_kp1)[axis_y], levelset.phiMixedDerivatives()(base_ip1_jp1_kp1)[1], dx[axis_z],
+      levelset.psiPrev()(base_ip1_jp1_k)[axis_y], levelset.phiMixedDerivatives()(base_ip1_jp1_k)[1],
+      levelset.psiPrev()(base_ip1_jp1_kp1)[axis_y], levelset.phiMixedDerivatives()(base_ip1_jp1_kp1)[1], dx[axis_z],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_xy_z = GALS::INTERPOLATION::get_control_points(
-      levelset.psiTm1()(base_ip1_j_k)[axis_z], levelset.phiMixedDerivatives()(base_ip1_j_k)[1],
-      levelset.psiTm1()(base_ip1_jp1_k)[axis_z], levelset.phiMixedDerivatives()(base_ip1_jp1_k)[1], dx[axis_y],
+      levelset.psiPrev()(base_ip1_j_k)[axis_z], levelset.phiMixedDerivatives()(base_ip1_j_k)[1],
+      levelset.psiPrev()(base_ip1_jp1_k)[axis_z], levelset.phiMixedDerivatives()(base_ip1_jp1_k)[1], dx[axis_y],
       use_gradient_limiting);
   const ControlPoints<T>& control_points_zxy_z = GALS::INTERPOLATION::get_control_points(
-      levelset.psiTm1()(base_ip1_j_kp1)[axis_z], levelset.phiMixedDerivatives()(base_ip1_j_kp1)[1],
-      levelset.psiTm1()(base_ip1_jp1_kp1)[axis_z], levelset.phiMixedDerivatives()(base_ip1_jp1_kp1)[1], dx[axis_y],
+      levelset.psiPrev()(base_ip1_j_kp1)[axis_z], levelset.phiMixedDerivatives()(base_ip1_j_kp1)[1],
+      levelset.psiPrev()(base_ip1_jp1_kp1)[axis_z], levelset.phiMixedDerivatives()(base_ip1_jp1_kp1)[1], dx[axis_y],
       use_gradient_limiting);
 
   const T& c_21_x = control_points_x.c_21;
@@ -392,8 +395,8 @@ void GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 3>>::compute(
       for (int k = 0; k < num_cells_interp[2]; ++k) {
         const auto& hermite_fields = this->interpolate(grid, x_interp(i, j, k), levelset);
 
-        levelset.phiInterpTm1()(i, j, k) = hermite_fields.phi_interpolated;
-        levelset.psiInterpTm1()(i, j, k) = hermite_fields.psi_interpolated;
+        levelset.phiInterpPrev()(i, j, k) = hermite_fields.phi_interpolated;
+        levelset.psiInterpPrev()(i, j, k) = hermite_fields.psi_interpolated;
       }
 }
 

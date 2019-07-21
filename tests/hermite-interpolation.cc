@@ -72,14 +72,15 @@ static Errors test_oned(const int nx)
   for (int i = i_min; i < i_max; ++i)
     for (int j = j_min; j < j_max; ++j)
       for (int k = k_min; k < k_max; ++k) {
-        levelset.phiTm1()(i, j, k) = oned_levelset(grid(i, j, k)[0], xo, ro);
-        levelset.phi()(i, j, k) = levelset.phiTm1()(i, j, k);
+        levelset.phiPrev()(i, j, k) = oned_levelset(grid(i, j, k)[0], xo, ro);
+        levelset.phi()(i, j, k) = levelset.phiPrev()(i, j, k);
 
-        levelset.psiTm1()(i, j, k)[0] = oned_levelset_grad(grid(i, j, k)[0], xo, ro);
-        levelset.psi()(i, j, k) = levelset.psiTm1()(i, j, k);
+        levelset.psiPrev()(i, j, k)[0] = oned_levelset_grad(grid(i, j, k)[0], xo, ro);
+        levelset.psi()(i, j, k) = levelset.psiPrev()(i, j, k);
 
-        // std::cout << "grid(" << i << ", " << j << ", " << k << ") = " << grid(i, j, k) << "; levelset.phiTm1()(" << i
-        //<< ", " << j << ", " << k << ") = " << levelset.phiTm1()(i, j, k) << std::endl;
+        // std::cout << "grid(" << i << ", " << j << ", " << k << ") = " << grid(i, j, k) << "; levelset.phiPrev()(" <<
+        // i
+        //<< ", " << j << ", " << k << ") = " << levelset.phiPrev()(i, j, k) << std::endl;
       }
 
   // Create interpolating points.
@@ -103,19 +104,19 @@ static Errors test_oned(const int nx)
   for (int i = 0; i < x_interp.grid().numCells()[0]; ++i)
     for (int j = 0; j < x_interp.grid().numCells()[1]; ++j)
       for (int k = 0; k < x_interp.grid().numCells()[2]; ++k) {
-        auto levelset_interp = levelset.phiInterpTm1()(i, j, k);
+        auto levelset_interp = levelset.phiInterpPrev()(i, j, k);
         auto levelset_exact = oned_levelset(x_interp(i, j, k)[0], xo, ro);
 
         errs.l1_phi += fabs(levelset_interp - levelset_exact);
 
-        auto psi_interp = levelset.psiInterpTm1()(i, j, k)[0];
+        auto psi_interp = levelset.psiInterpPrev()(i, j, k)[0];
         auto psi_exact = oned_levelset_grad(x_interp(i, j, k)[0], xo, ro);
 
         errs.l1_psi[0] += fabs(psi_interp - psi_exact);
 
         // std::cout << "x_interp(" << i << ", " << j << ", " << k << ") = " << x_interp(i, j, k)
-        //<< "; levelset.phiInterpTm1()(" << i << ", " << j << ", " << k
-        //<< ") = " << levelset.phiInterpTm1()(i, j, k) << "; levelset_exact"
+        //<< "; levelset.phiInterpPrev()(" << i << ", " << j << ", " << k
+        //<< ") = " << levelset.phiInterpPrev()(i, j, k) << "; levelset_exact"
         //<< " = " << levelset_exact << std::endl;
       }
   errs.l1_phi /= x_interp.grid().totalCells();
@@ -210,21 +211,22 @@ static Errors test_twod(const int nx, const int ny)
   for (int i = i_min; i < i_max; ++i)
     for (int j = j_min; j < j_max; ++j)
       for (int k = k_min; k < k_max; ++k) {
-        levelset.phiTm1()(i, j, k) = twod_exp_circle(grid(i, j, k)[0], grid(i, j, k)[1], xo, yo, ro);
-        levelset.phi()(i, j, k) = levelset.phiTm1()(i, j, k);
+        levelset.phiPrev()(i, j, k) = twod_exp_circle(grid(i, j, k)[0], grid(i, j, k)[1], xo, yo, ro);
+        levelset.phi()(i, j, k) = levelset.phiPrev()(i, j, k);
 
-        levelset.psiTm1()(i, j, k)[0] = twod_exp_circle_grad_x(grid(i, j, k)[0], grid(i, j, k)[1], xo, yo, ro);
-        levelset.psi()(i, j, k)[0] = levelset.psiTm1()(i, j, k)[0];
+        levelset.psiPrev()(i, j, k)[0] = twod_exp_circle_grad_x(grid(i, j, k)[0], grid(i, j, k)[1], xo, yo, ro);
+        levelset.psi()(i, j, k)[0] = levelset.psiPrev()(i, j, k)[0];
 
-        levelset.psiTm1()(i, j, k)[1] = twod_exp_circle_grad_y(grid(i, j, k)[0], grid(i, j, k)[1], xo, yo, ro);
-        levelset.psi()(i, j, k)[1] = levelset.psiTm1()(i, j, k)[1];
+        levelset.psiPrev()(i, j, k)[1] = twod_exp_circle_grad_y(grid(i, j, k)[0], grid(i, j, k)[1], xo, yo, ro);
+        levelset.psi()(i, j, k)[1] = levelset.psiPrev()(i, j, k)[1];
 
-        levelset.phiMixedDerivativesTm1()(i, j, k)[0] =
+        levelset.phiMixedDerivativesPrev()(i, j, k)[0] =
             twod_exp_circle_grad_xy(grid(i, j, k)[0], grid(i, j, k)[1], xo, yo, ro);
-        levelset.phiMixedDerivatives()(i, j, k)[0] = levelset.phiMixedDerivativesTm1()(i, j, k)[0];
+        levelset.phiMixedDerivatives()(i, j, k)[0] = levelset.phiMixedDerivativesPrev()(i, j, k)[0];
 
-        // std::cout << "grid(" << i << ", " << j << ", " << k << ") = " << grid(i, j, k) << "; levelset.phiTm1()(" << i
-        //<< ", " << j << ", " << k << ") = " << levelset.phiTm1()(i, j, k) << std::endl;
+        // std::cout << "grid(" << i << ", " << j << ", " << k << ") = " << grid(i, j, k) << "; levelset.phiPrev()(" <<
+        // i
+        //<< ", " << j << ", " << k << ") = " << levelset.phiPrev()(i, j, k) << std::endl;
       }
 
   // Create interpolating points.
@@ -248,26 +250,26 @@ static Errors test_twod(const int nx, const int ny)
   for (int i = 0; i < x_interp.grid().numCells()[0]; ++i)
     for (int j = 0; j < x_interp.grid().numCells()[1]; ++j)
       for (int k = 0; k < x_interp.grid().numCells()[2]; ++k) {
-        auto levelset_interp = levelset.phiInterpTm1()(i, j, k);
+        auto levelset_interp = levelset.phiInterpPrev()(i, j, k);
         auto levelset_exact = twod_exp_circle(x_interp(i, j, k)[0], x_interp(i, j, k)[1], xo, yo, ro);
 
         errs.l1_phi += fabs(levelset_interp - levelset_exact);
 
-        auto psix_interp = levelset.psiInterpTm1()(i, j, k)[0];
+        auto psix_interp = levelset.psiInterpPrev()(i, j, k)[0];
         auto psix_exact = twod_exp_circle_grad_x(x_interp(i, j, k)[0], x_interp(i, j, k)[1], xo, yo, ro);
 
-        auto psiy_interp = levelset.psiInterpTm1()(i, j, k)[1];
+        auto psiy_interp = levelset.psiInterpPrev()(i, j, k)[1];
         auto psiy_exact = twod_exp_circle_grad_y(x_interp(i, j, k)[0], x_interp(i, j, k)[1], xo, yo, ro);
 
         errs.l1_psi[0] += fabs(psix_interp - psix_exact);
         errs.l1_psi[1] += fabs(psiy_interp - psiy_exact);
 
         // std::cout << "x_interp(" << i << ", " << j << ", " << k << ") = " << x_interp(i, j, k) << std::endl
-        //<< "\tlevelset.phiInterpTm1()(" << i << ", " << j << ", " << k
-        //<< ") = " << levelset.phiInterpTm1()(i, j, k) << "; levelset_exact"
+        //<< "\tlevelset.phiInterpPrev()(" << i << ", " << j << ", " << k
+        //<< ") = " << levelset.phiInterpPrev()(i, j, k) << "; levelset_exact"
         //<< " = " << levelset_exact << std::endl
-        //<< "\tlevelset.psiInterpTm1()(" << i << ", " << j << ", " << k
-        //<< ") = " << levelset.psiInterpTm1()(i, j, k) << std::endl
+        //<< "\tlevelset.psiInterpPrev()(" << i << ", " << j << ", " << k
+        //<< ") = " << levelset.psiInterpPrev()(i, j, k) << std::endl
         //<< "\tpsi_exact"
         //<< " = " << psix_exact << ", " << psiy_exact << std::endl;
       }
@@ -364,40 +366,41 @@ static Errors test_threed(const int nx, const int ny, const int nz)
   for (int i = i_min; i < i_max; ++i)
     for (int j = j_min; j < j_max; ++j)
       for (int k = k_min; k < k_max; ++k) {
-        levelset.phiTm1()(i, j, k) =
+        levelset.phiPrev()(i, j, k) =
             threed_exp_circle(grid(i, j, k)[0], grid(i, j, k)[1], grid(i, j, k)[2], xo, yo, zo, ro);
-        levelset.phi()(i, j, k) = levelset.phiTm1()(i, j, k);
+        levelset.phi()(i, j, k) = levelset.phiPrev()(i, j, k);
 
-        levelset.psiTm1()(i, j, k)[0] =
+        levelset.psiPrev()(i, j, k)[0] =
             threed_exp_circle_grad_x(grid(i, j, k)[0], grid(i, j, k)[1], grid(i, j, k)[2], xo, yo, zo, ro);
-        levelset.psi()(i, j, k)[0] = levelset.psiTm1()(i, j, k)[0];
+        levelset.psi()(i, j, k)[0] = levelset.psiPrev()(i, j, k)[0];
 
-        levelset.psiTm1()(i, j, k)[1] =
+        levelset.psiPrev()(i, j, k)[1] =
             threed_exp_circle_grad_y(grid(i, j, k)[0], grid(i, j, k)[1], grid(i, j, k)[2], xo, yo, zo, ro);
-        levelset.psi()(i, j, k)[1] = levelset.psiTm1()(i, j, k)[1];
+        levelset.psi()(i, j, k)[1] = levelset.psiPrev()(i, j, k)[1];
 
-        levelset.psiTm1()(i, j, k)[2] =
+        levelset.psiPrev()(i, j, k)[2] =
             threed_exp_circle_grad_z(grid(i, j, k)[0], grid(i, j, k)[1], grid(i, j, k)[2], xo, yo, zo, ro);
-        levelset.psi()(i, j, k)[2] = levelset.psiTm1()(i, j, k)[2];
+        levelset.psi()(i, j, k)[2] = levelset.psiPrev()(i, j, k)[2];
 
-        levelset.phiMixedDerivativesTm1()(i, j, k)[0] =
+        levelset.phiMixedDerivativesPrev()(i, j, k)[0] =
             threed_exp_circle_grad_xy(grid(i, j, k)[0], grid(i, j, k)[1], grid(i, j, k)[2], xo, yo, zo, ro);
-        levelset.phiMixedDerivatives()(i, j, k)[0] = levelset.phiMixedDerivativesTm1()(i, j, k)[0];
+        levelset.phiMixedDerivatives()(i, j, k)[0] = levelset.phiMixedDerivativesPrev()(i, j, k)[0];
 
-        levelset.phiMixedDerivativesTm1()(i, j, k)[1] =
+        levelset.phiMixedDerivativesPrev()(i, j, k)[1] =
             threed_exp_circle_grad_yz(grid(i, j, k)[0], grid(i, j, k)[1], grid(i, j, k)[2], xo, yo, zo, ro);
-        levelset.phiMixedDerivatives()(i, j, k)[1] = levelset.phiMixedDerivativesTm1()(i, j, k)[1];
+        levelset.phiMixedDerivatives()(i, j, k)[1] = levelset.phiMixedDerivativesPrev()(i, j, k)[1];
 
-        levelset.phiMixedDerivativesTm1()(i, j, k)[2] =
+        levelset.phiMixedDerivativesPrev()(i, j, k)[2] =
             threed_exp_circle_grad_zx(grid(i, j, k)[0], grid(i, j, k)[1], grid(i, j, k)[2], xo, yo, zo, ro);
-        levelset.phiMixedDerivatives()(i, j, k)[2] = levelset.phiMixedDerivativesTm1()(i, j, k)[2];
+        levelset.phiMixedDerivatives()(i, j, k)[2] = levelset.phiMixedDerivativesPrev()(i, j, k)[2];
 
-        levelset.phiMixedDerivativesTm1()(i, j, k)[3] =
+        levelset.phiMixedDerivativesPrev()(i, j, k)[3] =
             threed_exp_circle_grad_xyz(grid(i, j, k)[0], grid(i, j, k)[1], grid(i, j, k)[2], xo, yo, zo, ro);
-        levelset.phiMixedDerivatives()(i, j, k)[3] = levelset.phiMixedDerivativesTm1()(i, j, k)[3];
+        levelset.phiMixedDerivatives()(i, j, k)[3] = levelset.phiMixedDerivativesPrev()(i, j, k)[3];
 
-        // std::cout << "grid(" << i << ", " << j << ", " << k << ") = " << grid(i, j, k) << "; levelset.phiTm1()(" << i
-        //<< ", " << j << ", " << k << ") = " << levelset.phiTm1()(i, j, k) << std::endl;
+        // std::cout << "grid(" << i << ", " << j << ", " << k << ") = " << grid(i, j, k) << "; levelset.phiPrev()(" <<
+        // i
+        //<< ", " << j << ", " << k << ") = " << levelset.phiPrev()(i, j, k) << std::endl;
       }
 
   // Create interpolating points.
@@ -422,21 +425,21 @@ static Errors test_threed(const int nx, const int ny, const int nz)
   for (int i = 0; i < x_interp.grid().numCells()[0]; ++i)
     for (int j = 0; j < x_interp.grid().numCells()[1]; ++j)
       for (int k = 0; k < x_interp.grid().numCells()[2]; ++k) {
-        auto levelset_interp = levelset.phiInterpTm1()(i, j, k);
+        auto levelset_interp = levelset.phiInterpPrev()(i, j, k);
         auto levelset_exact =
             threed_exp_circle(x_interp(i, j, k)[0], x_interp(i, j, k)[1], x_interp(i, j, k)[2], xo, yo, zo, ro);
 
         errs.l1_phi += fabs(levelset_interp - levelset_exact);
 
-        auto psix_interp = levelset.psiInterpTm1()(i, j, k)[0];
+        auto psix_interp = levelset.psiInterpPrev()(i, j, k)[0];
         auto psix_exact =
             threed_exp_circle_grad_x(x_interp(i, j, k)[0], x_interp(i, j, k)[1], x_interp(i, j, k)[2], xo, yo, zo, ro);
 
-        auto psiy_interp = levelset.psiInterpTm1()(i, j, k)[1];
+        auto psiy_interp = levelset.psiInterpPrev()(i, j, k)[1];
         auto psiy_exact =
             threed_exp_circle_grad_y(x_interp(i, j, k)[0], x_interp(i, j, k)[1], x_interp(i, j, k)[2], xo, yo, zo, ro);
 
-        auto psiz_interp = levelset.psiInterpTm1()(i, j, k)[2];
+        auto psiz_interp = levelset.psiInterpPrev()(i, j, k)[2];
         auto psiz_exact =
             threed_exp_circle_grad_z(x_interp(i, j, k)[0], x_interp(i, j, k)[1], x_interp(i, j, k)[2], xo, yo, zo, ro);
 
@@ -445,11 +448,11 @@ static Errors test_threed(const int nx, const int ny, const int nz)
         errs.l1_psi[2] += fabs(psiz_interp - psiz_exact);
 
         // std::cout << "x_interp(" << i << ", " << j << ", " << k << ") = " << x_interp(i, j, k) << std::endl
-        //<< "\tlevelset.phiInterpTm1()(" << i << ", " << j << ", " << k
-        //<< ") = " << levelset.phiInterpTm1()(i, j, k) << "; levelset_exact"
+        //<< "\tlevelset.phiInterpPrev()(" << i << ", " << j << ", " << k
+        //<< ") = " << levelset.phiInterpPrev()(i, j, k) << "; levelset_exact"
         //<< " = " << levelset_exact << std::endl
-        //<< "\tlevelset.psiInterpTm1()(" << i << ", " << j << ", " << k
-        //<< ") = " << levelset.psiInterpTm1()(i, j, k) << std::endl
+        //<< "\tlevelset.psiInterpPrev()(" << i << ", " << j << ", " << k
+        //<< ") = " << levelset.psiInterpPrev()(i, j, k) << std::endl
         //<< "\tpsi_exact"
         //<< " = " << psix_exact << ", " << psiy_exact << std::endl;
       }
