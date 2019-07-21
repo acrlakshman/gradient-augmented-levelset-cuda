@@ -31,21 +31,24 @@
 
 #include "gals/input-parser/input-parser-base.h"
 #include "gals/input-parser/grid.h"
+#include "gals/input-parser/velocity.h"
 
 template <typename FIELD>
-GALS::CPU::InputParserBase<FIELD>::InputParserBase()
+GALS::INPUT_PARSER::InputParserBase<FIELD>::InputParserBase()
 {
 }
 
 template <typename FIELD>
-GALS::CPU::InputParserBase<FIELD>::~InputParserBase()
+GALS::INPUT_PARSER::InputParserBase<FIELD>::~InputParserBase()
 {
 }
 
 template <typename FIELD>
-void GALS::CPU::InputParserBase<FIELD>::parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
+void GALS::INPUT_PARSER::InputParserBase<FIELD>::parse(const YAML::Node &field,
+                                                       GALS::INPUT_FIELDS::InputFields *p_input_fields)
 {
   FIELD()(field, p_input_fields);
 }
 
-template class GALS::CPU::InputParserBase<GALS::CPU::GridParser>;
+template class GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Grid>;
+template class GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Velocity>;

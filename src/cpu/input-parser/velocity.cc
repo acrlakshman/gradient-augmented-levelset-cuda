@@ -29,45 +29,25 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "gals/input-parser/velocity.h"
+#include "gals/input-fields/velocity.h"
 
-#include "gals/input-fields/input-fields.h"
+#include <vector>
 
-#include "yaml-cpp/yaml.h"
+GALS::INPUT_PARSER::Velocity::Velocity() {}
 
-namespace GALS
+GALS::INPUT_PARSER::Velocity::~Velocity() {}
+
+void GALS::INPUT_PARSER::Velocity::parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
 {
-namespace INPUT_PARSER
+  auto &input_fields = *p_input_fields;
+
+  input_fields.m_velocity->name = field["name"].as<std::string>();
+  input_fields.m_velocity->vector = field["vector"].as<std::vector<double>>();
+  input_fields.m_velocity->center = field["center"].as<std::vector<double>>();
+}
+
+void GALS::INPUT_PARSER::Velocity::operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
 {
-/*! \class Grid
- *
- * Class to parse input fields for grid.
- */
-class Grid
-{
- public:
-  /*! Default constructor
-   */
-  Grid();
-
-  /*! Destructor
-   */
-  ~Grid();
-
-  /*! Parse input variables for grid section.
-   *
-   * \param field YAML node for grid.
-   * \param p_input_fields pointer to input fields object.
-   */
-  void parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
-
-  /*! Overloaded operator to parse.
-   *
-   * \param field YAML node for grid.
-   * \param p_input_fields pointer to input fields object.
-   */
-  void operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
-};
-
-}  // namespace CPU
-}  // namespace GALS
+  this->parse(field, p_input_fields);
+}

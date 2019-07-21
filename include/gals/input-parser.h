@@ -38,7 +38,7 @@
 
 namespace GALS
 {
-namespace CPU
+namespace INPUT_PARSER
 {
 /*! \class InputParser
  *

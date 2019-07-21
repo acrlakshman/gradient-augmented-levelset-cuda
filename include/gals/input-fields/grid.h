@@ -35,7 +35,7 @@ namespace GALS
 {
 namespace INPUT_FIELDS
 {
-struct grid {
+struct Grid {
   double x_min, x_max, y_min, y_max, z_min, z_max;
   int nx, ny, nz;
 };

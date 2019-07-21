@@ -44,6 +44,8 @@ namespace GALS
 #define GALS_FUNCTION_NOT_IMPLEMENTED(var) std::cout << "FUNCTION_NOT_IMPLEMENTED: " << #var << std::endl;
 #endif
 
+static double pi() { return atan(1) * 4; }
+
 static double VSMALL = 1e-10;
 static const double one_third = 1. / 3.;
 static const double two_thirds = 2. / 3.;

@@ -165,6 +165,7 @@ STRIP_FROM_PATH        = ${SRC_DIR} \
 								 ${INCLUDE_DIR}/gals/utilities \
 								 ${INCLUDE_DIR}/gals/input-parser \
 								 ${INCLUDE_DIR}/gals/input-fields \
+								 ${INCLUDE_DIR}/gals/analytical-fields \
 								 ${INCLUDE_DIR}/gals/cpu \
 								 ${INCLUDE_DIR}/gals/cpu/gradient \
 								 ${INCLUDE_DIR}/gals/cpu/interpolation \
@@ -172,7 +173,8 @@ STRIP_FROM_PATH        = ${SRC_DIR} \
                          ${SRC_DIR}/cpu/gradient \
                          ${SRC_DIR}/cpu/interpolation \
                          ${SRC_DIR}/cpu/input-parser \
-                         ${SRC_DIR}/cpu/input-fields
+                         ${SRC_DIR}/cpu/input-fields \
+                         ${SRC_DIR}/cpu/analytical-fields
 
 # The STRIP_FROM_INC_PATH tag can be used to strip a user-defined part of the
 # path mentioned in the documentation of a class, which tells the reader which
@@ -822,12 +824,14 @@ INPUT                  = ${DOCS_DIR}/pages \
 								 ${INCLUDE_DIR}/gals/utilities \
 								 ${INCLUDE_DIR}/gals/input-parser \
 								 ${INCLUDE_DIR}/gals/input-fields \
+								 ${INCLUDE_DIR}/gals/analytical-fields \
 								 ${INCLUDE_DIR}/gals/cpu \
 								 ${INCLUDE_DIR}/gals/cpu/gradient \
 								 ${INCLUDE_DIR}/gals/cpu/interpolation \
                          ${SRC_DIR}/cpu/interpolation \
                          ${SRC_DIR}/cpu/input-parser \
                          ${SRC_DIR}/cpu/input-fields \
+                         ${SRC_DIR}/cpu/analytical-fields \
                          ${SRC_DIR}/cpu/gradient \
                          ${SRC_DIR}/cpu \
                          ${SRC_DIR}
