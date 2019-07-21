@@ -112,6 +112,12 @@ T_ARRAY& GALS::CPU::Array<T_GRID, T_ARRAY>::operator()(const Vec3<int> node_id)
   return m_data[m_grid.index(node_id)];
 }
 
+template <typename T_GRID, typename T_ARRAY>
+void GALS::CPU::Array<T_GRID, T_ARRAY>::operator=(const GALS::CPU::Array<T_GRID, T_ARRAY>& array)
+{
+  m_data = array.data();
+}
+
 template class GALS::CPU::Array<GALS::CPU::Grid<double, 1>, double>;
 template class GALS::CPU::Array<GALS::CPU::Grid<double, 2>, double>;
 template class GALS::CPU::Array<GALS::CPU::Grid<double, 3>, double>;

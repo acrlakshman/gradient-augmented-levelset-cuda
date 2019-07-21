@@ -80,6 +80,12 @@ class Array
    */
   const Vec3<int> numCells() const;
 
+  /*! Get data.
+   *
+   * \return vector that stores data.
+   */
+  const std::vector<T_ARRAY> &data() const { return m_data; }
+
   /*! Overloaded subscript operator to return value of array at a given 1D array based index.
    *
    * \param idx 1D array based index.
@@ -131,6 +137,12 @@ class Array
    * \return value at given 3D cell index.
    */
   T_ARRAY &operator()(const Vec3<int> node_id);
+
+  /*! Overloaded operator to assign values.
+   *
+   * \param array array from which values will be copied.
+   */
+  void operator=(const Array<T_GRID, T_ARRAY> &array);
 
  private:
   const T_GRID &m_grid;

@@ -40,6 +40,8 @@ namespace GALS
 {
 namespace TEMPORAL_SCHEMES
 {
+namespace SEMI_LAGRANGIAN
+{
 /*! \class Euler
  *
  * Euler scheme for temporal update.
@@ -58,22 +60,30 @@ class Euler
    */
   ~Euler();
 
-  /*! Advect in time.
+  /*! Advect in time using semi-Lagrangian scheme.
    *
-   * \f$\frac{\phi^{n+1} - \phi^n}{dt} + velocity = 0.\f$
+   * \f$\frac{\phi^{n+1} - \phi^n}{dt} + \boldsymbol{u}\cdot\nabla\phi = 0.\f$.
+   *
+   * TODO Document semi-Lagrangian formulation.
+   * * Before calling this function, all required variables for interpolation must be computed.
+   *   * levelset.phi_tm1, levelset.psi_tm1 are used to update levelset.phi, levelset.psi.
+   *   * levelset.phi_mixed_derivatives_tm1 must be pre-computed.
+   *   * levelset_velocity.velocityGradient() must be pre-computed.
+   *
    * Ghost cells are not updated during this step.
    *
    * \param dt time step.
    * \param levelset_velocity velocity term.
    * \param levelset levelset function that needs to be advected.
    */
-  void compute(const T dt, const GALS::CPU::LevelsetVelocity<T_GRID, T> &levelset_velocity,
+  void compute(const T dt, const CPU::LevelsetVelocity<T_GRID, T> &levelset_velocity,
                GALS::CPU::Levelset<T_GRID, T> &levelset);
 
   /*! Advect in time.
    *
-   * \f$\frac{\phi^{n+1} - \phi^n}{dt} + velocity = 0.\f$
+   * \f$\frac{\phi^{n+1} - \phi^n}{dt} + \boldsymbol{u}\cdot\nabla\phi = 0.\f$
    * Ghost cells are not updated during this step.
+   * * Before calling this function, all required variables for interpolation must be computed.
    *
    * \param dt time step.
    * \param levelset_velocity velocity term.
@@ -86,5 +96,6 @@ class Euler
   }
 };
 
+}  // namespace SEMI_LAGRANGIAN
 }  // namespace TEMPORAL_SCHEMES
 }  // namespace GALS

@@ -29,62 +29,21 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include "gals/cpu/levelset-velocity.h"
-#include "gals/cpu/levelset.h"
-#include "gals/utilities/array.h"
-#include "gals/utilities/grid.h"
 
-namespace GALS
+#include <iostream>
+
+template <typename T_GRID, typename T>
+GALS::CPU::LevelsetVelocity<T_GRID, T>::LevelsetVelocity(const T_GRID& grid)
+    : m_grid(grid), m_velocity(grid), m_velocity_grad(grid)
 {
-namespace TEMPORAL_SCHEMES
+}
+
+template <typename T_GRID, typename T>
+GALS::CPU::LevelsetVelocity<T_GRID, T>::~LevelsetVelocity()
 {
-/*! \class Euler
- *
- * Euler scheme for temporal update.
- */
-template <typename T, typename T_GRID>
-class Euler
-{
- public:
-  using value_type = T;
+}
 
-  /*! Default constructor
-   */
-  Euler();
-
-  /*! Destructor
-   */
-  ~Euler();
-
-  /*! Advect in time.
-   *
-   * \f$\frac{\phi^{n+1} - \phi^n}{dt} + velocity = 0.\f$
-   * Ghost cells are not updated during this step.
-   *
-   * \param dt time step.
-   * \param levelset_velocity velocity term.
-   * \param levelset levelset function that needs to be advected.
-   */
-  void compute(const T dt, const GALS::CPU::LevelsetVelocity<T_GRID, T> &levelset_velocity,
-               GALS::CPU::Levelset<T_GRID, T> &levelset);
-
-  /*! Advect in time.
-   *
-   * \f$\frac{\phi^{n+1} - \phi^n}{dt} + velocity = 0.\f$
-   * Ghost cells are not updated during this step.
-   *
-   * \param dt time step.
-   * \param levelset_velocity velocity term.
-   * \param levelset levelset function that needs to be advected.
-   */
-  void operator()(const T dt, const CPU::LevelsetVelocity<T_GRID, T> &levelset_velocity,
-                  GALS::CPU::Levelset<T_GRID, T> &levelset)
-  {
-    this->compute(dt, levelset_velocity, levelset);
-  }
-};
-
-}  // namespace TEMPORAL_SCHEMES
-}  // namespace GALS
+template class GALS::CPU::LevelsetVelocity<GALS::CPU::Grid<double, 1>, double>;
+template class GALS::CPU::LevelsetVelocity<GALS::CPU::Grid<double, 2>, double>;
+template class GALS::CPU::LevelsetVelocity<GALS::CPU::Grid<double, 3>, double>;

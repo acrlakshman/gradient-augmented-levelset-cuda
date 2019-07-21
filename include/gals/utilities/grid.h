@@ -76,6 +76,7 @@ class Grid
 
   //! vector along x: {1, 0, 0}; y: {0, 1, 0}; z: {0, 0, 1}.
   static const Mat3<int> axis_vectors;
+  static const Mat3<T> identity_mat;
 
   //! Number of mixed derivatives.
   static constexpr int num_mixed_derivatives = GALS::CPU::num_mixed_derivatives(DIM);
@@ -150,7 +151,7 @@ class Grid
    *
    * \return vector of size 3.
    */
-  const std::vector<int> numCells() const;
+  const Vec3<int> numCells() const;
 
   /*! Returns total number of cells excluding ghost (padded) cells.
    *
@@ -256,6 +257,9 @@ class Grid
 
 template <typename T, int DIM>
 const Mat3<int> Grid<T, DIM>::axis_vectors = Mat3<int>(1, 0, 0, 0, 1, 0, 0, 0, 1);
+
+template <typename T, int DIM>
+const Mat3<T> Grid<T, DIM>::identity_mat = Mat3<T>(1, 0, 0, 0, 1, 0, 0, 0, 1);
 
 }  // namespace CPU
 }  // namespace GALS

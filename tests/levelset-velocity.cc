@@ -29,62 +29,66 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
 #include "gals/cpu/levelset-velocity.h"
-#include "gals/cpu/levelset.h"
 #include "gals/utilities/array.h"
-#include "gals/utilities/grid.h"
+#include "gals/utilities/utilities.h"
+#include "gals/utilities/vec3.h"
 
-namespace GALS
+#include <gtest/gtest.h>
+
+#include <math.h>
+#include <iostream>
+
+/* * * * * *  TEST #1  * * * * * */
+TEST(CPU, LEVELSET_VELOCITY_1D)
 {
-namespace TEMPORAL_SCHEMES
+  typedef GALS::CPU::Grid<double, 1> T_GRID;
+
+  // initializing 1-D test grid.
+  GALS::CPU::Grid<double, 1> grid(10, 1, 1);
+
+  // grid generation
+  grid.generate(-1, 1, -1, 1, -1, 1);
+
+  // accessing grid details
+  const auto mask = grid.getMask();
+  const int pad = grid.getPadding();
+  const auto num_cells = grid.numCells();
+
+  // initializing 1-D scalar array
+  GALS::CPU::LevelsetVelocity<T_GRID, double> levelset_velocity(grid);
+
+  // Test getters.
+  const auto& grid_levelset_velocity = levelset_velocity.grid();
+  const auto& velocity = levelset_velocity.velocity();
+  const auto& velocity_grad = levelset_velocity.velocityGradient();
+  auto& velocity_1 = levelset_velocity.velocity();
+  auto& velocity_grad_1 = levelset_velocity.velocityGradient();
+}
+
+/* * * * * *  TEST #2  * * * * * */
+TEST(CPU, LEVELSET_VELOCITY_2D)
 {
-/*! \class Euler
- *
- * Euler scheme for temporal update.
- */
-template <typename T, typename T_GRID>
-class Euler
-{
- public:
-  using value_type = T;
+  typedef GALS::CPU::Grid<double, 2> T_GRID;
 
-  /*! Default constructor
-   */
-  Euler();
+  // initializing 2-D test grid.
+  GALS::CPU::Grid<double, 2> grid(10, 10, 1);
 
-  /*! Destructor
-   */
-  ~Euler();
+  // grid generation
+  grid.generate(-1, 1, -1, 1, -1, 1);
 
-  /*! Advect in time.
-   *
-   * \f$\frac{\phi^{n+1} - \phi^n}{dt} + velocity = 0.\f$
-   * Ghost cells are not updated during this step.
-   *
-   * \param dt time step.
-   * \param levelset_velocity velocity term.
-   * \param levelset levelset function that needs to be advected.
-   */
-  void compute(const T dt, const GALS::CPU::LevelsetVelocity<T_GRID, T> &levelset_velocity,
-               GALS::CPU::Levelset<T_GRID, T> &levelset);
+  // accessing grid details
+  const auto mask = grid.getMask();
+  const int pad = grid.getPadding();
+  const auto num_cells = grid.numCells();
 
-  /*! Advect in time.
-   *
-   * \f$\frac{\phi^{n+1} - \phi^n}{dt} + velocity = 0.\f$
-   * Ghost cells are not updated during this step.
-   *
-   * \param dt time step.
-   * \param levelset_velocity velocity term.
-   * \param levelset levelset function that needs to be advected.
-   */
-  void operator()(const T dt, const CPU::LevelsetVelocity<T_GRID, T> &levelset_velocity,
-                  GALS::CPU::Levelset<T_GRID, T> &levelset)
-  {
-    this->compute(dt, levelset_velocity, levelset);
-  }
-};
+  // initializing 2-D scalar array
+  GALS::CPU::LevelsetVelocity<T_GRID, double> levelset_velocity(grid);
 
-}  // namespace TEMPORAL_SCHEMES
-}  // namespace GALS
+  // Test getters.
+  const auto& grid_levelset_velocity = levelset_velocity.grid();
+  const auto& velocity = levelset_velocity.velocity();
+  const auto& velocity_grad = levelset_velocity.velocityGradient();
+  auto& velocity_1 = levelset_velocity.velocity();
+  auto& velocity_grad_1 = levelset_velocity.velocityGradient();
+}

@@ -29,35 +29,63 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "gals/cpu/temporal-schemes/euler.h"
+#include "gals/cpu/temporal-schemes/semi-lagrangian/euler.h"
+#include "gals/cpu/gradient.h"
+#include "gals/cpu/interpolate.h"
 
 #include <math.h>
 
 template <typename T, typename T_GRID>
-GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>::Euler()
+GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<T, T_GRID>::Euler()
 {
 }
 
 template <typename T, typename T_GRID>
-GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>::~Euler()
+GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<T, T_GRID>::~Euler()
 {
 }
 
 template <typename T, typename T_GRID>
-void GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>::compute(const T dt,
-                                                       const GALS::CPU::LevelsetVelocity<T_GRID, T> &levelset_velocity,
-                                                       GALS::CPU::Levelset<T_GRID, T> &levelset)
+void GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<T, T_GRID>::compute(
+    const T dt, const GALS::CPU::LevelsetVelocity<T_GRID, T> &levelset_velocity,
+    GALS::CPU::Levelset<T_GRID, T> &levelset)
 {
-  const auto &phi_prev = levelset.phiPrev();
-  auto &phi = levelset.phi();
-  const GALS::CPU::Vec3<int> num_cells = phi.numCells();
+  const auto &grid = levelset.grid();
   const auto &velocity = levelset_velocity.velocity();
+  const auto &velocity_grad = levelset_velocity.velocityGradient();
+  const GALS::CPU::Vec3<int> num_cells = grid.numCells();
+  auto &phi = levelset.phi();
+  auto &psi = levelset.psi();
+
+  // Compute x_root `root of the characteristic`.
+  GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>> x_root(grid);
 
   for (int i = 0; i < num_cells[0]; ++i)
     for (int j = 0; j < num_cells[1]; ++j)
+      for (int k = 0; k < num_cells[2]; ++k) x_root(i, j, k) = grid(i, j, k) - velocity(i, j, k) * dt;
+
+  // Compute phi_interp_prev, psi_interp_prev at x_root.
+  GALS::CPU::Interpolate<T, T_GRID, GALS::INTERPOLATION::Hermite<T, T_GRID>>::compute(x_root, levelset);
+
+  // Compute x_root_grad.
+  GALS::CPU::Array<T_GRID, GALS::CPU::Mat3<T>> x_root_grad(grid);
+
+  const auto &identity_mat = T_GRID::identity_mat;
+
+  for (int i = 0; i < num_cells[0]; ++i)
+    for (int j = 0; j < num_cells[1]; ++j)
+      for (int k = 0; k < num_cells[2]; ++k) x_root_grad(i, j, k) = identity_mat - velocity_grad(i, j, k) * dt;
+
+  const auto &phi_interp_prev = levelset.phiInterpPrev();
+  const auto &psi_interp_prev = levelset.psiInterpPrev();
+
+  // Update phi and psi.
+  for (int i = 0; i < num_cells[0]; ++i)
+    for (int j = 0; j < num_cells[1]; ++j)
       for (int k = 0; k < num_cells[2]; ++k) {
-        phi(i, j, k) = phi_prev(i, j, k) - dt * velocity(i, j, k)[0];  // FIXME
+        phi(i, j, k) = phi_interp_prev(i, j, k);
+        psi(i, j, k) = x_root_grad(i, j, k).dot(psi_interp_prev(i, j, k));
       }
 }
 
-template class GALS::TEMPORAL_SCHEMES::Euler<double, GALS::CPU::Grid<double, 1>>;
+template class GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<double, GALS::CPU::Grid<double, 1>>;

@@ -42,12 +42,14 @@ GALS::CPU::Temporal<T, T_GRID, TEMPORAL_SCHEME>::~Temporal()
 }
 
 template <typename T, typename T_GRID, typename TEMPORAL_SCHEME>
-void GALS::CPU::Temporal<T, T_GRID, TEMPORAL_SCHEME>::compute(const T dt, const GALS::CPU::Array<T_GRID, T> &alpha,
-                                                              const GALS::CPU::Array<T_GRID, T> &convection,
-                                                              GALS::CPU::Array<T_GRID, T> &alpha_new)
+void GALS::CPU::Temporal<T, T_GRID, TEMPORAL_SCHEME>::compute(
+    const T dt, const GALS::CPU::LevelsetVelocity<T_GRID, T> &levelset_velocity,
+    GALS::CPU::Levelset<T_GRID, T> &levelset)
 {
-  TEMPORAL_SCHEME()(dt, alpha, convection, alpha_new);
+  TEMPORAL_SCHEME()(dt, levelset_velocity, levelset);
 }
 
 template class GALS::CPU::Temporal<double, GALS::CPU::Grid<double, 1>,
                                    GALS::TEMPORAL_SCHEMES::Euler<double, GALS::CPU::Grid<double, 1>>>;
+template class GALS::CPU::Temporal<double, GALS::CPU::Grid<double, 1>,
+                                   GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<double, GALS::CPU::Grid<double, 1>>>;

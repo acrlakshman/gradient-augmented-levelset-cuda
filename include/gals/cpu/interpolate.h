@@ -73,7 +73,7 @@ class Interpolate
   /*! Compute interpolation of a levelset field.
    *
    * Depending on the interpolation scheme, phi and/or psi will be computed and the corresponding member variables of
-   * Levelset class are updated. Variables of `_tm1` are used to updated `_interp_tm1` variables.
+   * Levelset class are updated. Variables of `_prev` are used to updated `_interp_prev` variables.
    *
    * \param x_interp interpolation points.
    * \param levelset variable whose members will be used and udpated during interpolation.

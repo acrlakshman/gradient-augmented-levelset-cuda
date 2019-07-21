@@ -39,11 +39,11 @@ GALS::CPU::Levelset<T_GRID, T>::Levelset(const T_GRID& grid)
       m_phi(grid),
       m_psi(grid),
       m_phi_mixed_derivatives(grid),
-      m_phi_tm1(grid),
-      m_psi_tm1(grid),
-      m_phi_mixed_derivatives_tm1(grid),
-      m_phi_interp_tm1(grid),
-      m_psi_interp_tm1(grid)
+      m_phi_prev(grid),
+      m_psi_prev(grid),
+      m_phi_mixed_derivatives_prev(grid),
+      m_phi_interp_prev(grid),
+      m_psi_interp_prev(grid)
 {
 }
 
