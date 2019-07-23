@@ -12,16 +12,13 @@ OPTION(USE_SYSTEM_GTEST "Use GTEST from system libraries" OFF)
 OPTION(USE_RELATIVE_TEST_DIR "Use relative paths for the test data directory(For continious integration(CI) purposes only)" OFF)
 
 # TODO (lakshman): Move googletest to ext/
-IF ((NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/googletest") OR
-  (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ext/yaml-cpp") OR (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/ext/spdlog"))
-
+IF ((NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/googletest"))
   MESSAGE(WARNING "third party libraries are missing.")
   MESSAGE("Did you miss the --recursive option when cloning?")
   MESSAGE("Run the following commands to correct this:")
   MESSAGE("git submodule init")
   MESSAGE("git submodule update")
   MESSAGE("git submodule foreach git pull origin master")
-
 ENDIF ()
 
 # Set a default build type if none was specified
@@ -75,11 +72,11 @@ INCLUDE_DIRECTORIES(${GALS_INCLUDE})
 ADD_LIBRARY(gals_cpu SHARED ${GALS_CPU_SRC})
 
 IF (APPLE)
-  TARGET_LINK_LIBRARIES(gals_cpu PRIVATE yaml-cpp spdlog)
+  TARGET_LINK_LIBRARIES(gals_cpu PRIVATE yaml-cpp spdlog filesystem)
 ENDIF()
 
 ADD_EXECUTABLE(gals_cuda src/main.cc)
 TARGET_INCLUDE_DIRECTORIES(gals_cuda PUBLIC src/cpu)
-TARGET_LINK_LIBRARIES(gals_cuda PUBLIC gals_cpu PRIVATE yaml-cpp spdlog)
+TARGET_LINK_LIBRARIES(gals_cuda PUBLIC gals_cpu PRIVATE yaml-cpp spdlog filesystem)
 
 INSTALL(TARGETS gals_cuda DESTINATION .)

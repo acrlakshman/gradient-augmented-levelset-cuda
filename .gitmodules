@@ -7,3 +7,6 @@
 [submodule "ext/spdlog"]
 	path = ext/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "ext/filesystem"]
+	path = ext/filesystem
+	url = https://github.com/acrlakshman/filesystem
