@@ -31,6 +31,7 @@
 
 #pragma once
 
+#include <iostream>
 #include <vector>
 
 #include "grid.h"
@@ -143,6 +144,25 @@ class Array
    * \param array array from which values will be copied.
    */
   void operator=(const Array<T_GRID, T_ARRAY> &array);
+
+  /*! Output operator overload.
+   *
+   * \param out output stream.
+   * \param array Array object to output stream.
+   *
+   * \return reference to output stream.
+   */
+  friend std::ostream &operator<<(std::ostream &out, const Array<T_GRID, T_ARRAY> &array)
+  {
+    const auto &grid = array.grid();
+    const auto num_cells = array.numCells();
+
+    for (int i = 0; i < num_cells[0]; ++i)
+      for (int j = 0; j < num_cells[1]; ++j)
+        for (int k = 0; k < num_cells[2]; ++k) out << grid(i, j, k) << "\t" << array(i, j, k) << "\n";
+
+    return out;
+  }
 
  private:
   const T_GRID &m_grid;
