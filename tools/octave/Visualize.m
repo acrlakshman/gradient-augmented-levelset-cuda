@@ -19,6 +19,24 @@ function Visualize(path, dim)
 
 end
 
+function ShowScalar(path, dim)
+
+    fid = fopen(path);
+    ts = textscan(fid, '%f\t%f\t%f\t%f');
+    fclose(fid);
+
+    x = ts{ 1 };
+    y = ts{ 2 };
+    z = ts{ 3 };
+
+    a = ts{ 4 };
+
+    if (dim == 2)
+        surfc(x, y, a);
+    end
+
+end
+
 function ShowVector(path, dim)
 
     fid = fopen(path);
