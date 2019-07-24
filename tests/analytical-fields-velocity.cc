@@ -30,14 +30,18 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "gals/analytical-fields/velocity.h"
+
 #include "gals/input-parser.h"
 #include "gals/utilities/array.h"
+#include "gals/utilities/file-utils.h"
 #include "gals/utilities/utilities.h"
 #include "gals/utilities/vec3.h"
 
 #include <gtest/gtest.h>
 
 #include <iostream>
+
+namespace GU = GALS::UTILITIES;
 
 /* * * * * *  TEST #1  * * * * * */
 TEST(GALS, ANALYTICAL_FIELDS_VELOCITY_1D)
@@ -108,4 +112,10 @@ TEST(GALS, ANALYTICAL_FIELDS_VELOCITY_2D)
   // for (int j = 0; j < num_cells[1]; ++j)
   // for (int k = 0; k < num_cells[2]; ++k)
   // std::cout << "velocity(" << GALS::CPU::Vec3<int>(i, j, k) << "): " << velocity_field(i, j, k) << std::endl;
+
+  // Write velocity to a file.
+  GU::FileUtils file_utils;
+  file_utils.setRootDirectory("tmp/velocity/");
+  file_utils.createDirectory(file_utils.getRootDirectory());
+  file_utils.write(std::string(file_utils.getRootDirectory() + "velocity"), velocity_field);
 }

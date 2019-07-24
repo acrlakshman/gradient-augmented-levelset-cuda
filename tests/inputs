@@ -10,7 +10,7 @@ grid:
 velocity:
    name: CIRCULAR                      # CIRCULAR
    vector: [1., 0, 0]                  # [v_x, v_y, v_z] - uniform velocity field, for few velocity types.
-   center: [0, 0.5, 0]                 # Center of velocity field for few velocity types.
+   center: [0., 0., 0.]                 # Center of velocity field for few velocity types.
 levelset:
    gradient:
       scheme:        CENTRAL           # Available schemes: CENTRAL
