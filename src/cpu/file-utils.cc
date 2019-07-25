@@ -29,36 +29,63 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "filesystem/path.h"
+#include "gals/utilities/file-utils.h"
 
-#include <gtest/gtest.h>
-
-#include <math.h>
 #include <fstream>
 
-TEST(GALS, FILESYSTEM)
+#include "gals/utilities/array.h"
+#include "gals/utilities/grid.h"
+#include "gals/utilities/utilities.h"
+#include "gals/utilities/vec3.h"
+
+namespace fs = filesystem;
+
+GALS::UTILITIES::FileUtils::FileUtils() {}
+
+GALS::UTILITIES::FileUtils::~FileUtils() {}
+
+void GALS::UTILITIES::FileUtils::setRootDirectory(const std::string root_dir) { m_root_dir = root_dir; }
+
+const std::string GALS::UTILITIES::FileUtils::getRootDirectory() const { return m_root_dir; }
+
+bool GALS::UTILITIES::FileUtils::removeFile(const std::string file_name) const
 {
-  namespace fs = filesystem;
+  fs::path file_path(file_name);
 
-  // Simple test.
-  fs::path path_src("../../src");
-
-  EXPECT_TRUE(path_src.is_directory());
-  EXPECT_FALSE(path_src.is_file());
-
-  // Create a temporary directory.
-  fs::path path_tmp("./tmp");
-  EXPECT_TRUE(fs::create_directory(path_tmp));
-
-  // Open a file and write to it.
-  std::string test_file_1 = "./tmp/test_file_1.txt";
-  std::ofstream tmp_file_1(test_file_1);
-  tmp_file_1 << "GALS cuda" << std::endl;
-  tmp_file_1.close();
-
-  path_src.set(test_file_1);
-
-  // Remove file and directory.
-  EXPECT_TRUE(path_src.remove_file());
-  EXPECT_TRUE(fs::remove_directory(path_tmp));
+  return file_path.remove_file();
 }
+
+bool GALS::UTILITIES::FileUtils::createDirectory(const std::string dir_name) const
+{
+  fs::path dir_path(dir_name);
+
+  if (!dir_path.exists()) {
+    return fs::create_directories(dir_path);
+  }
+
+  return true;
+}
+
+bool GALS::UTILITIES::FileUtils::removeDirectory(const std::string dir_name) const
+{
+  fs::path dir_path(dir_name);
+
+  return fs::remove_directories(dir_path);
+}
+
+template <typename T>
+void GALS::UTILITIES::FileUtils::write(const std::string file_name, const T& field)
+{
+  std::ofstream ofs(file_name);
+
+  ofs << field;
+  ofs.close();
+}
+
+#define P(...) __VA_ARGS__
+#define _INSTANTIATE_WRITE_(type) template void GALS::UTILITIES::FileUtils::write<type>(const std::string, const type&);
+
+_INSTANTIATE_WRITE_(P(GALS::CPU::Array<GALS::CPU::Grid<double, 1>, double>));
+_INSTANTIATE_WRITE_(P(GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::Vec3<double>>));
+_INSTANTIATE_WRITE_(P(GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::Vec3<double>>));
+_INSTANTIATE_WRITE_(P(GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::Vec3<double>>));

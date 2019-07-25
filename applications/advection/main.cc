@@ -29,50 +29,44 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "gals/analytical-fields/velocity.h"
+#include <iostream>
+#include <string>
 
+#include "gals/analytical-fields/velocity.h"
 #include "gals/input-parser.h"
-#include "gals/utilities/array.h"
 #include "gals/utilities/file-utils.h"
-#include "gals/utilities/utilities.h"
+#include "gals/utilities/grid.h"
 #include "gals/utilities/vec3.h"
 
-#include <gtest/gtest.h>
-
-#include <iostream>
-
-namespace GU = GALS::UTILITIES;
-
-/* * * * * *  TEST #1  * * * * * */
-TEST(GALS, ANALYTICAL_FIELDS_VELOCITY_1D)
+int main(int argc, char **argv)
 {
-  typedef GALS::CPU::Grid<double, 1> T_GRID;
+  std::cout << "Inside applications/advection" << std::endl;
 
-  // Initializing 1-D test grid.
-  GALS::CPU::Grid<double, 1> grid(10, 1, 1);
+  std::string inputs_file;
+  if (argc == 1) {
+    std::cout << "./<executable> <inputs_file>" << std::endl;
+    exit(0);
+  } else {
+    inputs_file = std::string(argv[1]);
 
-  // grid generation
-  grid.generate(-1, 1, -1, 1, -1, 1);
+    // TODO (lakshman): Check if the file exists.
+  }
 
-  // accessing grid details
-  const auto mask = grid.getMask();
-  const int pad = grid.getPadding();
-  const auto num_cells = grid.numCells();
-
-  // TODO incomplete.
-}
-
-/* * * * * *  TEST #2  * * * * * */
-TEST(GALS, ANALYTICAL_FIELDS_VELOCITY_2D)
-{
+  const int dim = 2;
   using T = double;
-  using T_GRID = GALS::CPU::Grid<T, 2>;
+  using TV = GALS::CPU::Vec3<T>;
+  using T_GRID = GALS::CPU::Grid<T, dim>;
 
-  // Initializing 2-D test grid.
-  T_GRID grid(10, 10, 1);
+  GALS::INPUT_FIELDS::InputFields input_fields;
+  GALS::INPUT_PARSER::InputParser input_parser;
 
-  // grid generation.
-  grid.generate(-1, 1, -1, 1, -1, 1);
+  input_parser.parse(inputs_file, &input_fields);
+
+  // Construct grid.
+  const auto &grid_inputs = *(input_fields.m_grid);
+  T_GRID grid(grid_inputs.nx, grid_inputs.ny, grid_inputs.nz);
+  grid.generate(grid_inputs.x_min, grid_inputs.x_max, grid_inputs.y_min, grid_inputs.y_max, grid_inputs.z_min,
+                grid_inputs.z_max);
 
   // accessing grid details
   const auto mask = grid.getMask();
@@ -87,14 +81,7 @@ TEST(GALS, ANALYTICAL_FIELDS_VELOCITY_2D)
   int j_max = num_cells[1] + pad * mask[1];
   int k_max = num_cells[2] + pad * mask[2];
 
-  // Input fields.
-  GALS::INPUT_FIELDS::InputFields input_fields;
-
-  GALS::INPUT_PARSER::InputParser input_parser;
-  input_parser.parse("../../tests/inputs", &input_fields);
-
-  const auto &velocity_inputs = *(input_fields.m_velocity);
-
+  // Variable to store grid positions.
   GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>> positions(grid);
 
   for (int i = i_min; i < i_max; ++i)
@@ -103,19 +90,17 @@ TEST(GALS, ANALYTICAL_FIELDS_VELOCITY_2D)
         positions(i, j, k) = grid(i, j, k);
       }
 
+  // Construct velocity.
+  const auto &velocity_inputs = *(input_fields.m_velocity);
   GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>> velocity_field(grid);
   GALS::ANALYTICAL_FIELDS::Velocity<T_GRID, T> velocity(grid, velocity_inputs);
   velocity.compute(positions, velocity_field);
 
-  // TODO (lakshman): Compare these values with results from matlab.
-  // for (int i = 0; i < num_cells[0]; ++i)
-  // for (int j = 0; j < num_cells[1]; ++j)
-  // for (int k = 0; k < num_cells[2]; ++k)
-  // std::cout << "velocity(" << GALS::CPU::Vec3<int>(i, j, k) << "): " << velocity_field(i, j, k) << std::endl;
-
   // Write velocity to a file.
-  GU::FileUtils file_utils;
-  file_utils.setRootDirectory("tmp/velocity/");
+  GALS::UTILITIES::FileUtils file_utils;
+  file_utils.setRootDirectory("tmp/advection/");
   file_utils.createDirectory(file_utils.getRootDirectory());
   file_utils.write(std::string(file_utils.getRootDirectory() + "velocity"), velocity_field);
+
+  return 0;
 }
