@@ -56,6 +56,9 @@ IF (BUILD_TESTS)
     ADD_SUBDIRECTORY(tests)
 ENDIF()
 
+# Build applications
+ADD_SUBDIRECTORY(applications)
+
 FILE(GLOB_RECURSE GALS_CPU_SRC
   src/cpu/*.cc
   src/cpu/*.h
