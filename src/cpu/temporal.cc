@@ -51,5 +51,13 @@ void GALS::CPU::Temporal<T, T_GRID, TEMPORAL_SCHEME>::compute(
 
 template class GALS::CPU::Temporal<double, GALS::CPU::Grid<double, 1>,
                                    GALS::TEMPORAL_SCHEMES::Euler<double, GALS::CPU::Grid<double, 1>>>;
+template class GALS::CPU::Temporal<double, GALS::CPU::Grid<double, 2>,
+                                   GALS::TEMPORAL_SCHEMES::Euler<double, GALS::CPU::Grid<double, 2>>>;
+template class GALS::CPU::Temporal<double, GALS::CPU::Grid<double, 3>,
+                                   GALS::TEMPORAL_SCHEMES::Euler<double, GALS::CPU::Grid<double, 3>>>;
 template class GALS::CPU::Temporal<double, GALS::CPU::Grid<double, 1>,
                                    GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<double, GALS::CPU::Grid<double, 1>>>;
+template class GALS::CPU::Temporal<double, GALS::CPU::Grid<double, 2>,
+                                   GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<double, GALS::CPU::Grid<double, 2>>>;
+template class GALS::CPU::Temporal<double, GALS::CPU::Grid<double, 3>,
+                                   GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<double, GALS::CPU::Grid<double, 3>>>;

@@ -72,6 +72,12 @@ class Vec3
    */
   const int size() const;
 
+  /*! Returns minimum value from the array.
+   *
+   * \return minimum value.
+   */
+  const T min() const;
+
   /*! Overloaded subscript operator that returns a const value.
    *
    * \param idx zero based index of element.

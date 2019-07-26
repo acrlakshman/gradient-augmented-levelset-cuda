@@ -61,3 +61,5 @@ void GALS::TEMPORAL_SCHEMES::Euler<T, T_GRID>::compute(const T dt,
 }
 
 template class GALS::TEMPORAL_SCHEMES::Euler<double, GALS::CPU::Grid<double, 1>>;
+template class GALS::TEMPORAL_SCHEMES::Euler<double, GALS::CPU::Grid<double, 2>>;
+template class GALS::TEMPORAL_SCHEMES::Euler<double, GALS::CPU::Grid<double, 3>>;

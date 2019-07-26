@@ -29,21 +29,22 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "gals/input-parser/general.h"
+#include "gals/input-fields/general.h"
 
-#include <string>
-#include <vector>
+GALS::INPUT_PARSER::General::General() {}
 
-namespace GALS
+GALS::INPUT_PARSER::General::~General() {}
+
+void GALS::INPUT_PARSER::General::parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
 {
-namespace INPUT_FIELDS
-{
-struct Velocity {
-  std::string name;            //! Name of velocity field.
-  std::vector<double> vector;  //! Uniform velocity magnitudes of all components.
-  std::vector<double> center;  //! Center of velocity field for few velocity types.
-  std::string gradient_scheme;  //! Scheme to compute gradient of velocity field.
-};
+  auto &input_fields = *p_input_fields;
 
-}  // namespace INPUT_FIELDS
-}  // namespace GALS
+  // Parser general section.
+  input_fields.m_general->output_directory = field["output_directory"].as<std::string>();
+}
+
+void GALS::INPUT_PARSER::General::operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
+{
+  this->parse(field, p_input_fields);
+}

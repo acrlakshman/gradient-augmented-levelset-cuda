@@ -31,7 +31,9 @@
 
 #pragma once
 
+#include "general.h"
 #include "grid.h"
+#include "time.h"
 #include "velocity.h"
 
 namespace GALS
@@ -53,7 +55,9 @@ class InputFields
    */
   ~InputFields();
 
+  GALS::INPUT_FIELDS::General *m_general;
   GALS::INPUT_FIELDS::Grid *m_grid;
+  GALS::INPUT_FIELDS::Time *m_time;
   GALS::INPUT_FIELDS::Velocity *m_velocity;
 };
 

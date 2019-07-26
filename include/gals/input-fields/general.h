@@ -32,17 +32,13 @@
 #pragma once
 
 #include <string>
-#include <vector>
 
 namespace GALS
 {
 namespace INPUT_FIELDS
 {
-struct Velocity {
-  std::string name;            //! Name of velocity field.
-  std::vector<double> vector;  //! Uniform velocity magnitudes of all components.
-  std::vector<double> center;  //! Center of velocity field for few velocity types.
-  std::string gradient_scheme;  //! Scheme to compute gradient of velocity field.
+struct General {
+  std::string output_directory;
 };
 
 }  // namespace INPUT_FIELDS

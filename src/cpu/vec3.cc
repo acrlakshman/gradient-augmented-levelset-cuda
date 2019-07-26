@@ -58,6 +58,14 @@ const int GALS::CPU::Vec3<T>::size() const
 }
 
 template <typename T>
+const T GALS::CPU::Vec3<T>::min() const
+{
+  if (m_data[0] < m_data[1] && m_data[0] < m_data[2]) return m_data[0];
+  if (m_data[1] < m_data[0] && m_data[1] < m_data[2]) return m_data[1];
+  return m_data[2];
+}
+
+template <typename T>
 const T GALS::CPU::Vec3<T>::operator[](const int idx) const
 {
   return m_data[idx];

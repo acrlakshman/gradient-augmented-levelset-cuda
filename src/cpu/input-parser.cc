@@ -31,8 +31,10 @@
 
 #include "gals/input-parser.h"
 
+#include "gals/input-parser/general.h"
 #include "gals/input-parser/grid.h"
 #include "gals/input-parser/input-parser-base.h"
+#include "gals/input-parser/time.h"
 #include "gals/input-parser/velocity.h"
 
 GALS::INPUT_PARSER::InputParser::InputParser() {}
@@ -44,7 +46,10 @@ void GALS::INPUT_PARSER::InputParser::parse(const std::string input_file,
 {
   YAML::Node inputs = YAML::LoadFile(input_file);
 
+  if (inputs["general"])
+    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::General>()(inputs["general"], p_input_fields);
   if (inputs["grid"]) GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Grid>()(inputs["grid"], p_input_fields);
+  if (inputs["time"]) GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Time>()(inputs["time"], p_input_fields);
   if (inputs["velocity"])
     GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Velocity>()(inputs["velocity"], p_input_fields);
 }

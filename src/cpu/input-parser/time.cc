@@ -29,21 +29,25 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+#include "gals/input-parser/time.h"
+#include "gals/input-fields/time.h"
 
-#include <string>
-#include <vector>
+GALS::INPUT_PARSER::Time::Time() {}
 
-namespace GALS
+GALS::INPUT_PARSER::Time::~Time() {}
+
+void GALS::INPUT_PARSER::Time::parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
 {
-namespace INPUT_FIELDS
-{
-struct Velocity {
-  std::string name;            //! Name of velocity field.
-  std::vector<double> vector;  //! Uniform velocity magnitudes of all components.
-  std::vector<double> center;  //! Center of velocity field for few velocity types.
-  std::string gradient_scheme;  //! Scheme to compute gradient of velocity field.
-};
+  auto &input_fields = *p_input_fields;
 
-}  // namespace INPUT_FIELDS
-}  // namespace GALS
+  // Parse time section.
+  input_fields.m_time->start = field["start"].as<double>();
+  input_fields.m_time->end = field["end"].as<double>();
+  input_fields.m_time->dt = field["dt"].as<double>();
+  input_fields.m_time->constant_dt = field["constant_dt"].as<std::string>();
+}
+
+void GALS::INPUT_PARSER::Time::operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
+{
+  this->parse(field, p_input_fields);
+}

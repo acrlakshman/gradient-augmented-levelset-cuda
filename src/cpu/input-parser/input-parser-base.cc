@@ -30,7 +30,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "gals/input-parser/input-parser-base.h"
+#include "gals/input-parser/general.h"
 #include "gals/input-parser/grid.h"
+#include "gals/input-parser/time.h"
 #include "gals/input-parser/velocity.h"
 
 template <typename FIELD>
@@ -50,5 +52,7 @@ void GALS::INPUT_PARSER::InputParserBase<FIELD>::parse(const YAML::Node &field,
   FIELD()(field, p_input_fields);
 }
 
+template class GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::General>;
 template class GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Grid>;
+template class GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Time>;
 template class GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Velocity>;

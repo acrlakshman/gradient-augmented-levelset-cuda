@@ -31,19 +31,43 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
+#include "gals/input-fields/input-fields.h"
+
+#include "yaml-cpp/yaml.h"
 
 namespace GALS
 {
-namespace INPUT_FIELDS
+namespace INPUT_PARSER
 {
-struct Velocity {
-  std::string name;            //! Name of velocity field.
-  std::vector<double> vector;  //! Uniform velocity magnitudes of all components.
-  std::vector<double> center;  //! Center of velocity field for few velocity types.
-  std::string gradient_scheme;  //! Scheme to compute gradient of velocity field.
+/*! \class General
+ *
+ * Class to parse input fields for grid.
+ */
+class General
+{
+ public:
+  /*! Default constructor
+   */
+  General();
+
+  /*! Destructor
+   */
+  ~General();
+
+  /*! Parse input variables for grid section.
+   *
+   * \param field YAML node for grid.
+   * \param p_input_fields pointer to input fields object.
+   */
+  void parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
+
+  /*! Overloaded operator to parse.
+   *
+   * \param field YAML node for grid.
+   * \param p_input_fields pointer to input fields object.
+   */
+  void operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
 };
 
-}  // namespace INPUT_FIELDS
+}  // namespace INPUT_PARSER
 }  // namespace GALS

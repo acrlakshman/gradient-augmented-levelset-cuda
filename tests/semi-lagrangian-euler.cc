@@ -39,12 +39,62 @@
 #include <math.h>
 #include <iostream>
 
-TEST(CPU, TEMPORAL_SCHEME_SEMILAGRANGIAN_EULER)
+TEST(GALS_CPU_TEMPORAL_SCHEMES, SEMILAGRANGIAN_EULER_1D)
 {
   using T = double;
   using T_GRID = GALS::CPU::Grid<T, 1>;
   // scalar array on 1D grid.
   T_GRID grid(10, 1, 1);
+  grid.generate(-1, 1, -1, 1, -1, 1);
+
+  const T dt = 1.;
+  GALS::CPU::Array<T_GRID, T> alpha(grid);
+  GALS::CPU::LevelsetVelocity<T_GRID, T> levelset_velocity(grid);
+  GALS::CPU::Array<T_GRID, T> alpha_new(grid);
+  GALS::CPU::Levelset<T_GRID, T> levelset(grid);
+
+  levelset.phi() = alpha_new;
+  levelset.phiPrev() = alpha;
+
+  // TODO: Complete test case.
+  GALS::CPU::Temporal<T, T_GRID, GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<T, T_GRID>>::compute(
+      dt, levelset_velocity, levelset);
+
+  // For test converage.
+  GALS::CPU::Temporal<T, T_GRID> temporal_scheme;
+}
+
+TEST(GALS_CPU_TEMPORAL_SCHEMES, SEMILAGRANGIAN_EULER_2D)
+{
+  using T = double;
+  using T_GRID = GALS::CPU::Grid<T, 2>;
+  // scalar array on 2D grid.
+  T_GRID grid(10, 10, 1);
+  grid.generate(-1, 1, -1, 1, -1, 1);
+
+  const T dt = 1.;
+  GALS::CPU::Array<T_GRID, T> alpha(grid);
+  GALS::CPU::LevelsetVelocity<T_GRID, T> levelset_velocity(grid);
+  GALS::CPU::Array<T_GRID, T> alpha_new(grid);
+  GALS::CPU::Levelset<T_GRID, T> levelset(grid);
+
+  levelset.phi() = alpha_new;
+  levelset.phiPrev() = alpha;
+
+  // TODO: Complete test case.
+  GALS::CPU::Temporal<T, T_GRID, GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<T, T_GRID>>::compute(
+      dt, levelset_velocity, levelset);
+
+  // For test converage.
+  GALS::CPU::Temporal<T, T_GRID> temporal_scheme;
+}
+
+TEST(GALS_CPU_TEMPORAL_SCHEMES, SEMILAGRANGIAN_EULER_3D)
+{
+  using T = double;
+  using T_GRID = GALS::CPU::Grid<T, 3>;
+  // scalar array on 3D grid.
+  T_GRID grid(10, 10, 10);
   grid.generate(-1, 1, -1, 1, -1, 1);
 
   const T dt = 1.;

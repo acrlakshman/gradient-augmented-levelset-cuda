@@ -44,12 +44,16 @@ int main(int argc, char **argv)
 
   std::string inputs_file;
   if (argc == 1) {
-    std::cout << "./<executable> <inputs_file>" << std::endl;
+    std::cout << "<path-to-executable>/<executable> <path-to-inputs_file>" << std::endl;
     exit(0);
   } else {
     inputs_file = std::string(argv[1]);
 
-    // TODO (lakshman): Check if the file exists.
+    GALS::UTILITIES::FileUtils file_utils;
+    if (!file_utils.fileExists(inputs_file)) {
+      std::cout << "File: " << inputs_file << " does not exist" << std::endl;
+      exit(0);
+    }
   }
 
   const int dim = 2;
@@ -61,6 +65,11 @@ int main(int argc, char **argv)
   GALS::INPUT_PARSER::InputParser input_parser;
 
   input_parser.parse(inputs_file, &input_fields);
+
+  GALS::UTILITIES::FileUtils file_utils;
+
+  const auto &general_inputs = *(input_fields.m_general);
+  file_utils.setRootDirectory(general_inputs.output_directory + "/");
 
   // Construct grid.
   const auto &grid_inputs = *(input_fields.m_grid);
@@ -96,9 +105,29 @@ int main(int argc, char **argv)
   GALS::ANALYTICAL_FIELDS::Velocity<T_GRID, T> velocity(grid, velocity_inputs);
   velocity.compute(positions, velocity_field);
 
+  const auto &time_inputs = *(input_fields.m_time);
+
+  T t_start = time_inputs.start;
+  T t_end = time_inputs.end;
+  T dt = time_inputs.dt;
+  bool is_dt_fixed = std::strcmp(time_inputs.constant_dt.c_str(), "NO");
+  T sim_time = 0;
+
+  if (!is_dt_fixed) {
+    dt = grid.dX().min() / 2.;
+  }
+
+  // Time loop
+  bool run_sim = true;
+  while (run_sim) {
+    sim_time += dt;
+
+    //
+
+    if (GALS::is_equal(sim_time, t_end) || sim_time > t_end) run_sim = false;
+  }
+
   // Write velocity to a file.
-  GALS::UTILITIES::FileUtils file_utils;
-  file_utils.setRootDirectory("tmp/advection/");
   file_utils.createDirectory(file_utils.getRootDirectory());
   file_utils.write(std::string(file_utils.getRootDirectory() + "velocity"), velocity_field);
 

@@ -42,6 +42,11 @@ TEST(CPU, VEC3_INT)
 
   EXPECT_TRUE(vec3.size() == 3);
 
+  vec3[0] = -1;
+  vec3[1] = 1;
+  vec3[2] = 2;
+  EXPECT_TRUE(vec3.min() == -1);
+
   vec3[0] = 9;
   EXPECT_TRUE(vec3[0] == 9);
 
@@ -88,6 +93,11 @@ TEST(CPU, VEC3_DOUBLE)
   GALS::CPU::Vec3<double> vec3;
 
   EXPECT_TRUE(vec3.size() == 3);
+
+  vec3[0] = -1.9;
+  vec3[1] = 1.2;
+  vec3[2] = 2.1;
+  EXPECT_TRUE(GALS::is_equal(vec3.min(), -1.9));
 
   vec3[0] = 9.;
   EXPECT_TRUE(GALS::is_equal(vec3[0], 9.));
