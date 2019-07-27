@@ -103,9 +103,11 @@ TEST(GALS, ANALYTICAL_FIELDS_VELOCITY_2D)
         positions(i, j, k) = grid(i, j, k);
       }
 
-  GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>> velocity_field(grid);
+  GALS::CPU::LevelsetVelocity<T_GRID, T> levelset_velocity(grid);
+  const auto& velocity_field = levelset_velocity.velocity();
+
   GALS::ANALYTICAL_FIELDS::Velocity<T_GRID, T> velocity(grid, velocity_inputs);
-  velocity.compute(positions, velocity_field);
+  velocity.compute(positions, levelset_velocity);
 
   // TODO (lakshman): Compare these values with results from matlab.
   // for (int i = 0; i < num_cells[0]; ++i)
