@@ -30,6 +30,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "gals/analytical-fields/velocity.h"
+
+#include <string>
+
 #include "gals/utilities/utilities.h"
 
 template <typename T_GRID, typename T>
@@ -45,7 +48,7 @@ GALS::ANALYTICAL_FIELDS::Velocity<T_GRID, T>::~Velocity()
 
 template <typename T_GRID, typename T>
 void GALS::ANALYTICAL_FIELDS::Velocity<T_GRID, T>::compute(
-    const GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>>& positions,
+    const GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>>& positions, const T time,
     GALS::CPU::LevelsetVelocity<T_GRID, T>& levelset_velocity)
 {
   const GALS::CPU::Vec3<int> num_cells = positions.numCells();
@@ -74,13 +77,13 @@ void GALS::ANALYTICAL_FIELDS::Velocity<T_GRID, T>::compute(
           }
 
       // Compute velocity gradient using analytical expressions.
-      if (!std::strcmp(m_inputs.gradient_scheme, "ANALYTICAL")) {
+      if (!strcmp(m_inputs.gradient_scheme.c_str(), "ANALYTICAL")) {
         auto& velocity_gradient = levelset_velocity.velocityGradient();
 
         for (int i = 0; i < num_cells[0]; ++i)
           for (int j = 0; j < num_cells[1]; ++j)
             for (int k = 0; k < num_cells[2]; ++k) {
-              for (int cmpt = 0; cmpt < T_GRID::dim; ++cmp) {
+              for (int cmpt = 0; cmpt < T_GRID::dim; ++cmpt) {
                 for (int derv = 0; derv < T_GRID::dim; ++derv) {
                   if (cmpt == 0 && derv == 0) velocity_gradient[cmpt][derv] = static_cast<T>(0);
                   if (cmpt == 0 && derv == 1) velocity_gradient[cmpt][derv] = -coeff;

@@ -107,7 +107,7 @@ TEST(GALS, ANALYTICAL_FIELDS_VELOCITY_2D)
   const auto& velocity_field = levelset_velocity.velocity();
 
   GALS::ANALYTICAL_FIELDS::Velocity<T_GRID, T> velocity(grid, velocity_inputs);
-  velocity.compute(positions, levelset_velocity);
+  velocity.compute(positions, 0, levelset_velocity);
 
   // TODO (lakshman): Compare these values with results from matlab.
   // for (int i = 0; i < num_cells[0]; ++i)

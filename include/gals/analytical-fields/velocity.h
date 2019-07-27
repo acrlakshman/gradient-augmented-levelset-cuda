@@ -85,9 +85,10 @@ class Velocity
   /*! Compute velocity field.
    *
    * \param positions array of positions where velocity needs to be computed.
+   * \param time time, for some velocity fields.
    * \param levelset_velocity velocity field which will be updated by this function.
    */
-  void compute(const GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>>& positions,
+  void compute(const GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>>& positions, const T time,
                GALS::CPU::LevelsetVelocity<T_GRID, T>& levelset_velocity);
 
  private:
