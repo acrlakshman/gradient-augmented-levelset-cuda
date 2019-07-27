@@ -69,5 +69,5 @@ class Grid
   void operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
 };
 
-}  // namespace CPU
+}  // namespace INPUT_PARSER
 }  // namespace GALS

@@ -42,6 +42,16 @@ GALS::CPU::Vec3<T>::Vec3(const T a, const T b, const T c)
 }
 
 template <typename T>
+GALS::CPU::Vec3<T>::Vec3(const std::vector<T> a)
+{
+  if (a.size() != 3) GALS_ABORT("While constructing Vec3 object using std::vector, input must be of size 3.");
+
+  m_data[0] = a[0];
+  m_data[1] = a[1];
+  m_data[2] = a[2];
+}
+
+template <typename T>
 GALS::CPU::Vec3<T>::Vec3() : Vec3(static_cast<T>(0), static_cast<T>(0), static_cast<T>(0))
 {
 }
@@ -55,6 +65,20 @@ template <typename T>
 const int GALS::CPU::Vec3<T>::size() const
 {
   return SIZE;
+}
+
+template <typename T>
+const double GALS::CPU::Vec3<T>::mag() const
+{
+  return sqrt(m_data[0] * m_data[0] + m_data[1] * m_data[1] + m_data[2] * m_data[2]);
+}
+
+template <typename T>
+const T GALS::CPU::Vec3<T>::min() const
+{
+  if (m_data[0] < m_data[1] && m_data[0] < m_data[2]) return m_data[0];
+  if (m_data[1] < m_data[0] && m_data[1] < m_data[2]) return m_data[1];
+  return m_data[2];
 }
 
 template <typename T>

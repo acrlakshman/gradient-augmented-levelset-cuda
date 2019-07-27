@@ -44,6 +44,14 @@ namespace GALS
 #define GALS_FUNCTION_NOT_IMPLEMENTED(var) std::cout << "FUNCTION_NOT_IMPLEMENTED: " << #var << std::endl;
 #endif
 
+#ifndef BUILD_TESTS
+#define GALS_ABORT(var)                        \
+  std::cout << "ERROR: " << #var << std::endl; \
+  exit(0);
+#else
+#define GALS_ABORT(var) std::cout << "ERROR: " << #var << std::endl;
+#endif
+
 static double pi() { return atan(1) * 4; }
 
 static double VSMALL = 1e-10;

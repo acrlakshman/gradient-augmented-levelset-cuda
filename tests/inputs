@@ -1,16 +1,38 @@
+general:
+   output_directory:       "project-1/case-1"                     # Path where the output files are stored.
 grid:
-   box:                                # Bounding box dimensions.
-      x_min: -1.0                      # x_min
-      x_max: 1.0                       # x_max
-      y_min: -1.0                      # y_min
-      y_max: 1.0                       # y_max
-      z_min: -1.0                      # z_min
-      z_max: 1.0                       # z_max
-   cells: [10, 10, 10]                 # [n_x, n_y, n_z]
+   box:                                                           # Bounding box dimensions.
+      x_min:               -1.0                                   # x_min
+      x_max:               1.0                                    # x_max
+      y_min:               -1.0                                   # y_min
+      y_max:               1.0                                    # y_max
+      z_min:               -1.0                                   # z_min
+      z_max:               1.0                                    # z_max
+   cells:                  [10, 10, 1]                           # [n_x, n_y, n_z]
+
+time:
+   start:                  0                                      # Simulation start time.
+   end:                    0.1                                    # Simulation end time.
+   dt:                     1e-4                                   # Time step.
+   constant_dt:            NO                                     # NO/YES
+                                                                     # NO: time step will be dynamically calculated.
+                                                                     # YES: `dt` will be used for entire simulation.
+
 velocity:
-   name: CIRCULAR                      # CIRCULAR
-   vector: [1., 0, 0]                  # [v_x, v_y, v_z] - uniform velocity field, for few velocity types.
-   center: [0., 0., 0.]                 # Center of velocity field for few velocity types.
+   name:                   CIRCULAR                               # Available:
+                                                                     # CIRCULAR
+   vector:                 [1., 0, 0]                             # [v_x, v_y, v_z] - uniform velocity field, for few
+                                                                  # velocity types.
+   center:                 [0., 0., 0.]                           # Center of velocity field for few velocity types.
+   gradient:                                                      # Schemes to compute gradient.
+      scheme:              ANALYTICAL                             # Available:
+                                                                     # ANALYTICAL
+
 levelset:
-   gradient:
-      scheme:        CENTRAL           # Available schemes: CENTRAL
+   name:                   CIRCLE                                 # Available:
+                                                                     # CIRCLE
+   center:                 [0., 0., 0.]                           # Center for levelset field for few shapes.
+   radius:                 0.5                                    # Radius for few shapes.
+   gradient:                                                      # Numerical schemes to compute gradient.
+      scheme:              CENTRAL                                # Available:
+                                                                     # CENTRAL

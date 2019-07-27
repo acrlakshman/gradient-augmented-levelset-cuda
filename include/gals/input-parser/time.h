@@ -29,30 +29,45 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "gals/input-parser.h"
+#pragma once
 
-#include "gals/input-parser/general.h"
-#include "gals/input-parser/grid.h"
-#include "gals/input-parser/input-parser-base.h"
-#include "gals/input-parser/levelset.h"
-#include "gals/input-parser/time.h"
-#include "gals/input-parser/velocity.h"
+#include "gals/input-fields/input-fields.h"
 
-GALS::INPUT_PARSER::InputParser::InputParser() {}
+#include "yaml-cpp/yaml.h"
 
-GALS::INPUT_PARSER::InputParser::~InputParser() {}
-
-void GALS::INPUT_PARSER::InputParser::parse(const std::string input_file,
-                                            GALS::INPUT_FIELDS::InputFields *p_input_fields)
+namespace GALS
 {
-  YAML::Node inputs = YAML::LoadFile(input_file);
+namespace INPUT_PARSER
+{
+/*! \class Time
+ *
+ * Class to parse input fields for grid.
+ */
+class Time
+{
+ public:
+  /*! Default constructor
+   */
+  Time();
 
-  if (inputs["general"])
-    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::General>()(inputs["general"], p_input_fields);
-  if (inputs["grid"]) GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Grid>()(inputs["grid"], p_input_fields);
-  if (inputs["time"]) GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Time>()(inputs["time"], p_input_fields);
-  if (inputs["velocity"])
-    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Velocity>()(inputs["velocity"], p_input_fields);
-  if (inputs["levelset"])
-    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Levelset>()(inputs["levelset"], p_input_fields);
-}
+  /*! Destructor
+   */
+  ~Time();
+
+  /*! Parse input variables for grid section.
+   *
+   * \param field YAML node for grid.
+   * \param p_input_fields pointer to input fields object.
+   */
+  void parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
+
+  /*! Overloaded operator to parse.
+   *
+   * \param field YAML node for grid.
+   * \param p_input_fields pointer to input fields object.
+   */
+  void operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields);
+};
+
+}  // namespace INPUT_PARSER
+}  // namespace GALS

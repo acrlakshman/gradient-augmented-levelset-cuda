@@ -29,30 +29,48 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "gals/input-parser.h"
+#include "gals/analytical-fields/levelset.h"
+#include "gals/utilities/utilities.h"
 
-#include "gals/input-parser/general.h"
-#include "gals/input-parser/grid.h"
-#include "gals/input-parser/input-parser-base.h"
-#include "gals/input-parser/levelset.h"
-#include "gals/input-parser/time.h"
-#include "gals/input-parser/velocity.h"
-
-GALS::INPUT_PARSER::InputParser::InputParser() {}
-
-GALS::INPUT_PARSER::InputParser::~InputParser() {}
-
-void GALS::INPUT_PARSER::InputParser::parse(const std::string input_file,
-                                            GALS::INPUT_FIELDS::InputFields *p_input_fields)
+template <typename T_GRID, typename T>
+GALS::ANALYTICAL_FIELDS::Levelset<T_GRID, T>::Levelset(const T_GRID& grid, const GALS::INPUT_FIELDS::Levelset& inputs)
+    : m_grid(grid), m_inputs(inputs)
 {
-  YAML::Node inputs = YAML::LoadFile(input_file);
-
-  if (inputs["general"])
-    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::General>()(inputs["general"], p_input_fields);
-  if (inputs["grid"]) GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Grid>()(inputs["grid"], p_input_fields);
-  if (inputs["time"]) GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Time>()(inputs["time"], p_input_fields);
-  if (inputs["velocity"])
-    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Velocity>()(inputs["velocity"], p_input_fields);
-  if (inputs["levelset"])
-    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Levelset>()(inputs["levelset"], p_input_fields);
 }
+
+template <typename T_GRID, typename T>
+GALS::ANALYTICAL_FIELDS::Levelset<T_GRID, T>::~Levelset()
+{
+}
+
+template <typename T_GRID, typename T>
+void GALS::ANALYTICAL_FIELDS::Levelset<T_GRID, T>::compute(
+    const GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>>& positions, GALS::CPU::Levelset<T_GRID, T>& levelset)
+{
+  const GALS::CPU::Vec3<int> num_cells = positions.numCells();
+  const auto& levelset_name = m_inputs.name;
+
+  switch (levelset_name_map[levelset_name]) {
+    case LevelsetFieldNames::CIRCLE: {
+      auto& phi = levelset.phi();
+
+      GALS::CPU::Vec3<T> distance_vec;
+
+      for (int i = 0; i < num_cells[0]; ++i)
+        for (int j = 0; j < num_cells[1]; ++j)
+          for (int k = 0; k < num_cells[2]; ++k) {
+            distance_vec = positions(i, j, k) - m_inputs.center;
+            phi(i, j, k) = distance_vec.mag() - m_inputs.radius;
+          }
+
+      break;
+    }
+
+    default:
+      break;
+  }
+}
+
+template class GALS::ANALYTICAL_FIELDS::Levelset<GALS::CPU::Grid<double, 1>, double>;
+template class GALS::ANALYTICAL_FIELDS::Levelset<GALS::CPU::Grid<double, 2>, double>;
+template class GALS::ANALYTICAL_FIELDS::Levelset<GALS::CPU::Grid<double, 3>, double>;

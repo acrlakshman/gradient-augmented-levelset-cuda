@@ -95,8 +95,6 @@ TEST(CPU, GRID_1D)
 
   EXPECT_TRUE(fabs(grid.dX()[0] - dx) < 1e-10);
   EXPECT_TRUE(fabs(grid.oneOverDX()[0] - (1. / dx)) < 1e-10);
-
-  grid.writeToFile();
 }
 
 TEST(CPU, GRID_2D)
@@ -158,9 +156,7 @@ TEST(CPU, GRID_2D)
   EXPECT_TRUE(fabs(grid.dX()[2] - 2.) < 1e-10);
   EXPECT_TRUE(fabs(grid.oneOverDX()[0] - (1. / dx)) < 1e-10);
   EXPECT_TRUE(fabs(grid.oneOverDX()[1] - (1. / dy)) < 1e-10);
-  EXPECT_TRUE(fabs(grid.oneOverDX()[2] - 0.5) < 1e-10);
-
-  grid.writeToFile();
+  EXPECT_TRUE(fabs(grid.oneOverDX()[2] - INT_MIN) < 1e-10);
 }
 
 TEST(CPU, GRID_3D)
@@ -211,6 +207,4 @@ TEST(CPU, GRID_3D)
 
   EXPECT_TRUE(fabs(grid.dX()[0] - dx) < 1e-10);
   EXPECT_TRUE(fabs(grid.oneOverDX()[0] - (1. / dx)) < 1e-10);
-
-  grid.writeToFile();
 }

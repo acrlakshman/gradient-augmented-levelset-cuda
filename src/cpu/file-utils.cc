@@ -48,6 +48,13 @@ void GALS::UTILITIES::FileUtils::setRootDirectory(const std::string root_dir) { 
 
 const std::string GALS::UTILITIES::FileUtils::getRootDirectory() const { return m_root_dir; }
 
+bool GALS::UTILITIES::FileUtils::fileExists(const std::string file_name) const
+{
+  fs::path file_path(file_name);
+
+  return file_path.exists();
+}
+
 bool GALS::UTILITIES::FileUtils::removeFile(const std::string file_name) const
 {
   fs::path file_path(file_name);
@@ -87,5 +94,6 @@ void GALS::UTILITIES::FileUtils::write(const std::string file_name, const T& fie
 
 _INSTANTIATE_WRITE_(P(GALS::CPU::Array<GALS::CPU::Grid<double, 1>, double>));
 _INSTANTIATE_WRITE_(P(GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::Vec3<double>>));
+_INSTANTIATE_WRITE_(P(GALS::CPU::Array<GALS::CPU::Grid<double, 2>, double>));
 _INSTANTIATE_WRITE_(P(GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::Vec3<double>>));
 _INSTANTIATE_WRITE_(P(GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::Vec3<double>>));

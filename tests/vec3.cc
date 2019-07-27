@@ -42,6 +42,13 @@ TEST(CPU, VEC3_INT)
 
   EXPECT_TRUE(vec3.size() == 3);
 
+  vec3[0] = -1;
+  vec3[1] = 1;
+  vec3[2] = 2;
+  EXPECT_TRUE(vec3.min() == -1);
+
+  EXPECT_TRUE(GALS::is_equal(vec3.mag(), 2.449489742783178));
+
   vec3[0] = 9;
   EXPECT_TRUE(vec3[0] == 9);
 
@@ -81,6 +88,11 @@ TEST(CPU, VEC3_INT)
 
   // Overloaded output operator.
   std::cout << "VEC3_INT (<<): " << vec3 << std::endl;
+
+  // Instantiate vec3 object using standard vector.
+  GALS::CPU::Vec3<int> vec3_using_vector(std::vector<int>{0, 1, 2});
+  EXPECT_TRUE(GALS::is_equal(vec3_using_vector[0], 0) && GALS::is_equal(vec3_using_vector[1], 1) &&
+              GALS::is_equal(vec3_using_vector[2], 2));
 }
 
 TEST(CPU, VEC3_DOUBLE)
@@ -88,6 +100,13 @@ TEST(CPU, VEC3_DOUBLE)
   GALS::CPU::Vec3<double> vec3;
 
   EXPECT_TRUE(vec3.size() == 3);
+
+  vec3[0] = -1.9;
+  vec3[1] = 1.2;
+  vec3[2] = 2.1;
+  EXPECT_TRUE(GALS::is_equal(vec3.min(), -1.9));
+
+  EXPECT_TRUE(GALS::is_equal(vec3.mag(), 3.0757112998459397));
 
   vec3[0] = 9.;
   EXPECT_TRUE(GALS::is_equal(vec3[0], 9.));
@@ -129,4 +148,9 @@ TEST(CPU, VEC3_DOUBLE)
 
   // Overloaded output operator.
   std::cout << "VEC3_DOUBLE (<<): " << vec3 << std::endl;
+
+  // Instantiate vec3 object using standard vector.
+  GALS::CPU::Vec3<double> vec3_using_vector(std::vector<double>{0.2, 1.34, 2.12});
+  EXPECT_TRUE(GALS::is_equal(vec3_using_vector[0], 0.2) && GALS::is_equal(vec3_using_vector[1], 1.34) &&
+              GALS::is_equal(vec3_using_vector[2], 2.12));
 }

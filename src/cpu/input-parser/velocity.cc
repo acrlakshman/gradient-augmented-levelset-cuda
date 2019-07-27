@@ -45,6 +45,7 @@ void GALS::INPUT_PARSER::Velocity::parse(const YAML::Node &field, GALS::INPUT_FI
   input_fields.m_velocity->name = field["name"].as<std::string>();
   input_fields.m_velocity->vector = field["vector"].as<std::vector<double>>();
   input_fields.m_velocity->center = field["center"].as<std::vector<double>>();
+  input_fields.m_velocity->gradient_scheme = field["gradient"]["scheme"].as<std::string>();
 }
 
 void GALS::INPUT_PARSER::Velocity::operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)

@@ -42,6 +42,7 @@ struct Velocity {
   std::string name;            //! Name of velocity field.
   std::vector<double> vector;  //! Uniform velocity magnitudes of all components.
   std::vector<double> center;  //! Center of velocity field for few velocity types.
+  std::string gradient_scheme;  //! Scheme to compute gradient of velocity field.
 };
 
 }  // namespace INPUT_FIELDS

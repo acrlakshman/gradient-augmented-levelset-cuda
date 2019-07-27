@@ -67,6 +67,14 @@ class FileUtils
    */
   const std::string getRootDirectory() const;
 
+  /*! Checks if file exists or not.
+   *
+   * \param file_name name of file with relative or absolute path.
+   *
+   * \return true if exists, false otherwise.
+   */
+  bool fileExists(const std::string file_name) const;
+
   /*! Remove file.
    *
    * \param file_name name of file with relative or absolute path.

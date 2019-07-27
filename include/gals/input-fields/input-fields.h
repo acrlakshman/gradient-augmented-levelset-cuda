@@ -31,8 +31,11 @@
 
 #pragma once
 
-#include "grid.h"
-#include "velocity.h"
+#include "gals/input-fields/general.h"
+#include "gals/input-fields/grid.h"
+#include "gals/input-fields/levelset.h"
+#include "gals/input-fields/time.h"
+#include "gals/input-fields/velocity.h"
 
 namespace GALS
 {
@@ -53,8 +56,11 @@ class InputFields
    */
   ~InputFields();
 
+  GALS::INPUT_FIELDS::General *m_general;
   GALS::INPUT_FIELDS::Grid *m_grid;
+  GALS::INPUT_FIELDS::Time *m_time;
   GALS::INPUT_FIELDS::Velocity *m_velocity;
+  GALS::INPUT_FIELDS::Levelset *m_levelset;
 };
 
 }  // namespace INPUT_FIELDS

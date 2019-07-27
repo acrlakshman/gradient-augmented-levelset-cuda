@@ -29,30 +29,25 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "gals/input-parser.h"
-
-#include "gals/input-parser/general.h"
-#include "gals/input-parser/grid.h"
-#include "gals/input-parser/input-parser-base.h"
-#include "gals/input-parser/levelset.h"
 #include "gals/input-parser/time.h"
-#include "gals/input-parser/velocity.h"
+#include "gals/input-fields/time.h"
 
-GALS::INPUT_PARSER::InputParser::InputParser() {}
+GALS::INPUT_PARSER::Time::Time() {}
 
-GALS::INPUT_PARSER::InputParser::~InputParser() {}
+GALS::INPUT_PARSER::Time::~Time() {}
 
-void GALS::INPUT_PARSER::InputParser::parse(const std::string input_file,
-                                            GALS::INPUT_FIELDS::InputFields *p_input_fields)
+void GALS::INPUT_PARSER::Time::parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
 {
-  YAML::Node inputs = YAML::LoadFile(input_file);
+  auto &input_fields = *p_input_fields;
 
-  if (inputs["general"])
-    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::General>()(inputs["general"], p_input_fields);
-  if (inputs["grid"]) GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Grid>()(inputs["grid"], p_input_fields);
-  if (inputs["time"]) GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Time>()(inputs["time"], p_input_fields);
-  if (inputs["velocity"])
-    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Velocity>()(inputs["velocity"], p_input_fields);
-  if (inputs["levelset"])
-    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Levelset>()(inputs["levelset"], p_input_fields);
+  // Parse time section.
+  input_fields.m_time->start = field["start"].as<double>();
+  input_fields.m_time->end = field["end"].as<double>();
+  input_fields.m_time->dt = field["dt"].as<double>();
+  input_fields.m_time->constant_dt = field["constant_dt"].as<std::string>();
+}
+
+void GALS::INPUT_PARSER::Time::operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
+{
+  this->parse(field, p_input_fields);
 }

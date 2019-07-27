@@ -58,6 +58,12 @@ class Vec3
    */
   Vec3(const T a, const T b, const T c);
 
+  /*! Constructor with std::vector.
+   *
+   * \param a variable of type std::vector<double> and of size 3.
+   */
+  Vec3(const std::vector<T> a);
+
   /*! Default constructor.
    */
   Vec3();
@@ -71,6 +77,18 @@ class Vec3
    * \return number of elements.
    */
   const int size() const;
+
+  /*! Returns minimum value from the array.
+   *
+   * \return minimum value.
+   */
+  const T min() const;
+
+  /*! Returns magnitude.
+   *
+   * \return magnitude.
+   */
+  const double mag() const;
 
   /*! Overloaded subscript operator that returns a const value.
    *

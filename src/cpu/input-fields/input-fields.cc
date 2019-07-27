@@ -32,12 +32,19 @@
 #include "gals/input-fields/input-fields.h"
 
 GALS::INPUT_FIELDS::InputFields::InputFields()
-    : m_grid(new GALS::INPUT_FIELDS::Grid), m_velocity(new GALS::INPUT_FIELDS::Velocity)
+    : m_general(new GALS::INPUT_FIELDS::General),
+      m_grid(new GALS::INPUT_FIELDS::Grid),
+      m_time(new GALS::INPUT_FIELDS::Time),
+      m_velocity(new GALS::INPUT_FIELDS::Velocity),
+      m_levelset(new GALS::INPUT_FIELDS::Levelset)
 {
 }
 
 GALS::INPUT_FIELDS::InputFields::~InputFields()
 {
+  delete m_general;
   delete m_grid;
+  delete m_time;
   delete m_velocity;
+  delete m_levelset;
 }

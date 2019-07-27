@@ -29,53 +29,51 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include <iostream>
-#include <string>
+#include "gals/analytical-fields/levelset.h"
+#include "gals/cpu/levelset.h"
 
-#include "gals/analytical-fields/velocity.h"
 #include "gals/input-parser.h"
+#include "gals/utilities/array.h"
 #include "gals/utilities/file-utils.h"
-#include "gals/utilities/grid.h"
+#include "gals/utilities/utilities.h"
 #include "gals/utilities/vec3.h"
 
-int main(int argc, char **argv)
+#include <gtest/gtest.h>
+
+#include <iostream>
+
+namespace GU = GALS::UTILITIES;
+
+/* * * * * *  TEST #1  * * * * * */
+TEST(GALS, ANALYTICAL_FIELDS_LEVELSET_1D)
 {
-  std::cout << "Inside applications/advection" << std::endl;
+  typedef GALS::CPU::Grid<double, 1> T_GRID;
 
-  std::string inputs_file;
-  if (argc == 1) {
-    std::cout << "<path-to-executable>/<executable> <path-to-inputs_file>" << std::endl;
-    exit(0);
-  } else {
-    inputs_file = std::string(argv[1]);
+  // Initializing 1-D test grid.
+  GALS::CPU::Grid<double, 1> grid(10, 1, 1);
 
-    GALS::UTILITIES::FileUtils file_utils;
-    if (!file_utils.fileExists(inputs_file)) {
-      std::cout << "File: " << inputs_file << " does not exist" << std::endl;
-      exit(0);
-    }
-  }
+  // grid generation
+  grid.generate(-1, 1, -1, 1, -1, 1);
 
-  const int dim = 2;
+  // accessing grid details
+  const auto mask = grid.getMask();
+  const int pad = grid.getPadding();
+  const auto num_cells = grid.numCells();
+
+  // TODO incomplete.
+}
+
+/* * * * * *  TEST #2  * * * * * */
+TEST(GALS, ANALYTICAL_FIELDS_LEVELSET_2D)
+{
   using T = double;
-  using TV = GALS::CPU::Vec3<T>;
-  using T_GRID = GALS::CPU::Grid<T, dim>;
+  using T_GRID = GALS::CPU::Grid<T, 2>;
 
-  GALS::INPUT_FIELDS::InputFields input_fields;
-  GALS::INPUT_PARSER::InputParser input_parser;
+  // Initializing 2-D test grid.
+  T_GRID grid(10, 10, 1);
 
-  input_parser.parse(inputs_file, &input_fields);
-
-  GALS::UTILITIES::FileUtils file_utils;
-
-  const auto &general_inputs = *(input_fields.m_general);
-  file_utils.setRootDirectory(general_inputs.output_directory + "/");
-
-  // Construct grid.
-  const auto &grid_inputs = *(input_fields.m_grid);
-  T_GRID grid(grid_inputs.nx, grid_inputs.ny, grid_inputs.nz);
-  grid.generate(grid_inputs.x_min, grid_inputs.x_max, grid_inputs.y_min, grid_inputs.y_max, grid_inputs.z_min,
-                grid_inputs.z_max);
+  // grid generation.
+  grid.generate(-1, 1, -1, 1, -1, 1);
 
   // accessing grid details
   const auto mask = grid.getMask();
@@ -90,7 +88,14 @@ int main(int argc, char **argv)
   int j_max = num_cells[1] + pad * mask[1];
   int k_max = num_cells[2] + pad * mask[2];
 
-  // Variable to store grid positions.
+  // Input fields.
+  GALS::INPUT_FIELDS::InputFields input_fields;
+
+  GALS::INPUT_PARSER::InputParser input_parser;
+  input_parser.parse("../../tests/inputs", &input_fields);
+
+  const auto &levelset_inputs = *(input_fields.m_levelset);
+
   GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>> positions(grid);
 
   for (int i = i_min; i < i_max; ++i)
@@ -99,37 +104,19 @@ int main(int argc, char **argv)
         positions(i, j, k) = grid(i, j, k);
       }
 
-  // Construct velocity.
-  const auto &velocity_inputs = *(input_fields.m_velocity);
-  GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>> velocity_field(grid);
-  GALS::ANALYTICAL_FIELDS::Velocity<T_GRID, T> velocity(grid, velocity_inputs);
-  velocity.compute(positions, velocity_field);
+  GALS::CPU::Levelset<T_GRID, T> levelset_field(grid);
+  GALS::ANALYTICAL_FIELDS::Levelset<T_GRID, T> levelset(grid, levelset_inputs);
+  levelset.compute(positions, levelset_field);
 
-  const auto &time_inputs = *(input_fields.m_time);
+  // TODO (lakshman): Compare these values with results from matlab.
+  // for (int i = 0; i < num_cells[0]; ++i)
+  // for (int j = 0; j < num_cells[1]; ++j)
+  // for (int k = 0; k < num_cells[2]; ++k)
+  // std::cout << "levelset(" << GALS::CPU::Vec3<int>(i, j, k) << "): " << levelset_field(i, j, k) << std::endl;
 
-  T t_start = time_inputs.start;
-  T t_end = time_inputs.end;
-  T dt = time_inputs.dt;
-  bool is_dt_fixed = std::strcmp(time_inputs.constant_dt.c_str(), "NO");
-  T sim_time = 0;
-
-  if (!is_dt_fixed) {
-    dt = grid.dX().min() / 2.;
-  }
-
-  // Time loop
-  bool run_sim = true;
-  while (run_sim) {
-    sim_time += dt;
-
-    //
-
-    if (GALS::is_equal(sim_time, t_end) || sim_time > t_end) run_sim = false;
-  }
-
-  // Write velocity to a file.
+  // Write levelset to a file.
+  GU::FileUtils file_utils;
+  file_utils.setRootDirectory("tmp/levelset/");
   file_utils.createDirectory(file_utils.getRootDirectory());
-  file_utils.write(std::string(file_utils.getRootDirectory() + "velocity"), velocity_field);
-
-  return 0;
+  file_utils.write(std::string(file_utils.getRootDirectory() + "phi"), levelset_field.phi());
 }
