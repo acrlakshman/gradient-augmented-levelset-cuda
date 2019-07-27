@@ -238,14 +238,6 @@ class Grid
    */
   void generate(T x_min, T x_max, T y_min, T y_max, T z_min, T z_max);
 
-  /*! Write grid data to a file.
-   *
-   * \param file_name writes grid file with the prescribed name.
-   * \param dir_name writes grid in the prescribed directory.
-   * \param show_padding writes grid with or without padding cells.
-   */
-  void writeToFile(std::string file_name = "grid.dat", std::string dir_name = ".", bool show_padding = false);
-
  private:
   int m_dimension, m_nx, m_ny, m_nz, m_pad;
   size_t m_total_cells;

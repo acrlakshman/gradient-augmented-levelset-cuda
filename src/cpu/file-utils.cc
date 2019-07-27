@@ -94,5 +94,6 @@ void GALS::UTILITIES::FileUtils::write(const std::string file_name, const T& fie
 
 _INSTANTIATE_WRITE_(P(GALS::CPU::Array<GALS::CPU::Grid<double, 1>, double>));
 _INSTANTIATE_WRITE_(P(GALS::CPU::Array<GALS::CPU::Grid<double, 1>, GALS::CPU::Vec3<double>>));
+_INSTANTIATE_WRITE_(P(GALS::CPU::Array<GALS::CPU::Grid<double, 2>, double>));
 _INSTANTIATE_WRITE_(P(GALS::CPU::Array<GALS::CPU::Grid<double, 2>, GALS::CPU::Vec3<double>>));
 _INSTANTIATE_WRITE_(P(GALS::CPU::Array<GALS::CPU::Grid<double, 3>, GALS::CPU::Vec3<double>>));

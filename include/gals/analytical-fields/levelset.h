@@ -29,30 +29,70 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "gals/input-parser.h"
+#pragma once
 
-#include "gals/input-parser/general.h"
-#include "gals/input-parser/grid.h"
-#include "gals/input-parser/input-parser-base.h"
-#include "gals/input-parser/levelset.h"
-#include "gals/input-parser/time.h"
-#include "gals/input-parser/velocity.h"
+#include <map>
+#include <string>
+#include <vector>
 
-GALS::INPUT_PARSER::InputParser::InputParser() {}
+#include "gals/cpu/levelset.h"
+#include "gals/input-fields/levelset.h"
+#include "gals/utilities/array.h"
+#include "gals/utilities/grid.h"
+#include "gals/utilities/vec_n.h"
 
-GALS::INPUT_PARSER::InputParser::~InputParser() {}
-
-void GALS::INPUT_PARSER::InputParser::parse(const std::string input_file,
-                                            GALS::INPUT_FIELDS::InputFields *p_input_fields)
+namespace GALS
 {
-  YAML::Node inputs = YAML::LoadFile(input_file);
+namespace ANALYTICAL_FIELDS
+{
+/*! enums for levelset fields.
+ */
+enum class LevelsetFieldNames { NOT_DEFINED, CIRCLE };
 
-  if (inputs["general"])
-    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::General>()(inputs["general"], p_input_fields);
-  if (inputs["grid"]) GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Grid>()(inputs["grid"], p_input_fields);
-  if (inputs["time"]) GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Time>()(inputs["time"], p_input_fields);
-  if (inputs["velocity"])
-    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Velocity>()(inputs["velocity"], p_input_fields);
-  if (inputs["levelset"])
-    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Levelset>()(inputs["levelset"], p_input_fields);
-}
+/*! enum maps for levelset fields.
+ */
+static std::map<std::string, LevelsetFieldNames> levelset_name_map{{"CIRCLE", LevelsetFieldNames::CIRCLE}};
+
+/*! \class Levelset
+ *
+ * Class to create analytical levelset fields.
+ */
+template <typename T_GRID, typename T = double>
+class Levelset
+{
+ public:
+  /*! Constructor with grid.
+   *
+   * \param grid grid.
+   * \param inputs levelset input fields of type GALS::INPUT_FIELDS::Levelset
+   */
+  Levelset(const T_GRID& grid, const GALS::INPUT_FIELDS::Levelset& inputs);
+
+  /*! Remove default constructor.
+   */
+  Levelset() = delete;
+
+  /*! Destructor
+   */
+  ~Levelset();
+
+  /*! Return grid.
+   *
+   * \return grid.
+   */
+  const T_GRID& grid() const { return m_grid; }
+
+  /*! Compute levelset field.
+   *
+   * \param positions array of positions where levelset needs to be computed.
+   * \param levelset levelset field which will be updated by this function.
+   */
+  void compute(const GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>>& positions, GALS::CPU::Levelset<T_GRID, T>& levelset);
+
+ private:
+  const T_GRID& m_grid;
+  const GALS::INPUT_FIELDS::Levelset& m_inputs;
+};
+
+}  // namespace ANALYTICAL_FIELDS
+}  // namespace GALS

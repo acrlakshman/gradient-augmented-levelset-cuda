@@ -29,30 +29,26 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "gals/input-parser.h"
-
-#include "gals/input-parser/general.h"
-#include "gals/input-parser/grid.h"
-#include "gals/input-parser/input-parser-base.h"
 #include "gals/input-parser/levelset.h"
-#include "gals/input-parser/time.h"
-#include "gals/input-parser/velocity.h"
+#include "gals/input-fields/levelset.h"
 
-GALS::INPUT_PARSER::InputParser::InputParser() {}
+#include <vector>
 
-GALS::INPUT_PARSER::InputParser::~InputParser() {}
+GALS::INPUT_PARSER::Levelset::Levelset() {}
 
-void GALS::INPUT_PARSER::InputParser::parse(const std::string input_file,
-                                            GALS::INPUT_FIELDS::InputFields *p_input_fields)
+GALS::INPUT_PARSER::Levelset::~Levelset() {}
+
+void GALS::INPUT_PARSER::Levelset::parse(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
 {
-  YAML::Node inputs = YAML::LoadFile(input_file);
+  auto &input_fields = *p_input_fields;
 
-  if (inputs["general"])
-    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::General>()(inputs["general"], p_input_fields);
-  if (inputs["grid"]) GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Grid>()(inputs["grid"], p_input_fields);
-  if (inputs["time"]) GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Time>()(inputs["time"], p_input_fields);
-  if (inputs["velocity"])
-    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Velocity>()(inputs["velocity"], p_input_fields);
-  if (inputs["levelset"])
-    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Levelset>()(inputs["levelset"], p_input_fields);
+  input_fields.m_levelset->name = field["name"].as<std::string>();
+  input_fields.m_levelset->center = GALS::CPU::Vec3<double>(field["center"].as<std::vector<double>>());
+  input_fields.m_levelset->radius = field["radius"].as<double>();
+  input_fields.m_levelset->gradient_scheme = field["gradient"]["scheme"].as<std::string>();
+}
+
+void GALS::INPUT_PARSER::Levelset::operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)
+{
+  this->parse(field, p_input_fields);
 }

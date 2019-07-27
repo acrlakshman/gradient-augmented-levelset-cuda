@@ -8,7 +8,7 @@ grid:
       y_max:               1.0                                    # y_max
       z_min:               -1.0                                   # z_min
       z_max:               1.0                                    # z_max
-   cells:                  [10, 10, 10]                           # [n_x, n_y, n_z]
+   cells:                  [10, 10, 1]                           # [n_x, n_y, n_z]
 
 time:
    start:                  0                                      # Simulation start time.

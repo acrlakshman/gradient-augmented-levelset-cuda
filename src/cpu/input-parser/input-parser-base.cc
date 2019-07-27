@@ -32,6 +32,7 @@
 #include "gals/input-parser/input-parser-base.h"
 #include "gals/input-parser/general.h"
 #include "gals/input-parser/grid.h"
+#include "gals/input-parser/levelset.h"
 #include "gals/input-parser/time.h"
 #include "gals/input-parser/velocity.h"
 
@@ -56,3 +57,4 @@ template class GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::General>;
 template class GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Grid>;
 template class GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Time>;
 template class GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Velocity>;
+template class GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Levelset>;

@@ -186,20 +186,24 @@ void GALS::CPU::Grid<T, DIM>::generate(T x_min, T x_max, T y_min, T y_max, T z_m
   m_dx[1] = (y_max - y_min) / m_ny;
   m_dx[2] = (z_max - z_min) / m_nz;
 
-  for (int i = 0; i < 3; ++i) m_one_over_dx[i] = static_cast<T>(1.) / m_dx[i];
+  for (int i = 0; i < DIM; ++i) m_one_over_dx[i] = static_cast<T>(1.) / m_dx[i];
 
-  for (int i = 0; i < 3; ++i) domain_min_new[i] = domain_min[i] + (m_dx[i] * 0.5) - (m_dx[i] * m_mask[i]);
+  for (int i = 0; i < DIM; ++i) domain_min_new[i] = domain_min[i] + (m_dx[i] * 0.5) - (m_dx[i] * m_mask[i]);
 
   Vec3<T> elem;
 
   int i_min = -m_pad * m_mask[0], j_min = -m_pad * m_mask[1], k_min = -m_pad * m_mask[2];
 
+  GALS::CPU::Vec3<int> vec;
+
   for (int i = i_min; i < m_nx + m_pad * m_mask[0]; ++i) {
     for (int j = j_min; j < m_ny + m_pad * m_mask[1]; ++j) {
       for (int k = k_min; k < m_nz + m_pad * m_mask[2]; ++k) {
-        elem[0] = domain_min_new[0] + (i - i_min) * m_dx[0];
-        elem[1] = domain_min_new[1] + (j - j_min) * m_dx[1];
-        elem[2] = domain_min_new[2] + (k - k_min) * m_dx[2];
+        vec[0] = i - i_min;
+        vec[1] = j - j_min;
+        vec[2] = k - k_min;
+
+        for (int axis = 0; axis < DIM; ++axis) elem[axis] = domain_min_new[axis] + vec[axis] * m_dx[axis];
 
         this->x(i, j, k) = elem;
       }
@@ -209,31 +213,6 @@ void GALS::CPU::Grid<T, DIM>::generate(T x_min, T x_max, T y_min, T y_max, T z_m
   // Update total cells.
   m_total_cells = 1;
   for (int d = 0; d < DIM; ++d) m_total_cells *= this->numCells()[d];
-}
-
-template <typename T, int DIM>
-void GALS::CPU::Grid<T, DIM>::writeToFile(std::string file_name, std::string dir_name, bool show_padding)
-{
-  std::string full_File_Name = dir_name + "/" + file_name;
-  std::ofstream output_file(full_File_Name);
-  output_file << "Node_ID\tX\tY\tZ\n";
-
-  int i_min = show_padding ? -m_pad * m_mask[0] : 0;
-  int j_min = show_padding ? -m_pad * m_mask[1] : 0;
-  int k_min = show_padding ? -m_pad * m_mask[2] : 0;
-  int i_max = show_padding ? m_nx + m_pad * m_mask[0] : m_nx;
-  int j_max = show_padding ? m_ny + m_pad * m_mask[1] : m_ny;
-  int k_max = show_padding ? m_nz + m_pad * m_mask[2] : m_nz;
-
-  for (int i = i_min; i < i_max; ++i) {
-    for (int j = j_min; j < j_max; ++j) {
-      for (int k = k_min; k < k_max; ++k) {
-        Vec3<T> coordinate = this->x(i, j, k);
-        output_file << this->index(i, j, k) << '\t' << coordinate[0] << '\t' << coordinate[1] << '\t' << coordinate[2]
-                    << std::endl;
-      }
-    }
-  }
 }
 
 template class GALS::CPU::Grid<double, 1>;

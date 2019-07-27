@@ -29,30 +29,22 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "gals/input-parser.h"
+#pragma once
 
-#include "gals/input-parser/general.h"
-#include "gals/input-parser/grid.h"
-#include "gals/input-parser/input-parser-base.h"
-#include "gals/input-parser/levelset.h"
-#include "gals/input-parser/time.h"
-#include "gals/input-parser/velocity.h"
+#include "gals/utilities/vec3.h"
 
-GALS::INPUT_PARSER::InputParser::InputParser() {}
+#include <string>
 
-GALS::INPUT_PARSER::InputParser::~InputParser() {}
-
-void GALS::INPUT_PARSER::InputParser::parse(const std::string input_file,
-                                            GALS::INPUT_FIELDS::InputFields *p_input_fields)
+namespace GALS
 {
-  YAML::Node inputs = YAML::LoadFile(input_file);
+namespace INPUT_FIELDS
+{
+struct Levelset {
+  std::string name;                //! Name of levelset field.
+  GALS::CPU::Vec3<double> center;  //! Center of levelset field for few levelset types.
+  double radius;                   //! Radius of levelset field for few object types.
+  std::string gradient_scheme;     //! Scheme to compute gradient of levelset field.
+};
 
-  if (inputs["general"])
-    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::General>()(inputs["general"], p_input_fields);
-  if (inputs["grid"]) GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Grid>()(inputs["grid"], p_input_fields);
-  if (inputs["time"]) GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Time>()(inputs["time"], p_input_fields);
-  if (inputs["velocity"])
-    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Velocity>()(inputs["velocity"], p_input_fields);
-  if (inputs["levelset"])
-    GALS::INPUT_PARSER::InputParserBase<GALS::INPUT_PARSER::Levelset>()(inputs["levelset"], p_input_fields);
-}
+}  // namespace INPUT_FIELDS
+}  // namespace GALS
