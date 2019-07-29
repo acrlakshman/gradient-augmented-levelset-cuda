@@ -1,0 +1,13 @@
+var searchData=
+[
+  ['general',['General',['../classGALS_1_1INPUT__PARSER_1_1General.html#abb76c719b5834a13f078debcdf5d203b',1,'GALS::INPUT_PARSER::General']]],
+  ['generate',['generate',['../classGALS_1_1CPU_1_1Grid.html#a3b7254270ecd2eeb12fb44f7ded62844',1,'GALS::CPU::Grid']]],
+  ['get_5fcontrol_5fpoints',['get_control_points',['../namespaceGALS_1_1INTERPOLATION.html#a8ab8e5a65d5738bc793e924f4983c74b',1,'GALS::INTERPOLATION']]],
+  ['getmask',['getMask',['../classGALS_1_1CPU_1_1Grid.html#ac919eacbf0f4eb161ce1a1a269398e59',1,'GALS::CPU::Grid']]],
+  ['getpadding',['getPadding',['../classGALS_1_1CPU_1_1Grid.html#a23a94842c428af5000e716a01e80f83c',1,'GALS::CPU::Grid']]],
+  ['getrootdirectory',['getRootDirectory',['../classGALS_1_1UTILITIES_1_1FileUtils.html#a1b2c1d9a02d24a32234dccf3a3bb4635',1,'GALS::UTILITIES::FileUtils']]],
+  ['gradient',['Gradient',['../classGALS_1_1CPU_1_1Gradient.html#a2ecadb48be97c2a82512733026980c3e',1,'GALS::CPU::Gradient']]],
+  ['grid',['grid',['../classGALS_1_1CPU_1_1Array.html#a3aad7f7ba4ee96ebd3fbe52df428e79a',1,'GALS::CPU::Array::grid()'],['../classGALS_1_1ANALYTICAL__FIELDS_1_1Levelset.html#ac4b695c57037492790929adfaaa01308',1,'GALS::ANALYTICAL_FIELDS::Levelset::grid()'],['../classGALS_1_1ANALYTICAL__FIELDS_1_1Velocity.html#ac4b695c57037492790929adfaaa01308',1,'GALS::ANALYTICAL_FIELDS::Velocity::grid()'],['../classGALS_1_1CPU_1_1LevelsetVelocity.html#ac4b695c57037492790929adfaaa01308',1,'GALS::CPU::LevelsetVelocity::grid()'],['../classGALS_1_1CPU_1_1Levelset.html#ac4b695c57037492790929adfaaa01308',1,'GALS::CPU::Levelset::grid()'],['../classGALS_1_1CPU_1_1Grid.html#ada668220454edc9a93fa8b5ff0c58557',1,'GALS::CPU::Grid::Grid(int nx, int ny, int nz)'],['../classGALS_1_1CPU_1_1Grid.html#a976e5e963fb465a13c9fde3437b09fb8',1,'GALS::CPU::Grid::Grid(int nx, int ny)'],['../classGALS_1_1CPU_1_1Grid.html#a4995fe78ad1403f6ae49461b5cd17a41',1,'GALS::CPU::Grid::Grid(int nx)'],['../classGALS_1_1INPUT__PARSER_1_1Grid.html#a0a335d0339fe70071fcdf4cd5b1c7b5f',1,'GALS::INPUT_PARSER::Grid::Grid()']]],
+  ['write_3c_20gals_3a_3acpu_3a_3aarray_3c_20gals_3a_3acpu_3a_3agrid_3c_20double_2c_201_20_3e_2c_20double_20_3e_20_3e',['write&lt; GALS::CPU::Array&lt; GALS::CPU::Grid&lt; double, 1 &gt;, double &gt; &gt;',['../file-utils_8cc.html#a62fa3ebeee8f1cc760145197d832b858',1,'file-utils.cc']]],
+  ['write_3c_20gals_3a_3acpu_3a_3aarray_3c_20gals_3a_3acpu_3a_3agrid_3c_20double_2c_202_20_3e_2c_20double_20_3e_20_3e',['write&lt; GALS::CPU::Array&lt; GALS::CPU::Grid&lt; double, 2 &gt;, double &gt; &gt;',['../file-utils_8cc.html#a88bde6a1773a8c38666e5584c7f7afc4',1,'file-utils.cc']]]
+];

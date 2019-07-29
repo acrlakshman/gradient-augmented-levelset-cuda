@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['circle',['CIRCLE',['../namespaceGALS_1_1ANALYTICAL__FIELDS.html#ac6ddd5c896a13f5b6ac37ffc47c18949a0af50777920c1401ab975cab64c4d491',1,'GALS::ANALYTICAL_FIELDS']]],
+  ['circular',['CIRCULAR',['../namespaceGALS_1_1ANALYTICAL__FIELDS.html#a3b901d7b26aa5a757a12b72a0634aa4aa93c8d295bb538cdb3302604512828d68',1,'GALS::ANALYTICAL_FIELDS']]]
+];
