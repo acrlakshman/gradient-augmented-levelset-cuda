@@ -35,6 +35,7 @@
 #include <string>
 #include <vector>
 
+#include "gals/cpu/levelset-velocity.h"
 #include "gals/input-fields/velocity.h"
 #include "gals/utilities/array.h"
 #include "gals/utilities/grid.h"
@@ -84,10 +85,11 @@ class Velocity
   /*! Compute velocity field.
    *
    * \param positions array of positions where velocity needs to be computed.
-   * \param velocity velocity field which will be updated by this function.
+   * \param time time, for some velocity fields.
+   * \param levelset_velocity velocity field which will be updated by this function.
    */
-  void compute(const GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>>& positions,
-               GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>>& velocity);
+  void compute(const GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>>& positions, const T time,
+               GALS::CPU::LevelsetVelocity<T_GRID, T>& levelset_velocity);
 
  private:
   const T_GRID& m_grid;

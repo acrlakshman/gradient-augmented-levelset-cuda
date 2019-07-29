@@ -32,7 +32,11 @@
 #include <iostream>
 #include <string>
 
+#include "gals/analytical-fields/levelset.h"
 #include "gals/analytical-fields/velocity.h"
+#include "gals/cpu/gradient.h"
+#include "gals/cpu/levelset.h"
+#include "gals/cpu/temporal.h"
 #include "gals/input-parser.h"
 #include "gals/utilities/file-utils.h"
 #include "gals/utilities/grid.h"
@@ -101,20 +105,33 @@ int main(int argc, char **argv)
 
   // Construct velocity.
   const auto &velocity_inputs = *(input_fields.m_velocity);
-  GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>> velocity_field(grid);
-  GALS::ANALYTICAL_FIELDS::Velocity<T_GRID, T> velocity(grid, velocity_inputs);
-  velocity.compute(positions, velocity_field);
+  GALS::CPU::LevelsetVelocity<T_GRID, T> levelset_velocity(grid);
+  const auto &velocity_field = levelset_velocity.velocity();
+  GALS::ANALYTICAL_FIELDS::Velocity<T_GRID, T> analytical_velocity(grid, velocity_inputs);
 
+  // Build levelset.
+  const auto &levelset_inputs = *(input_fields.m_levelset);
+  GALS::CPU::Levelset<T_GRID, T> levelset(grid);
+  auto &phi = levelset.phi();
+  auto &psi = levelset.psi();
+  auto &phi_prev = levelset.phiPrev();
+  auto &psi_prev = levelset.psiPrev();
+  auto &phi_mixed_derivatives_prev = levelset.phiMixedDerivativesPrev();
+  GALS::ANALYTICAL_FIELDS::Levelset<T_GRID, T> analytical_levelset(grid, levelset_inputs);
+
+  analytical_levelset.compute(positions, levelset);
+
+  // Build time data.
   const auto &time_inputs = *(input_fields.m_time);
 
   T t_start = time_inputs.start;
   T t_end = time_inputs.end;
   T dt = time_inputs.dt;
   bool is_dt_fixed = std::strcmp(time_inputs.constant_dt.c_str(), "NO");
-  T sim_time = 0;
+  T sim_time = static_cast<T>(0);
 
   if (!is_dt_fixed) {
-    dt = grid.dX().min() / 2.;
+    dt = grid.dX().min() * static_cast<T>(0.5);
   }
 
   // Time loop
@@ -122,7 +139,21 @@ int main(int argc, char **argv)
   while (run_sim) {
     sim_time += dt;
 
-    //
+    // Compute velocity and its gradient at current time.
+    analytical_velocity.compute(positions, sim_time, levelset_velocity);
+
+    // Compute gradient of levelset field.
+    GALS::CPU::Gradient<T, T_GRID, GALS::CPU::ThirdOrder<T, T_GRID>>::compute(phi, psi);
+    phi_prev = phi;
+    psi_prev = psi;
+
+    // Compute levelset mixed derivatives for `_prev` fields.
+    // TODO (lakshman)
+    // levelset.computeMixedDerivatives(psi_prev, phi_mixed_derivatives_prev);
+
+    // Advect levelset.
+    GALS::CPU::Temporal<T, T_GRID, GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<T, T_GRID>>::compute(
+        dt, levelset_velocity, levelset);
 
     if (GALS::is_equal(sim_time, t_end) || sim_time > t_end) run_sim = false;
   }

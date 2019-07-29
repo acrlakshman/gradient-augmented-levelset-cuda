@@ -30,6 +30,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "gals/analytical-fields/velocity.h"
+
+#include <string>
+
 #include "gals/utilities/utilities.h"
 
 template <typename T_GRID, typename T>
@@ -45,14 +48,16 @@ GALS::ANALYTICAL_FIELDS::Velocity<T_GRID, T>::~Velocity()
 
 template <typename T_GRID, typename T>
 void GALS::ANALYTICAL_FIELDS::Velocity<T_GRID, T>::compute(
-    const GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>>& positions,
-    GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>>& velocity)
+    const GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>>& positions, const T time,
+    GALS::CPU::LevelsetVelocity<T_GRID, T>& levelset_velocity)
 {
   const GALS::CPU::Vec3<int> num_cells = positions.numCells();
   const auto& velocity_name = m_inputs.name;
 
   switch (velocity_name_map[velocity_name]) {
     case VelocityFieldNames::CIRCULAR: {
+      auto& velocity = levelset_velocity.velocity();
+
       if (T_GRID::dim == 1)
         GALS_FUNCTION_NOT_IMPLEMENTED(
             "GALS::ANALYTICAL_FIELDS::Velocity::compute: CIRCULAR velocity field for 1D grid.");
@@ -70,6 +75,24 @@ void GALS::ANALYTICAL_FIELDS::Velocity<T_GRID, T>::compute(
 
             velocity(i, j, k) = velocity_node;
           }
+
+      // Compute velocity gradient using analytical expressions.
+      if (!strcmp(m_inputs.gradient_scheme.c_str(), "ANALYTICAL")) {
+        auto& velocity_gradient = levelset_velocity.velocityGradient();
+
+        for (int i = 0; i < num_cells[0]; ++i)
+          for (int j = 0; j < num_cells[1]; ++j)
+            for (int k = 0; k < num_cells[2]; ++k) {
+              for (int cmpt = 0; cmpt < T_GRID::dim; ++cmpt) {
+                for (int derv = 0; derv < T_GRID::dim; ++derv) {
+                  if (cmpt == 0 && derv == 0) velocity_gradient[cmpt][derv] = static_cast<T>(0);
+                  if (cmpt == 0 && derv == 1) velocity_gradient[cmpt][derv] = -coeff;
+                  if (cmpt == 1 && derv == 0) velocity_gradient[cmpt][derv] = coeff;
+                  if (cmpt == 1 && derv == 1) velocity_gradient[cmpt][derv] = static_cast<T>(0);
+                }
+              }
+            }
+      }
 
       break;
     }
