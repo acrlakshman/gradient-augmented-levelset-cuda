@@ -30,6 +30,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "gals/cpu/levelset.h"
+#include "gals/cpu/gradient.h"
 
 #include <iostream>
 
@@ -50,6 +51,74 @@ GALS::CPU::Levelset<T_GRID, T>::Levelset(const T_GRID& grid)
 template <typename T_GRID, typename T>
 GALS::CPU::Levelset<T_GRID, T>::~Levelset()
 {
+}
+
+template <typename T_GRID, typename T>
+void GALS::CPU::Levelset<T_GRID, T>::computeMixedDerivatives(
+    const Array<T_GRID, Vec3<T>>& psi, Array<T_GRID, VecN<T, T_GRID::num_mixed_derivatives>>& phi_mixed_derivatives)
+{
+  // For now gradient computations are hardcoded in this function.
+  const Vec3<int> num_cells = psi.numCells();
+  const T_GRID& grid = psi.grid();
+  const Vec3<typename T_GRID::value_type> dx = grid.dX();
+  const auto one_over_dx = grid.oneOverDX();
+  const auto& axis_vectors = GALS::CPU::Grid<typename T_GRID::value_type, T_GRID::dim>::axis_vectors;
+
+  if constexpr (T_GRID::dim == 2) {
+    int axis_x = 0, axis_y = 1;
+
+    // Computing \frac{\partial}{\partial y} \left( \frac{\partial}{\partial x} \right).
+    for (int i = 0; i < num_cells[0]; ++i)
+      for (int j = 0; j < num_cells[1]; ++j)
+        for (int k = 0; k < num_cells[2]; ++k) {
+          phi_mixed_derivatives(i, j, k)[0] =
+              (psi(i + axis_vectors(axis_y, 0), j + axis_vectors(axis_y, 1), k + axis_vectors(axis_y, 2))[axis_x] -
+               psi(i - axis_vectors(axis_y, 0), j - axis_vectors(axis_y, 1), k - axis_vectors(axis_y, 2))[axis_x]) *
+              one_over_dx[axis_y] * static_cast<T>(0.5);
+        }
+  } else if constexpr (T_GRID::dim == 3) {
+    int axis_x = 0, axis_y = 1, axis_z = 2;
+
+    // Computing \frac{\partial}{\partial x} \left( \frac{\partial}{\partial y} \right).
+    for (int i = 0; i < num_cells[0]; ++i)
+      for (int j = 0; j < num_cells[1]; ++j)
+        for (int k = 0; k < num_cells[2]; ++k) {
+          phi_mixed_derivatives(i, j, k)[0] =
+              (psi(i + axis_vectors(axis_x, 0), j + axis_vectors(axis_x, 1), k + axis_vectors(axis_x, 2))[axis_y] -
+               psi(i - axis_vectors(axis_x, 0), j - axis_vectors(axis_x, 1), k - axis_vectors(axis_x, 2))[axis_y]) *
+              one_over_dx[axis_x] * static_cast<T>(0.5);
+        }
+
+    // Computing \frac{\partial}{\partial y} \left( \frac{\partial}{\partial z} \right).
+    for (int i = 0; i < num_cells[0]; ++i)
+      for (int j = 0; j < num_cells[1]; ++j)
+        for (int k = 0; k < num_cells[2]; ++k) {
+          phi_mixed_derivatives(i, j, k)[1] =
+              (psi(i + axis_vectors(axis_y, 0), j + axis_vectors(axis_y, 1), k + axis_vectors(axis_y, 2))[axis_z] -
+               psi(i - axis_vectors(axis_y, 0), j - axis_vectors(axis_y, 1), k - axis_vectors(axis_y, 2))[axis_z]) *
+              one_over_dx[axis_y] * static_cast<T>(0.5);
+        }
+
+    // Computing \frac{\partial}{\partial z} \left( \frac{\partial}{\partial x} \right).
+    for (int i = 0; i < num_cells[0]; ++i)
+      for (int j = 0; j < num_cells[1]; ++j)
+        for (int k = 0; k < num_cells[2]; ++k) {
+          phi_mixed_derivatives(i, j, k)[2] =
+              (psi(i + axis_vectors(axis_z, 0), j + axis_vectors(axis_z, 1), k + axis_vectors(axis_z, 2))[axis_x] -
+               psi(i - axis_vectors(axis_z, 0), j - axis_vectors(axis_z, 1), k - axis_vectors(axis_z, 2))[axis_x]) *
+              one_over_dx[axis_z] * static_cast<T>(0.5);
+        }
+
+    // Computing \frac{\partial}{\partial y} \left( \frac{\partial}{\partial z} \right).
+    for (int i = 0; i < num_cells[0]; ++i)
+      for (int j = 0; j < num_cells[1]; ++j)
+        for (int k = 0; k < num_cells[2]; ++k) {
+          // phi_mixed_derivatives(i, j, k)[1] =
+          //(psi(i + axis_vectors(axis_y, 0), j + axis_vectors(axis_y, 1), k + axis_vectors(axis_y, 2))[axis_z] -
+          // psi(i - axis_vectors(axis_y, 0), j - axis_vectors(axis_y, 1), k - axis_vectors(axis_y, 2))[axis_z]) *
+          // one_over_dx[axis_y] * static_cast<T>(0.5);
+        }
+  }
 }
 
 template <typename T_GRID, typename T>
