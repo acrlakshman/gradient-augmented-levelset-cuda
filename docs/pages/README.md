@@ -16,7 +16,7 @@ Implementation of Gradient Augmented Levelset method in CPU and GPU.
 #### Dependencies
 
 * [CMake]
-* Compiler that supports C++14
+* Compiler that supports C++17
 
 ```sh
    git clone https://github.com/acrlakshman/gradient-augmented-levelset-cuda --recursive

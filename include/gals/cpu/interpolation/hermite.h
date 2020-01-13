@@ -178,7 +178,7 @@ class Hermite<T, GALS::CPU::Grid<T, 1>>
    */
   CPU::InterpolatedFields<CPU::Vec3<T>> interpolate(
       const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 1>::value_type, GALS::CPU::Grid<T, 1>::dim> &grid,
-      const typename GALS::CPU::Grid<T, 1>::position_type &x_interp,
+      const GALS::CPU::Vec3<int> &node_id, const typename GALS::CPU::Grid<T, 1>::position_type &x_interp,
       const CPU::Levelset<GALS::CPU::Grid<T, 1>, T> &levelset, const bool use_gradient_limiting = false);
 
   /*! Interpolate scalar field.
@@ -247,7 +247,7 @@ class Hermite<T, GALS::CPU::Grid<T, 2>>
    */
   CPU::InterpolatedFields<CPU::Vec3<T>> interpolate(
       const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 2>::value_type, GALS::CPU::Grid<T, 2>::dim> &grid,
-      const typename GALS::CPU::Grid<T, 2>::position_type &x_interp,
+      const GALS::CPU::Vec3<int> &node_id, const typename GALS::CPU::Grid<T, 2>::position_type &x_interp,
       const CPU::Levelset<GALS::CPU::Grid<T, 2>, T> &levelset, const bool use_gradient_limiting = false);
 
   /*! Interpolate scalar field.
@@ -316,7 +316,7 @@ class Hermite<T, GALS::CPU::Grid<T, 3>>
    */
   CPU::InterpolatedFields<CPU::Vec3<T>> interpolate(
       const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 3>::value_type, GALS::CPU::Grid<T, 3>::dim> &grid,
-      const typename GALS::CPU::Grid<T, 3>::position_type &x_interp,
+      const GALS::CPU::Vec3<int> &node_id, const typename GALS::CPU::Grid<T, 3>::position_type &x_interp,
       const CPU::Levelset<GALS::CPU::Grid<T, 3>, T> &levelset, const bool use_gradient_limiting = false);
 
   /*! Interpolate scalar field.

@@ -84,6 +84,19 @@ class Levelset
    */
   ~Levelset();
 
+  /*! Compute mixed derivatives.
+   *
+   * Mixed derivatives of the levelset is computed using second order gradient approximation on
+   * the levelset gradient.
+   *
+   * \param psi gradient of levelset.
+   * \param phi_mixed_derivatives mixed derivatives of the levelset.
+   *
+   * \return Void.
+   */
+  void computeMixedDerivatives(const Array<T_GRID, Vec3<T>>& psi,
+                               Array<T_GRID, VecN<T, T_GRID::num_mixed_derivatives>>& phi_mixed_derivatives);
+
   /*! Return grid.
    *
    * \return grid.

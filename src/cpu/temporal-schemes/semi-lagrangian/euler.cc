@@ -56,16 +56,25 @@ void GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<T, T_GRID>::compute(
   const GALS::CPU::Vec3<int> num_cells = grid.numCells();
   auto &phi = levelset.phi();
   auto &psi = levelset.psi();
+  // std::cout << "phi = " << phi << std::endl;
 
   // Compute x_root `root of the characteristic`.
   GALS::CPU::Array<T_GRID, GALS::CPU::Vec3<T>> x_root(grid);
 
   for (int i = 0; i < num_cells[0]; ++i)
     for (int j = 0; j < num_cells[1]; ++j)
-      for (int k = 0; k < num_cells[2]; ++k) x_root(i, j, k) = grid(i, j, k) - velocity(i, j, k) * dt;
+      for (int k = 0; k < num_cells[2]; ++k) {
+        x_root(i, j, k) = grid(i, j, k) - velocity(i, j, k) * dt;
+        // std::cout << "grid(" << i << "," << j << "," << k << "): " << grid(i, j, k) << std::endl;
+        // std::cout << "\tvelocity(" << i << "," << j << "," << k << "): " << velocity(i,j,k) << std::endl;
+        // std::cout << "\tdt = " << dt << std::endl;
+        // std::cout << "\tx_root(" << i << "," << j << "," << k << "): " << x_root(i,j,k) << std::endl;
+      }
+  // std::cout << "x_root = " << x_root << std::endl;
 
   // Compute phi_interp_prev, psi_interp_prev at x_root.
   GALS::CPU::Interpolate<T, T_GRID, GALS::INTERPOLATION::Hermite<T, T_GRID>>::compute(x_root, levelset);
+  // std::cout << "after interp" << std::endl;
 
   // Compute x_root_grad.
   GALS::CPU::Array<T_GRID, GALS::CPU::Mat3<T>> x_root_grad(grid);
@@ -75,9 +84,12 @@ void GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<T, T_GRID>::compute(
   for (int i = 0; i < num_cells[0]; ++i)
     for (int j = 0; j < num_cells[1]; ++j)
       for (int k = 0; k < num_cells[2]; ++k) x_root_grad(i, j, k) = identity_mat - velocity_grad(i, j, k) * dt;
+  // std::cout << "x_root_grad = " << x_root_grad << std::endl;
 
   const auto &phi_interp_prev = levelset.phiInterpPrev();
   const auto &psi_interp_prev = levelset.psiInterpPrev();
+  // std::cout << "phi_interp_prev = " << phi_interp_prev << std::endl;
+  // std::cout << "psi_interp_prev = " << psi_interp_prev << std::endl;
 
   // Update phi and psi.
   for (int i = 0; i < num_cells[0]; ++i)
@@ -86,6 +98,8 @@ void GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<T, T_GRID>::compute(
         phi(i, j, k) = phi_interp_prev(i, j, k);
         psi(i, j, k) = x_root_grad(i, j, k).dot(psi_interp_prev(i, j, k));
       }
+  // std::cout << "phi = " << phi << std::endl;
+  // std::cout << "psi = " << psi << std::endl;
 }
 
 template class GALS::TEMPORAL_SCHEMES::SEMI_LAGRANGIAN::Euler<double, GALS::CPU::Grid<double, 1>>;

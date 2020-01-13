@@ -215,6 +215,21 @@ void GALS::CPU::Grid<T, DIM>::generate(T x_min, T x_max, T y_min, T y_max, T z_m
   for (int d = 0; d < DIM; ++d) m_total_cells *= this->numCells()[d];
 }
 
+template <typename T, int DIM>
+bool GALS::CPU::Grid<T, DIM>::isIndexInDomain(const Vec3<int> node_id, const bool use_padding) const
+{
+  int pad = use_padding ? m_pad : 0;
+
+  int i_min = -pad * m_mask[0], j_min = -pad * m_mask[1], k_min = -pad * m_mask[2];
+  int i_max = m_nx + pad * m_mask[0], j_max = m_ny + pad * m_mask[1], k_max = m_nz + pad * m_mask[2];
+
+  if (node_id[0] < i_min || node_id[1] >= i_max) return false;
+  if (m_dimension > 1 && (node_id[1] < j_min || node_id[1] >= j_max)) return false;
+  if (m_dimension > 2 && (node_id[2] < k_min || node_id[2] >= k_max)) return false;
+
+  return true;
+}
+
 template class GALS::CPU::Grid<double, 1>;
 template class GALS::CPU::Grid<double, 2>;
 template class GALS::CPU::Grid<double, 3>;

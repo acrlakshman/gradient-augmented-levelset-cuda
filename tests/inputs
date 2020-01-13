@@ -17,6 +17,8 @@ time:
    constant_dt:            NO                                     # NO/YES
                                                                      # NO: time step will be dynamically calculated.
                                                                      # YES: `dt` will be used for entire simulation.
+   cfl_max:                0.5                                    # Max CFL number for simulation.
+   write_interval:         1e-4                                   # Write interval for output files.
 
 velocity:
    name:                   CIRCULAR                               # Available:
