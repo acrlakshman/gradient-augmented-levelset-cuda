@@ -45,6 +45,8 @@ void GALS::INPUT_PARSER::Time::parse(const YAML::Node &field, GALS::INPUT_FIELDS
   input_fields.m_time->end = field["end"].as<double>();
   input_fields.m_time->dt = field["dt"].as<double>();
   input_fields.m_time->constant_dt = field["constant_dt"].as<std::string>();
+  input_fields.m_time->cfl_max = field["cfl_max"].as<double>();
+  input_fields.m_time->write_interval = field["write_interval"].as<double>();
 }
 
 void GALS::INPUT_PARSER::Time::operator()(const YAML::Node &field, GALS::INPUT_FIELDS::InputFields *p_input_fields)

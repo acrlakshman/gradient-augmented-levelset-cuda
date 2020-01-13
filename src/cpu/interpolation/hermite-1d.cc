@@ -36,7 +36,7 @@
 template <typename T>
 GALS::CPU::InterpolatedFields<GALS::CPU::Vec3<T>> GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 1>>::interpolate(
     const GALS::CPU::Grid<typename GALS::CPU::Grid<T, 1>::value_type, GALS::CPU::Grid<T, 1>::dim> &grid,
-    const typename GALS::CPU::Grid<T, 1>::position_type &x_interp,
+    const GALS::CPU::Vec3<int> &node_id, const typename GALS::CPU::Grid<T, 1>::position_type &x_interp,
     const GALS::CPU::Levelset<GALS::CPU::Grid<T, 1>, T> &levelset, const bool use_gradient_limiting)
 {
   GALS::CPU::InterpolatedFields<GALS::CPU::Vec3<T>> hermite_fields;
@@ -96,7 +96,8 @@ void GALS::INTERPOLATION::Hermite<T, GALS::CPU::Grid<T, 1>>::compute(
   for (int i = 0; i < num_cells_interp[0]; ++i)
     for (int j = 0; j < num_cells_interp[1]; ++j)
       for (int k = 0; k < num_cells_interp[2]; ++k) {
-        const auto &hermite_fields = this->interpolate(grid, x_interp(i, j, k), levelset);
+        GALS::CPU::Vec3<int> node_id(i, j, k);
+        const auto &hermite_fields = this->interpolate(grid, node_id, x_interp(i, j, k), levelset);
 
         levelset.phiInterpPrev()(i, j, k) = hermite_fields.phi_interpolated;
         levelset.psiInterpPrev()(i, j, k) = hermite_fields.psi_interpolated;

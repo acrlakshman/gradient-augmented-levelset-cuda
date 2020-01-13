@@ -38,7 +38,7 @@ namespace GALS
 namespace INPUT_FIELDS
 {
 struct Time {
-  double start, end, dt;
+  double start, end, dt, cfl_max, write_interval;
   std::string constant_dt;
 };
 

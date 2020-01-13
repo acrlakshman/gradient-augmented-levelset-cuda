@@ -238,6 +238,12 @@ class Grid
    */
   void generate(T x_min, T x_max, T y_min, T y_max, T z_min, T z_max);
 
+  /*! Returns true if index in the domain.
+   *
+   * \param node_id node index of type NodeId.
+   */
+  bool isIndexInDomain(const Vec3<int> node_id, const bool use_padding = false) const;
+
  private:
   int m_dimension, m_nx, m_ny, m_nz, m_pad;
   size_t m_total_cells;
